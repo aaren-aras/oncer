@@ -1,18 +1,17 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+  import { RouterLink, RouterView } from 'vue-router'
+  import WelcomeText from './components/WelcomeText.vue'
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+    <img alt="Oncer logo" class="logo" src="@/assets/oncer-logo.png" width="150" height="150" />
 
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
+      <WelcomeText title="Oncer" />
       <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/">Welcome</RouterLink>
+        <RouterLink to="/upload">Upload Scan</RouterLink>
       </nav>
     </div>
   </header>
