@@ -5,7 +5,7 @@
 
 <template>
   <header>
-    <img alt="Oncer logo" class="logo" src="@/assets/oncer-logo.png" width="150" height="150" />
+    <img alt="Oncer logo" class="logo" src="@/assets/logo.png" width="150" height="150" />
 
     <div class="wrapper">
       <WelcomeText title="Oncer" />
