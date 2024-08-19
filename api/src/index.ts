@@ -9,7 +9,7 @@ app.use(express.json()); // parse 'application/json' content-type
 app.post('/upload', upload.single('image'), (req: Request, res: Response) => {
   const filePath = req.file?.path;
   if (filePath) res.send({ message: 'File uploaded successfully!', filePath });
-  else res.status(400).send({ message: 'File upload failed.' });
+  else res.status(400).send({ message: 'File upload failed.' }); // bad client request
 });
 
 const PORT = process.env.PORT || 5000;
