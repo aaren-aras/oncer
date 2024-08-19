@@ -1,12 +1,16 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
+import multer from 'multer';
+import path from 'path';
 
 const app = express();
-const port = 3000;
+const upload = multer({ dest: 'uploads/' }); // create 'uploads' folder
 
-app.get('/', (req, res) => {
-  res.send('Hello, TypeScript with Express!');
+app.use(express.json()); // parse 'application/json' content-type
+app.post('/upload', upload.single('image'), (req: Request, res: Response) => {
+  const filePath = req.file?.path;
+  if (filePath) res.send({ message: 'File uploaded successfully!', filePath });
+  else res.status(400).send({ message: 'File upload failed.' });
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server is running on http://localhost:${PORT}`));
