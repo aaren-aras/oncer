@@ -7,7 +7,7 @@
   "scripts": {
     "start": "concurrently \"npm run start:app\" \"npm run start:api\"",
     "start:app": "cd app && npm run dev",
-    "start:api": "cd api && nodemon index.ts",
+    "start:api": "cd api && nodemon",
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
