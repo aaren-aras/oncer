@@ -3,13 +3,11 @@
   "version": "0.0.1",
   "private": true,
   "type": "module",
-  "description": "",
-  "main": "index.js",
+  "description": "Uses a ML algorithm to detect tumours in uploaded medical images",
   "scripts": {
     "start": "concurrently \"npm run start:app\" \"npm run start:api\"",
     "start:app": "cd app && npm run dev",
     "start:api": "cd api && nodemon index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
@@ -19,7 +17,13 @@
     "type-check": "vue-tsc --build --force",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
-  "keywords": [],
+  "keywords": [
+    "vue",
+    "express",
+    "tumor-detection",
+    "ml",
+    "medical-images"
+  ],
   "author": "Aaren Arasaratnam",
   "license": "ISC",
   "dependencies": {
