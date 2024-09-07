@@ -6,9 +6,8 @@
   "description": "Uses a ML algorithm to detect tumours in uploaded medical images",
   "scripts": {
     "start": "concurrently \"npm run start:app\" \"npm run start:api\"",
-    "start:app": "cd app && npm run dev",
+    "start:app": "cd app && vite",
     "start:api": "cd api && nodemon",
-    "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "test:unit": "vitest",
