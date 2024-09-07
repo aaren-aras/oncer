@@ -1,7 +1,8 @@
 import express, { Request, Response } from 'express';
 import multer from 'multer';
 import path from 'path';
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 const upload = multer({ dest: 'uploads/' }); // create 'uploads' folder
