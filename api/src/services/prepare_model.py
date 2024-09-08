@@ -1,12 +1,16 @@
 import os
-import numpy as np
-import cv2  # OpenCV
-import tensorflow as tf
+import random
+import glob
+import shutil
 
+import numpy as np
+import tensorflow as tf
 from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
 from keras.preprocessing.image import ImageDataGenerator
 from sklearn.model_selection import train_test_split
+
+# import cv2  # OpenCV
 
 # Use GPU for faster training (if available)
 physical_devices = tf.config.experimental.list_physical_devices('GPU')
@@ -14,6 +18,18 @@ print('Available GPUs:', physical_devices)
 if physical_devices: 
   # Allocate memory incrementally, instead of all at once
   ts.config.experimental.set_memory_growth(physical_devices[0], True) 
+
+# Organize data into training, validation, and testing sets
+os.chdir('data/brain')
+os.makedirs('train/positive', exist_ok=True)
+os.makedirs('train/negative', exist_ok=True)
+os.makedirs('test/positive', exist_ok=True)
+os.makedirs('test/negative', exist_ok=True)
+os.makedirs('valid/positive', exist_ok=True)
+os.makedirs('valid/negative', exist_ok=True)
+
+for c in random.sample(glob.glob('Te-no*'), 100):  # 100 positive samples
+  shutil.move(c, 'train/positive')
 
 # Paths (data from: https://www.kaggle.com/datasets/praneet0327/brain-tumor-dataset/data)
 DATA_DIR = 'api/data/brain/training' 
