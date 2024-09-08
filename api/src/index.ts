@@ -5,6 +5,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
+const port = process.env.PORT || 5000;
+
 const upload = multer({ dest: 'uploads/' }); // create 'uploads' folder
 
 app.use(express.json()); // parse 'application/json' content-type
@@ -16,5 +18,5 @@ app.get('/upload', upload.single('image'), (req: Request, res: Response) => {
   else res.status(400).send({ message: 'File upload failed.' }); // bad client request
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server is running on http://localhost:${PORT}`));
+// Serve static files
+app.listen(port, () => console.log(`Server is running on http://localhost:${port}`));
