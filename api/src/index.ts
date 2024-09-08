@@ -8,6 +8,8 @@ const app = express();
 const upload = multer({ dest: 'uploads/' }); // create 'uploads' folder
 
 app.use(express.json()); // parse 'application/json' content-type
+
+// Handle file upload 
 app.post('/upload', upload.single('image'), (req: Request, res: Response) => {
   const filePath = req.file?.path;
   if (filePath) res.send({ message: 'File uploaded successfully!', filePath });
