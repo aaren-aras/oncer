@@ -7,7 +7,7 @@ import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import matplotlib.pyplot as plt
 
-# Switch to working dir
+# Switch to working dir (data from: https://www.kaggle.com/datasets/praneet0327/brain-tumor-dataset/data)
 os.chdir('../../data/brain')
 SOURCE_DIR = os.getcwd()
 
