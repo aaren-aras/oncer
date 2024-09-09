@@ -49,7 +49,7 @@ datasets = {
 for dataset, (neg_samples, pos_samples) in datasets.items():
   neg_images = sample_images('no', neg_samples)
   
-  # TO DO: organize based on tumour type (gliomas, meningiomas) if positive
+  '''TO DO: organize based on tumour type (gliomas, meningiomas) if positive'''
   pos_images = sample_images('gl', pos_samples)
   pos_images += sample_images('me', pos_samples)
 
@@ -78,13 +78,13 @@ TO DO:
 
 # Preprocess image data before inputting into CNN 
 TRAIN_BATCHES = ImageDataGenerator(rescale=1./255) \
-  .flow_from_directory(directory=TRAIN_DIR, target_size=(224, 224), classes=['negative', 'positive'], batch_size=10)  # `rescale`: normalize pixel values to [0, 1]
+  .flow_from_directory(directory=TRAIN_DIR, target_size=(224, 224), classes=['negative', 'positive'], batch_size=10, color_mode='grayscale')  # `rescale`: normalize pixel values to [0, 1]
 
 VALID_BATCHES = ImageDataGenerator(rescale=1./255) \
-  .flow_from_directory(directory=VALID_DIR, target_size=(224, 224), classes=['negative', 'positive'], batch_size=10)  # `batch_size`: learns from 10 images at a time, then updates weights
+  .flow_from_directory(directory=VALID_DIR, target_size=(224, 224), classes=['negative', 'positive'], batch_size=10, color_mode='grayscale')  # `batch_size`: learns from 10 img at a time, then updates weights
 
 TEST_BATCHES = ImageDataGenerator(rescale=1./255) \
-  .flow_from_directory(directory=TEST_DIR, target_size=(224, 224), classes=['negative', 'positive'], batch_size=10, shuffle=False)  # `shuffle`: maintain correct order for confusion matrix
+  .flow_from_directory(directory=TEST_DIR, target_size=(224, 224), classes=['negative', 'positive'], batch_size=10, color_mode='grayscale', shuffle=False)  # `shuffle`: maintain same order for confusion matrix
 
 # Ensure console output is as expected
 assert TRAIN_BATCHES.n == 1000 
@@ -92,15 +92,15 @@ assert VALID_BATCHES.n == 300
 assert TEST_BATCHES.n == 200 
 assert TRAIN_BATCHES.num_classes == VALID_BATCHES.num_classes == TEST_BATCHES.num_classes == 2
 
-samples, labels = next(TRAIN_BATCHES)
-def plotImages(img_arr):
-  fig, axes = plt.subplots(1, 10, figsize=(20, 20))
-  axes = axes.flatten()  # 2D -> 1D
-  for img, axis in zip(img_arr, axes):  # iterate over two lists in parallel
-    axis.imshow(img)
-    axis.axis('off')
-  plt.tight_layout()
-  plt.show()
+# samples, labels = next(TRAIN_BATCHES)
+# def plotImages(img_arr):
+#   fig, axes = plt.subplots(1, 10, figsize=(20, 20))
+#   axes = axes.flatten()  # 2D -> 1D
+#   for img, axis in zip(img_arr, axes):  # iterate over two lists in parallel
+#     axis.imshow(img)
+#     axis.axis('off')
+#   plt.tight_layout()
+#   plt.show()
 
-print(labels)  # one-hot encoded (avoid implying ranking/order): [1. 0.] = neg, [0. 1.] = pos (floats!)
-plotImages(samples)
+# print(labels)  # one-hot encoded (avoid implying ranking/order): [1. 0.] = neg, [0. 1.] = pos (floats!)
+# plotImages(samples)
