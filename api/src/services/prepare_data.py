@@ -3,11 +3,14 @@ import random
 import glob
 import shutil
 
+import tensorflow as tf
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+
 # Switch to working dir
 os.chdir('../../data/brain')
 SOURCE_DIR = os.getcwd()
 
-# Define datasets
+# Define dataset paths
 TRAIN_DIR = os.path.join(SOURCE_DIR, 'train')
 VALID_DIR = os.path.join(SOURCE_DIR, 'valid')
 TEST_DIR = os.path.join(SOURCE_DIR, 'test')
@@ -64,3 +67,14 @@ for dataset, (neg_samples, pos_samples) in datasets.items():
       print(f'Error moving \'{os.path.basename(c)}\': {e}')
 
 print('*COMPLETE: images have been distributed across training, validation, and testing sets')
+
+# Preprocess image data before inputting into CNN w/ VGG16 architecture
+TRAIN_BATCHES = ImageDataGenerator(preprocessing_function=tf.keras.applications.vgg16.preprocess_input) \
+  .flow_from_directory(directory=TRAIN_DIR, target_size=(224, 224), classes=['negative', 'positive'], batch_size=10)  # learns from 10 images at a time, then updates weights
+
+# TO DO: refactor and use augmentation (e.g., `rotation_range=10, zoom_range=0.1, horizontal_flip=True`)
+VALID_BATCHES = ImageDataGenerator(preprocessing_function=tf.keras.applications.vgg16.preprocess_input) \
+  .flow_from_directory(directory=VALID_DIR, target_size=(224, 224), classes=['negative', 'positive'], batch_size=10)
+
+TEST_BATCHES = ImageDataGenerator(preprocessing_function=tf.keras.applications.vgg16.preprocess_input) \
+  .flow_from_directory(directory=TEST_DIR, target_size=(224, 224), classes=['negative', 'positive'], batch_size=10, shuffle=False)  # maintain correct order for confusion matrix

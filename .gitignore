@@ -1,3 +1,4 @@
+# ROOT
 node_modules/
 .vscode/
 .env
@@ -5,6 +6,7 @@ node_modules/
 # BACKEND
 api/data/
 api/uploads/
+api/venv/
 
 # FRONTEND
 ## Logs
