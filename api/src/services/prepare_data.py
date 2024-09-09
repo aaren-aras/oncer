@@ -5,6 +5,7 @@ import shutil
 
 import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+import matplotlib.pyplot as plt
 
 # Switch to working dir
 os.chdir('../../data/brain')
@@ -15,14 +16,14 @@ TRAIN_DIR = os.path.join(SOURCE_DIR, 'train')
 VALID_DIR = os.path.join(SOURCE_DIR, 'valid')
 TEST_DIR = os.path.join(SOURCE_DIR, 'test')
 
-# Create 'positive' and 'negative' folders (if needed)
+# Create 'negative' and 'positive' folders (if needed)
 for dir_name in [TRAIN_DIR, VALID_DIR, TEST_DIR]:
-  os.makedirs(os.path.join(dir_name, 'positive'), exist_ok=True)
   os.makedirs(os.path.join(dir_name, 'negative'), exist_ok=True)
+  os.makedirs(os.path.join(dir_name, 'positive'), exist_ok=True)
 
 # Move images back to source directory (if needed)
 def move_back_to_src_dir(dir_name):
-  for folder in ['positive', 'negative']:
+  for folder in ['negative', 'positive']:
     folder_path = os.path.join(dir_name, folder)
     for filename in os.listdir(folder_path):
       file_path = os.path.join(folder_path, filename)
@@ -68,13 +69,38 @@ for dataset, (neg_samples, pos_samples) in datasets.items():
 
 print('*COMPLETE: images have been distributed across training, validation, and testing sets')
 
-# Preprocess image data before inputting into CNN w/ VGG16 architecture
-TRAIN_BATCHES = ImageDataGenerator(preprocessing_function=tf.keras.applications.vgg16.preprocess_input) \
-  .flow_from_directory(directory=TRAIN_DIR, target_size=(224, 224), classes=['negative', 'positive'], batch_size=10)  # learns from 10 images at a time, then updates weights
+'''
+TO DO:
+ - Refactor and use augmentation (e.g., `rotation_range=10, zoom_range=0.1, horizontal_flip=True`)?
+ - Use VGG16 (`preprocessing_function=tf.keras.applications.vgg16.preprocess_input`), then duplicate 
+ channels for RGB (https://tinyurl.com/yzxkhmdh)? Not ideal?
+'''
 
-# TO DO: refactor and use augmentation (e.g., `rotation_range=10, zoom_range=0.1, horizontal_flip=True`)
-VALID_BATCHES = ImageDataGenerator(preprocessing_function=tf.keras.applications.vgg16.preprocess_input) \
-  .flow_from_directory(directory=VALID_DIR, target_size=(224, 224), classes=['negative', 'positive'], batch_size=10)
+# Preprocess image data before inputting into CNN 
+TRAIN_BATCHES = ImageDataGenerator(rescale=1./255) \
+  .flow_from_directory(directory=TRAIN_DIR, target_size=(224, 224), classes=['negative', 'positive'], batch_size=10)  # `rescale`: normalize pixel values to [0, 1]
 
-TEST_BATCHES = ImageDataGenerator(preprocessing_function=tf.keras.applications.vgg16.preprocess_input) \
-  .flow_from_directory(directory=TEST_DIR, target_size=(224, 224), classes=['negative', 'positive'], batch_size=10, shuffle=False)  # maintain correct order for confusion matrix
+VALID_BATCHES = ImageDataGenerator(rescale=1./255) \
+  .flow_from_directory(directory=VALID_DIR, target_size=(224, 224), classes=['negative', 'positive'], batch_size=10)  # `batch_size`: learns from 10 images at a time, then updates weights
+
+TEST_BATCHES = ImageDataGenerator(rescale=1./255) \
+  .flow_from_directory(directory=TEST_DIR, target_size=(224, 224), classes=['negative', 'positive'], batch_size=10, shuffle=False)  # `shuffle`: maintain correct order for confusion matrix
+
+# Ensure console output is as expected
+assert TRAIN_BATCHES.n == 1000 
+assert VALID_BATCHES.n == 300 
+assert TEST_BATCHES.n == 200 
+assert TRAIN_BATCHES.num_classes == VALID_BATCHES.num_classes == TEST_BATCHES.num_classes == 2
+
+samples, labels = next(TRAIN_BATCHES)
+def plotImages(img_arr):
+  fig, axes = plt.subplots(1, 10, figsize=(20, 20))
+  axes = axes.flatten()  # 2D -> 1D
+  for img, axis in zip(img_arr, axes):  # iterate over two lists in parallel
+    axis.imshow(img)
+    axis.axis('off')
+  plt.tight_layout()
+  plt.show()
+
+print(labels)  # one-hot encoded: [1. 0.] = negative, [0. 1.] = positive
+plotImages(samples)
