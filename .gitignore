@@ -7,6 +7,7 @@ node_modules/
 api/data/
 api/uploads/
 api/venv/
+api/src/services/__pycache__
 
 # FRONTEND
 ## Logs
