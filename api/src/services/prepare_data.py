@@ -102,5 +102,5 @@ def plotImages(img_arr):
   plt.tight_layout()
   plt.show()
 
-print(labels)  # one-hot encoded: [1. 0.] = negative, [0. 1.] = positive
+print(labels)  # one-hot encoded (avoid implying ranking/order): [1. 0.] = neg, [0. 1.] = pos (floats!)
 plotImages(samples)
