@@ -7,6 +7,7 @@ from tensorflow.keras.metrics import categorical_crossentropy
 from sklearn.metrics import confusion_matrix
 
 from prepare_data import TRAIN_BATCHES, VALID_BATCHES
+import tensorflowjs as tfjs
 
 # Use GPU for faster training (if available)
 physical_devices = tf.config.experimental.list_physical_devices('GPU')
@@ -49,7 +50,9 @@ def train_model():
   '''TO DO: resolve runtime warnings'''
   # Epochs: num. of times the model will cycle through data, verbose: amount of console output
   model.fit(x=TRAIN_BATCHES, validation_data=VALID_BATCHES, epochs=10, verbose=2)
-  model.save('../models/brain_tumour_model.keras')
+  
+  model.save('../../models/brain_tumour_model.keras')
+  tfjs.converters.save_keras_model(model, '../../models')
   print(f'*COMPLETE: model trained and saved to \'models\' folder')
 
 if __name__ == '__main__':  # run script
