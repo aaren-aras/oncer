@@ -17,13 +17,13 @@ app.listen(port, () => console.log(`Server is running on http://localhost:${port
 
 const upload = multer({ dest: 'uploads/' }); // Ensure 'uploads' folder exists
 
-app.use('/models', express.static('../models'));
+app.use('/models', express.static('models'));
 
 let model: tfjs.LayersModel | null = null;
 async function loadModel() {
   try {
-    model = await tfjs.loadLayersModel('http://10.36.89.31:8080/model.json');
-    console.log('Model loaded successfully');
+    model = await tfjs.loadLayersModel('http://localhost:5000/../models/model.json');
+    console.log('Model is running on http://localhost:5000/../models/model.json');
   } catch (error) {
     console.error('Failed to load the model:', error);
   }
