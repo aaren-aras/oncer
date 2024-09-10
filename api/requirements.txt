@@ -1,4 +1,7 @@
-tensorflow
-keras
-scikit-learn
-numpy
+# Python 3.8.10 + venv
+numpy==1.22.0
+tensorflow==2.2.0
+tensorflowjs==3.1.0
+protobuf==3.20.3
+matplotlib==3.3.4 
+scikit-learn==0.23.2  
