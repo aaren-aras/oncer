@@ -2,12 +2,11 @@
 node_modules/
 .vscode/
 .env
-.venv
+.venv/
 
 # BACKEND
 api/data/
 api/uploads/
-api/venv/
 api/src/services/__pycache__
 
 # FRONTEND
