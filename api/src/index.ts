@@ -37,7 +37,6 @@ loadModel();
 
 // Handle file upload and prediction
 app.post('/predict', upload.single('image'), async (req: Request, res: Response) => {
-  console.log('test')
   const imagePath = req.file?.path;
 
   if (!imagePath) {
