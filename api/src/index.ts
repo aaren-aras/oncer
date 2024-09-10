@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import multer from 'multer';
-import * as tfjs from '@tensorflow/tfjs'; // TO DO: use @tensorflow/tfjs-node instead of canvas
+// TO DO: use @tensorflow/tfjs-node instead of canvas: https://www.tensorflow.org/js/guide/nodejs
+import * as tfjs from '@tensorflow/tfjs';
 import path from 'path';
 import fs from 'fs';
 import cors from 'cors';

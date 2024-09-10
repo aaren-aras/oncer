@@ -52,6 +52,7 @@ def train_model():
   model.fit(x=TRAIN_BATCHES, validation_data=VALID_BATCHES, epochs=10, verbose=2)
   
   model.save('../../models/brain_tumour_model.keras')
+  # https://www.tensorflow.org/js/tutorials/conversion/import_keras
   tfjs.converters.save_keras_model(model, '../../models')
   print(f'*COMPLETE: model trained and saved to \'models\' folder')
 
