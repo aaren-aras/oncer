@@ -6,8 +6,8 @@ node_modules/
 
 # BACKEND
 api/data/
-api/uploads/
 api/models/
+api/uploads/
 api/src/services/__pycache__
 
 # FRONTEND

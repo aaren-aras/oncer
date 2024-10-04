@@ -1,4 +1,4 @@
-# Python 3.8.10 + venv
+virtualenv  # use Python 3.8.10
 numpy==1.22.0
 tensorflow==2.2.0
 tensorflowjs==3.1.0
