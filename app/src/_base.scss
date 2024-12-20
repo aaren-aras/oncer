@@ -61,7 +61,7 @@
 body {
   min-height: 100vh;
   color: var(--color-text);
-  background: var(--color-background);
+  /* background: var(--color-background); */
   transition:
     color 0.5s,
     background-color 0.5s;
@@ -83,4 +83,18 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('./assets/bkgd.jpg') no-repeat center center/cover;
+  z-index: -1; /* Ensure it’s behind the content */
+  opacity: 0.02; /* Adjust opacity */
+  filter: brightness(500%); /* Add filters here */
+  transition: opacity 0.5s, filter 0.5s;
 }
