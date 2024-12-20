@@ -55,6 +55,7 @@
     "eslint-plugin-vue": "^9.23.0",
     "jsdom": "^24.1.0",
     "nodemon": "^3.1.4",
+    "sass-embedded": "^1.83.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4",
     "vite": "^5.3.1",

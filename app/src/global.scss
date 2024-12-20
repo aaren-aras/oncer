@@ -1,0 +1,76 @@
+/* Custom Fonts */
+// Source: https://fonts.google.com/specimen/League+Spartan
+@font-face {
+  font-family: 'League Spartan';
+  src: url('https://static.igem.wiki/teams/5118/fonts/leaguespartan.woff2') format('woff2');
+  font-stretch: ultra-expanded;
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+// Source: https://www.whatfontis.com/FF_QUARTZO-demo-Bold.font?text=BovEco
+@font-face {
+  font-family: 'Quartzo';
+  src: url('https://static.igem.wiki/teams/5118/fonts/quartzo.woff2') format('woff2');
+  font-stretch: ultra-expanded;
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Colour Scheme */
+$primary: white;
+$secondary: rgba(29, 30, 29, 0.639);
+$accent-1: rgb(101, 146, 109);
+$accent-2: rgb(99, 144, 119);
+$accent-3: rgb(215, 200, 176);
+$accent-4: rgb(165, 149, 123);
+
+$lnd: rgb(151, 200, 216);
+$mnm: rgb(146, 81, 146);
+$hp: rgb(99, 183, 144);
+
+$accent-gradient-1: linear-gradient(
+  45deg,
+  rgba($accent-1, 0.8),
+  rgba($accent-2, 0.7),
+  rgba($primary, 0.6)
+);
+
+$accent-gradient-2: linear-gradient(
+  45deg,
+  rgba($accent-3, 0.8),
+  rgba($accent-4, 0.7),
+  rgba($primary, 0.6)
+);
+
+
+html {
+  font-family: 'League Spartan', 'Roboto', system-ui, sans-serif;
+  overflow-x: hidden; // for Clouds.astro
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+}
+
+img, picture, svg, video {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+a { 
+  text-decoration: none; 
+  color: inherit;
+}
+
+@mixin transition-ease {
+  opacity: 0.8;
+  transform: translateY(0.05em);
+  transition: all 0.2s ease-in-out;
+}

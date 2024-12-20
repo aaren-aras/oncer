@@ -1,8 +1,9 @@
 <template>
-  <h1>Upload here:</h1>
-  <form id="upload-form" @submit.prevent>
-    <input type="file" id="image" @change="uploadFile" accept="image/*" required/>
-  </form>
+  <div>
+    <form id="upload-form" @submit.prevent>
+      <input type="file" id="image" @change="uploadFile" accept="image/*" required/>
+    </form>
+  </div>
   <div v-show="message">{{ message }}</div>
   <div v-show="result">{{ result }}</div>
 </template>
@@ -45,7 +46,7 @@
   };
 </script>
 
-<style>
+<style lang="scss">
   @media (min-width: 1024px) {
     .about {
       min-height: 100vh;
