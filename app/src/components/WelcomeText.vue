@@ -8,7 +8,7 @@ defineProps<{
   <div class="greetings">
     <h1 class="green">{{ title }}</h1>
     <h3>
-      An all-in-one solution for cancer detection with a mere click of a button!
+      An all-in-ONE solution for cancer detection with a SINGLE upload!
       Powered by
       <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a> +
       <a href="" target="_blank" rel="noopener">Express</a> + 
