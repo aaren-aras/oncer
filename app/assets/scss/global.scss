@@ -1,0 +1,71 @@
+@use 'fonts';
+@use 'palette';
+@use 'config';
+
+@forward 'fonts';
+@forward 'palette';
+@forward 'config';
+
+a {
+  text-decoration: none;
+  color: palette.$accent-3;
+  padding: 3px;
+  @include config.transition-ease;
+}
+
+body {
+  min-height: 100vh;
+  // color: rgba(lightslategray, 0.5);
+  // color: rgba(lightcyan, 0.5);
+
+  color: var(--color-text);
+  background: var(--color-background); 
+
+  transition:
+    color 0.5s,
+    background-color 0.5s;
+  line-height: 1.6;
+  font-size: 15px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('./assets/bkgd.jpg') no-repeat center center/cover;
+  z-index: -1; /* Ensure it’s behind the content */
+  opacity: 0.02; /* Adjust opacity */
+  // filter: brightness(500%); /* Add filters here */
+  transition: opacity 0.5s, filter 0.5s;
+}
+
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+@media (hover: hover) {
+  a:hover {
+    background-color: rgba(palette.$accent-3, 0.3);
+  }
+}
+
+@media (min-width: 1024px) {
+  body {
+    display: flex;
+    place-items: center;
+  }
+
+  #app {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0 2rem;
+  }
+}

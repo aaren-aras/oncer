@@ -1,0 +1,38 @@
+:root {
+  // --primary: rgb(212, 223, 231);
+  --primary: rgb(211, 211, 211);
+  --secondary: rgb(24, 24, 24);
+  --accent-1: rgb(44, 62, 80);
+  --accent-2: rgba(192, 218, 251, 0.75); // ~ lightsteelblue
+
+  --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
+  --vt-c-divider-light-2: rgba(191, 184, 227, 0.12);
+  --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
+  --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
+}
+
+$accent-3: rgb(82, 113, 255); // ~ royalblue
+
+// Light mode (default)
+:root {
+  --color-background: var(--vt-c-white);
+
+  --color-border: var(--vt-c-divider-light-2);
+  --color-border-hover: var(--vt-c-divider-light-1);
+
+  --color-heading: var(--secondary);
+  --color-text: var(--accent-1);
+}
+
+// Dark mode 
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: var(--secondary);
+
+    --color-border: var(--vt-c-divider-dark-2);
+    --color-border-hover: var(--vt-c-divider-dark-1);
+
+    --color-heading: var(--primary);
+    --color-text: var(--accent-2);
+  }
+}

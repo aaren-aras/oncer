@@ -1,0 +1,26 @@
+// Source: https://fonts.google.com/specimen/Ubuntu
+@font-face {
+  font-family: 'Ubuntu';
+  src: url('assets/fonts/Ubuntu.ttf');
+  font-stretch: ultra-expanded;
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+html {
+  font-family:
+  'Ubuntu',
+  Inter,
+  -apple-system,
+  BlinkMacSystemFont,
+  'Segoe UI',
+  Roboto,
+  Oxygen,
+  Ubuntu,
+  Cantarell,
+  'Fira Sans',
+  'Droid Sans',
+  'Helvetica Neue',
+  sans-serif;
+}

@@ -17,32 +17,36 @@ defineProps<{
   </div>
 </template>
 
-<style scoped>
-h1 {
-  font-weight: 500;
-  font-size: 2.6rem;
-  padding: 0;
-  margin: 0;
-  margin-block-start: 0 !important;
-  margin-block-end: 0 !important;
-  position: relative;
-  top: -10px;
-}
+<style scoped lang="scss">
+  @use '../../assets/scss/global.scss' as *;
 
-h3 {
-  font-size: 1.2rem;
-  font-weight: normal;
-}
+  h1 {
+    font-weight: 500;
+    font-size: 2.6rem;
+    color: $accent-3;
+    padding: 0;
+    margin: 0;
+    margin-block-start: 0 !important;
+    margin-block-end: 0 !important;
+    position: relative;
+    top: -10px;
+  }
 
-.greetings h1,
-.greetings h3 {
-  text-align: center;
-}
+  h3 {
+    /* width: 80%; */
+    font-size: 1.2rem;
+    font-weight: normal;
+  }
 
-@media (min-width: 1024px) {
   .greetings h1,
   .greetings h3 {
-    text-align: left;
+    text-align: center;
   }
-}
+
+  @media (min-width: 1024px) {
+    .greetings h1,
+    .greetings h3 {
+      text-align: left;
+    }
+  }
 </style>
