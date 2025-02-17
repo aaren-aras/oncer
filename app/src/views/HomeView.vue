@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
+  import WelcomeBlurb from '../components/WelcomeBlurb.vue'
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <WelcomeBlurb />
   </main>
 </template>

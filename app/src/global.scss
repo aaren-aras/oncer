@@ -1,161 +1,105 @@
-// /* Custom Fonts */
-// // Source: https://fonts.google.com/specimen/League+Spartan
-// @font-face {
-//   font-family: 'League Spartan';
-//   src: url('https://static.igem.wiki/teams/5118/fonts/leaguespartan.woff2') format('woff2');
-//   font-stretch: ultra-expanded;
-//   font-weight: bold;
-//   font-style: normal;
-//   font-display: swap;
-// }
-
-// // Source: https://www.whatfontis.com/FF_QUARTZO-demo-Bold.font?text=BovEco
-// @font-face {
-//   font-family: 'Quartzo';
-//   src: url('https://static.igem.wiki/teams/5118/fonts/quartzo.woff2') format('woff2');
-//   font-stretch: ultra-expanded;
-//   font-weight: normal;
-//   font-style: normal;
-//   font-display: swap;
-// }
-
-// /* Colour Scheme */
-// $primary: white;
-// $secondary: rgba(29, 30, 29, 0.639);
-// $accent-1: rgb(101, 146, 109);
-// $accent-2: rgb(99, 144, 119);
-// $accent-3: rgb(215, 200, 176);
-// $accent-4: rgb(165, 149, 123);
-
-// $lnd: rgb(151, 200, 216);
-// $mnm: rgb(146, 81, 146);
-// $hp: rgb(99, 183, 144);
-
-// $accent-gradient-1: linear-gradient(
-//   45deg,
-//   rgba($accent-1, 0.8),
-//   rgba($accent-2, 0.7),
-//   rgba($primary, 0.6)
-// );
-
-// $accent-gradient-2: linear-gradient(
-//   45deg,
-//   rgba($accent-3, 0.8),
-//   rgba($accent-4, 0.7),
-//   rgba($primary, 0.6)
-// );
-
-
-// html {
-//   font-family: 'League Spartan', 'Roboto', system-ui, sans-serif;
-//   overflow-x: hidden; // for Clouds.astro
-// }
-
-// *, *::before, *::after {
-//   box-sizing: border-box;
-//   margin: 0;
-//   padding: 0;
-//   scroll-behavior: smooth;
-// }
-
-// img, picture, svg, video {
-//   display: block;
-//   max-width: 100%;
-//   max-height: 100%;
-// }
-
-// a { 
-//   text-decoration: none; 
-//   color: inherit;
-// }
-
-// @mixin transition-ease {
-//   opacity: 0.8;
-//   transform: translateY(0.05em);
-//   transition: all 0.2s ease-in-out;
-// }
-
-/* color palette from <https://github.com/vuejs/theme> */
-:root {
-  --vt-c-white: #ffffff;
-  --vt-c-white-soft: #f8f8f8;
-  --vt-c-white-mute: #f2f2f2;
-
-  --vt-c-black: #181818;
-  --vt-c-black-soft: #222222;
-  --vt-c-black-mute: #282828;
-
-  --vt-c-indigo: #2c3e50;
-
-  --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
-  --vt-c-divider-light-2: rgba(60, 60, 60, 0.12);
-  --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
-  --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
-
-  --vt-c-text-light-1: var(--vt-c-indigo);
-  --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
-  --vt-c-text-dark-1: var(--vt-c-white);
-  --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
+/* Custom Fonts */
+// Source: https://fonts.google.com/specimen/League+Spartan
+@font-face {
+  font-family: 'League Spartan';
+  src: url('assets/fonts/Ubuntu.ttf');
+  font-stretch: ultra-expanded;
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
-/* semantic color variables for this project */
+/* Colour Scheme */
+:root {
+  --primary: rgb(212, 223, 231);
+  --secondary: rgb(24, 24, 24);
+  --accent-1: rgb(44, 62, 80);
+
+  --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
+  --vt-c-divider-light-2: rgba(191, 184, 227, 0.12);
+  --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
+  --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
+}
+
+// Light mode 
 :root {
   --color-background: var(--vt-c-white);
-  --color-background-soft: var(--vt-c-white-soft);
-  --color-background-mute: var(--vt-c-white-mute);
 
   --color-border: var(--vt-c-divider-light-2);
   --color-border-hover: var(--vt-c-divider-light-1);
 
-  --color-heading: var(--vt-c-text-light-1);
-  --color-text: var(--vt-c-text-light-1);
-
-  --section-gap: 160px;
+  --color-heading: var(--accent);
+  --color-text: var(--accent);
 }
 
+// Dark mode 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-background: var(--vt-c-black);
-    --color-background-soft: var(--vt-c-black-soft);
-    --color-background-mute: var(--vt-c-black-mute);
+    --color-background: var(--secondary);
 
     --color-border: var(--vt-c-divider-dark-2);
     --color-border-hover: var(--vt-c-divider-dark-1);
 
-    --color-heading: var(--vt-c-text-dark-1);
-    --color-text: var(--vt-c-text-dark-2);
+    --color-heading: var(--primary);
+    --color-text: rgba(192, 218, 251, 0.75); // ~ lightsteelblue
   }
 }
 
-*,
-*::before,
-*::after {
+html {
+  font-family:
+  'League Spartan',
+  Inter,
+  -apple-system,
+  BlinkMacSystemFont,
+  'Segoe UI',
+  Roboto,
+  Oxygen,
+  Ubuntu,
+  Cantarell,
+  'Fira Sans',
+  'Droid Sans',
+  'Helvetica Neue',
+  sans-serif;
+}
+
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
-  font-weight: normal;
+  padding: 0;
+  scroll-behavior: smooth;
+}
+
+img, picture, svg, video {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+a { 
+  text-decoration: none; 
+  color: inherit;
+}
+
+@mixin transition-ease {
+  opacity: 0.8;
+  transform: translateY(0.05em);
+  transition: all 0.2s ease-in-out;
 }
 
 body {
   min-height: 100vh;
+  // color: lightgray;
+  // color: rgba(lightslategray, 0.5);
+  // color: rgba(lightsteelblue, 0.75);
+  // color: rgba(lightcyan, 0.5);
+
   color: var(--color-text);
   background: var(--color-background); 
+
   transition:
     color 0.5s,
     background-color 0.5s;
   line-height: 1.6;
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    'Fira Sans',
-    'Droid Sans',
-    'Helvetica Neue',
-    sans-serif;
   font-size: 15px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -172,15 +116,14 @@ body::before {
   background: url('./assets/bkgd.jpg') no-repeat center center/cover;
   z-index: -1; /* Ensure it’s behind the content */
   opacity: 0.02; /* Adjust opacity */
-  filter: brightness(500%); /* Add filters here */
+  // filter: brightness(500%); /* Add filters here */
   transition: opacity 0.5s, filter 0.5s;
 }
 
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+  max-width: 1280px !important;
+  margin: 0 auto !important;
+  padding: 2rem !important;
 }
 
 a,
@@ -193,7 +136,7 @@ a,
 
 @media (hover: hover) {
   a:hover {
-    background-color: rgba(12, 192, 223, 0.3);
+    background-color: rgba(190, 79, 66, 0.3) !important;
     border-radius: 50px;
   }
 }

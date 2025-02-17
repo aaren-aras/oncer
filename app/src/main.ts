@@ -1,4 +1,4 @@
-import './global.scss'
+import './global.scss' // global styles
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'

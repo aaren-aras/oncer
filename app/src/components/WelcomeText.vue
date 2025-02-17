@@ -12,7 +12,7 @@ defineProps<{
       Powered by
       <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a> +
       <a href="" target="_blank" rel="noopener">Express</a> + 
-      <a href="" target="_blank" rel="noopener">???</a>. 
+      <a href="" target="_blank" rel="noopener">TensorFlow</a>. 
     </h3>
   </div>
 </template>
@@ -21,12 +21,17 @@ defineProps<{
 h1 {
   font-weight: 500;
   font-size: 2.6rem;
+  padding: 0;
+  margin: 0;
+  margin-block-start: 0 !important;
+  margin-block-end: 0 !important;
   position: relative;
   top: -10px;
 }
 
 h3 {
   font-size: 1.2rem;
+  font-weight: normal;
 }
 
 .greetings h1,
