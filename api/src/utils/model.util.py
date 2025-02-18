@@ -6,8 +6,14 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.metrics import categorical_crossentropy
 from sklearn.metrics import confusion_matrix
 
-from prepare_data import TRAIN_BATCHES, VALID_BATCHES
+import os
+import importlib.util
 import tensorflowjs as tfjs
+
+# Allow use of periods in 'data.util.py' filename being imported
+spec = importlib.util.spec_from_file_location('data.util', 'data.util.py')
+data_util = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(data_util)
 
 # Use GPU for faster training (if available)
 physical_devices = tf.config.experimental.list_physical_devices('GPU')
@@ -48,8 +54,12 @@ def build_model():
 def train_model():
   model = build_model()
   '''TO DO: resolve runtime warnings'''
+
+  # Create 'models' folder if it doesn't exist
+  os.makedirs('../../models', exist_ok=True) 
+
   # Epochs: num. of times the model will cycle through data, verbose: amount of console output
-  model.fit(x=TRAIN_BATCHES, validation_data=VALID_BATCHES, epochs=10, verbose=2)
+  model.fit(x=data_util.TRAIN_BATCHES, validation_data=data_util.VALID_BATCHES, epochs=10, verbose=2)
   
   model.save('../../models/brain_tumour_model.keras')
   # https://www.tensorflow.org/js/tutorials/conversion/import_keras
