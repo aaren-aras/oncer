@@ -25,7 +25,7 @@ $ cd oncer
 $ npm install
 
 # Install Python dependencies
-$ cd api && pip install virtual env
+$ cd api && pip install virtualenv
 $ virtualenv -p C:/Users/[User]/AppData/Local/Programs/Python/Python38/python.exe .venv # default path
 $ source .venv/Scripts/activate # for Windows
 $ pip install -r requirements.txt
