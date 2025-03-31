@@ -16,23 +16,24 @@ TRAIN_DIR = os.path.join(SOURCE_DIR, 'train')
 VALID_DIR = os.path.join(SOURCE_DIR, 'valid')
 TEST_DIR = os.path.join(SOURCE_DIR, 'test')
 
-# Create 'negative' and 'positive' folders (if needed)
+# Create 'Negative' and 'Positive' folders (if needed)
 for dir_name in [TRAIN_DIR, VALID_DIR, TEST_DIR]:
-  os.makedirs(os.path.join(dir_name, 'negative'), exist_ok=True)
-  os.makedirs(os.path.join(dir_name, 'positive'), exist_ok=True)
+  os.makedirs(os.path.join(dir_name, 'Negative'), exist_ok=True)
+  os.makedirs(os.path.join(dir_name, 'Positive'), exist_ok=True)
 
 # Move images back to source directory (if needed)
-def move_back_to_src_dir(dir_name):
-  for folder in ['negative', 'positive']:
+def move_to_src_dir(dir_name):
+  for folder in ['Negative', 'Positive']:
     folder_path = os.path.join(dir_name, folder)
     for filename in os.listdir(folder_path):
       file_path = os.path.join(folder_path, filename)
       if os.path.isfile(file_path):
         shutil.move(file_path, os.path.join(SOURCE_DIR, filename))
 
-move_back_to_src_dir(TRAIN_DIR)
-move_back_to_src_dir(VALID_DIR)
-move_back_to_src_dir(TEST_DIR)
+move_to_src_dir(SOURCE_DIR)
+move_to_src_dir(TRAIN_DIR)
+move_to_src_dir(VALID_DIR)
+move_to_src_dir(TEST_DIR)
 
 # Randomly sample images from source directory based on category
 def sample_images(category, num_samples):
@@ -40,15 +41,16 @@ def sample_images(category, num_samples):
   return random.sample(glob.glob(os.path.join(SOURCE_DIR, f'*{category}*')), num_samples)
 
 datasets = {
-  'train': (500, 250),  # (neg, pos)
-  'valid': (150, 75),  # 1/2 * pos since calling twice
+  # (neg, pos) where 1/2 * pos since calling twice ('gl' + 'me')
+  'train': (500, 250),  
+  'valid': (150, 75),  
   'test': (100, 50)
 }
 
 # Move images to respective directories based on sampling and distribution amounts
 for dataset, (neg_samples, pos_samples) in datasets.items():
   neg_images = sample_images('no', neg_samples)
-  
+
   '''TO DO: organize based on tumour type (gliomas, meningiomas) if positive'''
   pos_images = sample_images('gl', pos_samples)
   pos_images += sample_images('me', pos_samples)
