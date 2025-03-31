@@ -8,7 +8,7 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import matplotlib.pyplot as plt
 
 # Switch to working dir 
-os.chdir('../../data/brain')
+os.chdir('../../data/Brain_Tumor_Dataset')
 SOURCE_DIR = os.getcwd()
 
 # Define dataset paths
