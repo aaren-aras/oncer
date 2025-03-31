@@ -8,10 +8,7 @@ This web app enables users to upload medical images and have them processed by a
 ## Prerequisites
 This project relies on specific versions of **Node.js** and **Python** to work properly due to weird compatibility issues with [TensorFlow.js](https://www.tensorflow.org/js). I've personally found the most success with Node.js [v**20.17**](https://nodejs.org/en/blog/release/v20.17.0) and Python [**3.8.10**](https://www.python.org/downloads/release/python-3810/), but feel free to experiment a bit!
 
-It also requires data and model files that have not been provided in this repository. Download the brain MRI scans from [here](https://www.kaggle.com/datasets/praneet0327/brain-tumor-dataset/data), create a subfolder named `data` inside the `api` folder, and place the downloaded `Brain_Tumor_Dataset` folder inside it (`api/data/Brain_Tumor_Dataset`). The Python files in `api/src/utils` will handle the rest (see setup instructions below).
-
-## Issues
-TBA
+It also requires data and model files that haven't been provided in this repository. Download the brain MRI scans from [here](https://www.kaggle.com/datasets/praneet0327/brain-tumor-dataset/data), create a subfolder named `data` inside the `api` folder, and place the downloaded `Brain_Tumor_Dataset` folder inside it (`api/data/Brain_Tumor_Dataset`). Then, you'll want to run the Python files in `api/src/utils` to build and train the CNN model, as shown below.
 
 ## Setup
 ```bash
@@ -41,6 +38,9 @@ $ npm run build
 $ npm run preview
 
 ```
+
+## Issues
+TBA
 
 ## Retrospective
  - Consider writing the entire backend in Python (with a framework like Flask) for more uniformity 
