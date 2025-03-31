@@ -36,7 +36,7 @@ move_back_to_src_dir(TEST_DIR)
 
 # Randomly sample images from source directory based on category
 def sample_images(category, num_samples):
-  # E.g., ['api/data/brain/Tr-no_0840.jpg', 'api/data/brain/Tr-no_0812.jpg', ...] for category = 'no'
+  # E.g., ['api/data/Brain_Tumor_Dataset/Tr-no_0840.jpg', 'api/data/Brain_Tumor_Dataset/Tr-no_0812.jpg', ...] for category = 'no'
   return random.sample(glob.glob(os.path.join(SOURCE_DIR, f'*{category}*')), num_samples)
 
 datasets = {
@@ -55,14 +55,14 @@ for dataset, (neg_samples, pos_samples) in datasets.items():
 
   for c in neg_images:  # c = current image
     try:
-      # E.g., 'api/data/brain/Tr-no_0835.jpg' -> 'api/data/brain/train/negative/Tr-no_0835.jpg'
+      # E.g., 'api/data/Brain_Tumor_Dataset/Tr-no_0835.jpg' -> 'api/data/Brain_Tumor_Dataset/train/negative/Tr-no_0835.jpg'
       shutil.move(c, os.path.join(dataset, 'negative'))
     except Exception as e:
       print(f'Error moving \'{os.path.basename(c)}\': {e}')
   
   for c in pos_images:
     try:
-      # E.g., 'api/data/brain/Tr-gl_0336.jpg' -> 'api/data/brain/train/positive/Tr-gl_0336.jpg'
+      # E.g., 'api/data/Brain_Tumor_Dataset/Tr-gl_0336.jpg' -> 'api/data/Brain_Tumor_Dataset/train/positive/Tr-gl_0336.jpg'
       shutil.move(c, os.path.join(dataset, 'positive'))
     except Exception as e:
       print(f'Error moving \'{os.path.basename(c)}\': {e}')
