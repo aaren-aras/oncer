@@ -1,7 +1,9 @@
+// Use variables in this file 
 @use 'fonts';
 @use 'palette';
 @use 'config';
 
+// Make variables available everywhere this file is imported
 @forward 'fonts';
 @forward 'palette';
 @forward 'config';
