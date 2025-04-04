@@ -14,22 +14,17 @@ export function useTheme() {
     localStorage.setItem('theme', value)
   }
 
-  const toggleTheme = () => {
+  const toggleTheme = () => { 
     setTheme(theme.value === 'dark' ? 'light' : 'dark')
   }
 
   onMounted(() => {
-    const saved = localStorage.getItem('theme') as Theme | null
-    if (saved === 'light' || saved === 'dark') {
-      setTheme(saved)
-    } else {
-      setTheme(prefersDark.matches ? 'dark' : 'light')
-    }
+    const savedTheme = localStorage.getItem('theme') as Theme | null
+    if (savedTheme === 'light' || savedTheme === 'dark') setTheme(savedTheme)
+    else setTheme(prefersDark.matches ? 'dark' : 'light')
 
     prefersDark.addEventListener('change', (e) => {
-      if (!localStorage.getItem('theme')) {
-        setTheme(e.matches ? 'dark' : 'light')
-      }
+      if (!localStorage.getItem('theme')) setTheme(e.matches ? 'dark' : 'light')
     })
   })
 
