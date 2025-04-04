@@ -1,6 +1,9 @@
 <script setup lang="ts">
   import { RouterLink, RouterView } from 'vue-router'
+  import { useTheme } from '@/composables/useTheme'
   import WelcomeText from './components/WelcomeText.vue'
+
+  const { theme, toggleTheme } = useTheme()
 </script>
 
 <template>
@@ -14,12 +17,30 @@
         <RouterLink to="/upload">Upload Scan</RouterLink>
       </nav>
     </div>
+
+    <button @click="toggleTheme" class="theme-toggle">
+      Toggle to {{ theme === 'dark' ? 'Light' : 'Dark' }} Mode
+    </button>
   </header>
 
   <RouterView />
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+  @use '../assets/scss/global.scss' as *;
+
+  .theme-toggle {
+    background-color: transparent;
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    cursor: pointer;
+  }
+
 header {
   line-height: 1.5;
   max-height: 100vh;

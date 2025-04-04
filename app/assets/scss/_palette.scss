@@ -13,8 +13,19 @@
 
 $accent-3: rgb(82, 113, 255); // ~ royalblue
 
-// Light mode (default)
-:root {
+// Dark mode (default)
+:root.dark-mode {
+  --color-background: var(--secondary);
+
+  --color-border: var(--vt-c-divider-dark-2);
+  --color-border-hover: var(--vt-c-divider-dark-1);
+
+  --color-heading: var(--primary);
+  --color-text: var(--accent-2);
+}
+
+// Light mode 
+:root.light-mode {
   --color-background: var(--vt-c-white);
 
   --color-border: var(--vt-c-divider-light-2);
@@ -24,15 +35,6 @@ $accent-3: rgb(82, 113, 255); // ~ royalblue
   --color-text: var(--accent-1);
 }
 
-// Dark mode 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: var(--secondary);
-
-    --color-border: var(--vt-c-divider-dark-2);
-    --color-border-hover: var(--vt-c-divider-dark-1);
-
-    --color-heading: var(--primary);
-    --color-text: var(--accent-2);
-  }
+:root {
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
