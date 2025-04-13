@@ -1,4 +1,4 @@
-// Source: https://fonts.google.com/specimen/Ubuntu
+/* Source: https://fonts.google.com/specimen/Ubuntu */
 @font-face {
   font-family: 'Ubuntu';
   src: url('assets/fonts/Ubuntu.ttf');
@@ -8,7 +8,8 @@
   font-display: swap;
 }
 
-html {
+// Ensure font is inherited EVERYWHERE
+html, input, button, textarea {
   font-family:
   'Ubuntu',
   Inter,
