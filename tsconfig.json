@@ -1,0 +1,5 @@
+{
+    "extends": "@vue/tsconfig/tsconfig.json",
+    "include": ["app", "api"],
+    "exclude": ["node_modules", "dist"]
+  }
