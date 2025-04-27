@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <main>
+  <section id="home-view">
     <WelcomeBlurb />
-  </main>
+  </section>
 </template>
