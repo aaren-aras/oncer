@@ -7,7 +7,7 @@
       <WelcomeText title="Oncer" />
       <nav>
         <RouterLink to="/">Welcome</RouterLink>
-        <UploadButton @image-uploaded="handleImageUpload" />
+        <UploadButton />
         <!-- <RouterLink to="/upload">Upload Scan</RouterLink> -->
       </nav>
     </div>
@@ -31,14 +31,14 @@
   const { theme, toggleTheme } = useTheme()
 
 
-  import { ref } from 'vue';
+  // import { ref } from 'vue';
   
-  const uploadedImage = ref<string | null>(null);
-  const predictionResult = ref<string>('');
-  const handleImageUpload = (data: { image: string; prediction: string; originalName: string }) => {
-    uploadedImage.value = data.image;
-    predictionResult.value = `Tumor ${data.prediction.toLowerCase()}`; 
-  };
+  // const uploadedImage = ref<string | null>(null);
+  // const predictionResult = ref<string>('');
+  // const handleImageUpload = (data: { image: string; prediction: string; originalName: string }) => {
+  //   uploadedImage.value = data.image;
+  //   predictionResult.value = `Tumor ${data.prediction.toLowerCase()}`; 
+  // };
 
 </script>
 
