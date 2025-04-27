@@ -1,10 +1,3 @@
-<script setup lang="ts">
-  import { RouterLink, RouterView } from 'vue-router'
-  import { useTheme } from '@/composables/useTheme'
-  import WelcomeText from './components/WelcomeText.vue'
-
-  const { theme, toggleTheme } = useTheme()
-</script>
 
 <template>
   <header>
@@ -14,7 +7,8 @@
       <WelcomeText title="Oncer" />
       <nav>
         <RouterLink to="/">Welcome</RouterLink>
-        <RouterLink to="/upload">Upload Scan</RouterLink>
+        <UploadButton @image-uploaded="handleImageUpload" />
+        <!-- <RouterLink to="/upload">Upload Scan</RouterLink> -->
       </nav>
     </div>
 
@@ -23,11 +17,43 @@
     </button>
   </header>
 
-  <RouterView />
+  <main>
+    <RouterView />
+  </main>
 </template>
+
+<script setup lang="ts">
+  import { RouterLink, RouterView } from 'vue-router'
+  import { useTheme } from '@/composables/useTheme'
+  import WelcomeText from './components/WelcomeText.vue'
+  import UploadButton from './components/UploadButton.vue'
+
+  const { theme, toggleTheme } = useTheme()
+
+
+  import { ref } from 'vue';
+  
+  const uploadedImage = ref<string | null>(null);
+  const predictionResult = ref<string>('');
+  const handleImageUpload = (data: { image: string; prediction: string; originalName: string }) => {
+    uploadedImage.value = data.image;
+    predictionResult.value = `Tumor ${data.prediction.toLowerCase()}`; 
+  };
+
+</script>
+
 
 <style scoped lang="scss">
   @use '../assets/scss/global.scss' as *;
+
+  main {
+    // width: 100%;
+    // max-width: 100rem;
+    // max-width: 100%;
+    min-width: 100%;
+    // margin: 0 auto;
+    // padding: 2rem 1rem;
+  }
 
   .theme-toggle {
     background-color: transparent;
@@ -39,6 +65,11 @@
     bottom: 30px;
     left: 30px;
     cursor: pointer;
+    @include transition-ease;
+
+    &:hover {
+      opacity: 0.5;
+    }
   }
 
 header {
@@ -52,7 +83,7 @@ header {
 }
 
 nav {
-  width: 100%;
+  // width: 100%;
   font-size: 12px;
   text-align: center;
   margin-top: 2rem;
