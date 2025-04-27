@@ -1,9 +1,16 @@
 <template>
-  <section id="upload-view">
+  <section v-if="store.isEmpty" id="empty-upload-view">
+    <p>No images have been uploaded yet.</p>
+  </section>
+  <section v-else id="upload-view">
     <div class="selected-view">
       <img v-if="selectedImage" :src="selectedImage.image" />
       <p>{{ selectedImage?.prediction }}</p>
     </div>
+
+    <!-- <div v-if="isStoreEmpty" class="">
+      <p>No images have been uploaded yet.</p>
+    </div> -->
 
     <div class="thumbnail-row">
       <div
@@ -15,6 +22,7 @@
         <img :src="upload.image" alt=""/>
       </div>
     </div>
+
     <div class="reset-wrapper">
       <button class="reset" @click="store.resetUploads()">RESET</button>
     </div>
@@ -59,6 +67,11 @@
 <style scoped lang="scss">
   @use '../../assets/scss/global.scss' as *;
   // @use '../../assets/scss/palette';
+
+  #empty-upload-view {
+    text-align: center;
+    font-size: 1.5rem;
+  }
 
   #upload-view {
     display: flex;

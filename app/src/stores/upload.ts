@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import type { UploadResult } from '@/types';
 
 // export const useUploadStore = defineStore('upload',  {
@@ -38,5 +38,7 @@ export const useUploadStore = defineStore('upload', () => {
     if (storedState) uploads.value = JSON.parse(storedState);
   }
 
-  return { uploads, addUpload, resetUploads, loadFromLocalStorage };
+  const isEmpty = computed(() => uploads.value.length === 0);
+
+  return { uploads, addUpload, resetUploads, loadFromLocalStorage, isEmpty };
 })
