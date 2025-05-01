@@ -20,7 +20,7 @@ physical_devices = tf.config.experimental.list_physical_devices('GPU')
 print('Available GPUs:', physical_devices)
 if physical_devices: 
   # Allocate memory incrementally, instead of all at once
-  ts.config.experimental.set_memory_growth(physical_devices[0], True) 
+  tf.config.experimental.set_memory_growth(physical_devices[0], True) 
 
 # Convolutional Neural Network (CNN): https://www.youtube.com/watch?v=pj9-rr1wDhM
 def build_model():
