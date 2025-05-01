@@ -73,13 +73,12 @@ print('*COMPLETE: images have been distributed across training, validation, and 
 
 '''
 TO DO:
- - Refactor and use augmentation (e.g., `rotation_range=10, zoom_range=0.1, horizontal_flip=True`)?
  - Use VGG16 (`preprocessing_function=tf.keras.applications.vgg16.preprocess_input`), then duplicate 
  channels for RGB (https://tinyurl.com/yzxkhmdh)? Not ideal?
 '''
 
-# Preprocess image data before inputting into CNN 
-TRAIN_BATCHES = ImageDataGenerator(rescale=1./255) \
+# Preprocess image data before inputting into CNN: only add augmentation to training set 
+TRAIN_BATCHES = ImageDataGenerator(rescale=1./255, rotation_range=15, zoom_range=0.1, horizontal_flip=True, shear_range=0.1, width_shift_range=0.1, height_shift_range=0.1) \
   .flow_from_directory(directory=TRAIN_DIR, target_size=(224, 224), classes=['negative', 'positive'], batch_size=10, color_mode='grayscale')  # `rescale`: normalize pixel values to [0, 1]
 
 VALID_BATCHES = ImageDataGenerator(rescale=1./255) \
