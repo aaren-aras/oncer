@@ -5,3 +5,4 @@ tensorflowjs==3.1.0
 protobuf==3.20.3
 matplotlib==3.3.4 
 scikit-learn==0.23.2  
+nibabel==3.2.2
