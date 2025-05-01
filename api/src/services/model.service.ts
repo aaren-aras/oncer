@@ -25,7 +25,7 @@ export const predict = async (imagePath: string): Promise<string> => {
   const processedImage = preprocessImage(image);
   const predictions = model.predict(processedImage) as tfjs.Tensor;
   const results = await predictions.array() as number[][];
-  return results[0][0] > results[0][1] ? 'No tumour detected' : 'Tumour detected'; // 0 = -ve, 1 = +ve
+  return results[0][0] > results[0][1] ? 'No tumours detected' : 'Tumour(s) detected'; // 0 = -ve, 1 = +ve
   // const results = await prediction.dataSync()[0] > 0.5 ? 'Tumor detected' : 'No tumor detected';
   predictions.dispose();
 };
