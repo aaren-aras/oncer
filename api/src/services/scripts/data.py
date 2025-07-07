@@ -1,4 +1,4 @@
-import os
+import pathlib
 import json
 
 from tqdm import tqdm
@@ -8,21 +8,21 @@ from sklearn.model_selection import train_test_split
 
 from ..utils.config import MODALITIES, LABEL_MAP
 
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-BRATS_DIR = os.path.join(SCRIPT_DIR, '../../../data/BraTS2021_Training_Data') # update if needed
-OUTPUT_DIR = os.path.join(SCRIPT_DIR, '../../../data/BraTS2021_Processed_Data')
-os.makedirs(OUTPUT_DIR, exist_ok=True)
+SCRIPT_DIR = Path(__file__).resolve().parent
+BRATS_DIR = (SCRIPT_DIR / '../../../data/BraTS2021_Training_Data').resolve() # update if needed
+OUTPUT_DIR = (SCRIPT_DIR / '../../../data/BraTS2021_Processed_Data').resolve()
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # Define dataset subdirectories    
-IMG_DIR = os.path.join(OUTPUT_DIR, 'images')
-MASK_DIR = os.path.join(OUTPUT_DIR, 'masks')
-METADATA_DIR = os.path.join(OUTPUT_DIR, 'metadata')
+IMG_DIR = OUTPUT_DIR / 'images'
+MASK_DIR = OUTPUT_DIR / 'masks'
+METADATA_DIR = OUTPUT_DIR / 'metadata'
 
 # Create 'train', 'valid', and 'test' subsubdirectories
 for split in ['train', 'valid', 'test']:
-    os.makedirs(os.path.join(IMG_DIR, split), exist_ok=True)
-    os.makedirs(os.path.join(MASK_DIR, split), exist_ok=True)
-    os.makedirs(os.path.join(METADATA_DIR, split), exist_ok=True)
+    (IMG_DIR / split).mkdir(parents=True, exist_ok=True)
+    (MASK_DIR / split).mkdir(parents=True, exist_ok=True)
+    (METADATA_DIR / split).mkdir(parents=True, exist_ok=True)
 
 
 def normalize_modality(img):
@@ -35,9 +35,9 @@ def normalize_modality(img):
 
 def save_slice(img_stack, mask_slice, metadata, subject_id, slice_idx, split):
     '''Save MRI image slice, corresponding segmentation mask, and per-slice metadata to their respective subsubdirectories.'''
-    img_path = os.path.join(IMG_DIR, split, f'{subject_id}_slice{slice_idx:03d}.npy') # e.g., 5 -> 005
-    mask_path = os.path.join(MASK_DIR, split, f'{subject_id}_slice{slice_idx:03d}_mask.npy')
-    metadata_path = os.path.join(METADATA_DIR, split, f'{subject_id}_slice{slice_idx:03d}.json')
+    img_path = IMG_DIR / split / f'{subject_id}_slice{slice_idx:03d}.npy' # e.g., 5 -> 005
+    mask_path = MASK_DIR / split / f'{subject_id}_slice{slice_idx:03d}_mask.npy'
+    metadata_path = METADATA_DIR / split / f'{subject_id}_slice{slice_idx:03d}.json'
 
     np.save(img_path, img_stack) # 4-channel (T1, T1CE, T2, FLAIR): shape (H, W, 4), uint8 (0-255 greyscale)
     np.save(mask_path, mask_slice) # 1-channel (class labels): shape (H, W), int (0: background, 1: NCR, 2: ED, 4->3: ET)
@@ -69,16 +69,16 @@ def process_subject(subject_path):
       - Stack all 4 MRI modalities (T1, T1CE, T2, FLAIR) into a 4-channel 3D image volume. 
       - Extract MRI image slices from both the image volume and corresponding 3D segmentation mask.
     '''
-    subject_id = os.path.basename(subject_path)
+    subject_id = subject_path.name
     
     imgs = []
     for m in MODALITIES:
-        m_nii = nib.load(os.path.join(subject_path, f'{subject_id}_{m}.nii.gz'))
+        m_nii = nib.load(subject_path / f'{subject_id}_{m}.nii.gz')
         data = normalize_modality(m_nii.get_fdata()) # Nifti1Image obj -> np arr (raw voxels as float) -> np arr (raw voxels normalized to [0, 255])
         imgs.append(data)
     stacked = np.stack(imgs, axis=-1) # shape (H, W, D) x 4 -> (H, W, D, 4) (append new dim at the end)
 
-    seg_nii = nib.load(os.path.join(subject_path, f'{subject_id}_seg.nii.gz'))
+    seg_nii = nib.load(subject_path / f'{subject_id}_seg.nii.gz')
     mask = seg_nii.get_fdata().astype(np.uint8) # Nifti1Image obj -> np arr (raw voxels as float) -> np arr (raw voxels as uint8)  
     mask[mask == 4] = 3 # remap label 4 -> 3 for convenience
 
@@ -93,8 +93,8 @@ def process_subject(subject_path):
 
 def main():
     all_slices = []
-    subjects = sorted([os.path.join(BRATS_DIR, d) for d in os.listdir(BRATS_DIR)])
-
+    
+    subjects = sorted([p for p in BRATS_DIR.iterdir()])
     for subject_path in tqdm(subjects, desc='Processing BraTS2021 subjects'):
         slices = process_subject(subject_path)
         all_slices.extend(slices)
