@@ -26,7 +26,9 @@ for split in ['train', 'valid', 'test']:
 
 
 def normalize_modality(img: np.ndarray) -> np.ndarray:
-    '''Normalize MRI image slice to 8-bit greyscale to standardize pixel intensities and highlight structure over brightness.'''
+    """
+    Normalize MRI image slice to 8-bit greyscale to standardize pixel intensities and highlight structure over brightness.
+    """
     img = np.nan_to_num(img) # handle any corrupted/missing values
     img = np.clip(img, 0, np.percentile(img, 99)) # cut off extremes (99th %tile)
     img = (img - np.min(img)) / (np.max(img) - np.min(img) + 1e-8) # scale to [0, 1], avoid division-by-0 cases with epsilon (1e-8)
@@ -34,10 +36,11 @@ def normalize_modality(img: np.ndarray) -> np.ndarray:
 
 
 def process_subject(subject_path: Path) -> list[tuple[np.ndarray, np.ndarray, str, int]]:
-    '''Given a BraTS subject (BraTS_2021_0xxxx):
+    """
+    Given a BraTS subject (BraTS_2021_0xxxx):
       - Stack all 4 MRI modalities (T1, T1CE, T2, FLAIR) into a 4-channel 3D image volume. 
       - Extract MRI image slices from both the image volume and corresponding 3D segmentation mask.
-    '''
+    """
     subject_id = subject_path.name
     
     imgs = []
@@ -61,7 +64,9 @@ def process_subject(subject_path: Path) -> list[tuple[np.ndarray, np.ndarray, st
 
 
 def save_slice(img_stack: np.ndarray, mask_slice: np.ndarray, subject_id: str, slice_idx: int, split: str) -> None:
-    '''Save MRI image slice, corresponding segmentation mask, and per-slice metadata to their respective subsubdirectories.'''
+    """
+    Save MRI image slice, corresponding segmentation mask, and per-slice metadata to their respective subsubdirectories.
+    """
     img_path = IMG_DIR / split / f'{subject_id}_slice{slice_idx:03d}.npy' # e.g., 5 -> 005
     mask_path = MASK_DIR / split / f'{subject_id}_slice{slice_idx:03d}_mask.npy'
     metadata_path = METADATA_DIR / split / f'{subject_id}_slice{slice_idx:03d}.json'
@@ -91,7 +96,10 @@ def save_slice(img_stack: np.ndarray, mask_slice: np.ndarray, subject_id: str, s
         json.dump(metadata, file, default=str) # ->str if unserializable
 
 
-def main() -> None:
+def prepare_data() -> None:
+    """
+    Process all BraTS subjects and prepare dataset for model training. 
+    """
     all_slices = []
     
     subjects = sorted([p for p in BRATS_DIR.iterdir()])
@@ -113,4 +121,4 @@ def main() -> None:
 
 
 if __name__ == '__main__':
-    main()
+    prepare_data()
