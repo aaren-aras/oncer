@@ -6,7 +6,7 @@ import numpy as np
 import nibabel as nib
 from sklearn.model_selection import train_test_split
 
-from ..utils.config import MODALITIES, LABEL_MAP
+from ..utils.config import MODALITIES, EPSILON, LABEL_MAP
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 BRATS_DIR = (SCRIPT_DIR / '../../../data/BraTS2021_Training_Data').resolve() # update if needed
@@ -18,7 +18,7 @@ IMG_DIR = OUTPUT_DIR / 'images'
 MASK_DIR = OUTPUT_DIR / 'masks'
 METADATA_DIR = OUTPUT_DIR / 'metadata'
 
-# Create 'train', 'valid', and 'test' subsubdirectories
+# Create above subdirectories and 'train', 'valid', and 'test' subsubdirectories
 for split in ['train', 'valid', 'test']:
     (IMG_DIR / split).mkdir(parents=True, exist_ok=True)
     (MASK_DIR / split).mkdir(parents=True, exist_ok=True)
@@ -31,15 +31,15 @@ def normalize_modality(img: np.ndarray) -> np.ndarray:
     """
     img = np.nan_to_num(img) # handle any corrupted/missing values
     img = np.clip(img, 0, np.percentile(img, 99)) # cut off extremes (99th %tile)
-    img = (img - np.min(img)) / (np.max(img) - np.min(img) + 1e-8) # scale to [0, 1], avoid division-by-0 cases with epsilon (1e-8)
+    img = (img - np.min(img)) / (np.max(img) - np.min(img) + EPSILON) # scale to [0, 1]
     return (img * 255).astype(np.uint8) # scale to [0, 255] (2e8)
 
 
 def process_subject(subject_path: Path) -> list[tuple[np.ndarray, np.ndarray, str, int]]:
     """
     Given a BraTS subject (BraTS_2021_0xxxx):
-      - Stack all 4 MRI modalities (T1, T1CE, T2, FLAIR) into a 4-channel 3D image volume. 
-      - Extract MRI image slices from both the image volume and corresponding 3D segmentation mask.
+    - Stack all 4 MRI modalities (T1, T1CE, T2, FLAIR) into a 4-channel 3D image volume,
+    - Extract MRI image slices from both the image volume and corresponding 3D segmentation mask.
     """
     subject_id = subject_path.name
     
@@ -72,9 +72,9 @@ def save_slice(img_stack: np.ndarray, mask_slice: np.ndarray, subject_id: str, s
     metadata_path = METADATA_DIR / split / f'{subject_id}_slice{slice_idx:03d}.json'
 
     np.save(img_path, img_stack) # 4-channel (T1, T1CE, T2, FLAIR): shape (H, W, 4), uint8 (0-255 greyscale)
-    np.save(mask_path, mask_slice) # 1-channel (class labels): shape (H, W), int (0: background, 1: NCR, 2: ED, 4->3: ET)
+    np.save(mask_path, mask_slice) # 1-channel (class labels): shape (H, W), uint8 (0: background, 1: NCR, 2: ED, 4->3: ET)
     
-    total_pixels = mask_slice.size # total = H x W
+    total_pixels = mask_slice.size # total = H * W
     unique, counts = np.unique(mask_slice, return_counts=True) # num pixels belonging to each class
     class_pixel_counts = {int(u): int(c) for u, c in zip(unique, counts)}
 
@@ -98,7 +98,7 @@ def save_slice(img_stack: np.ndarray, mask_slice: np.ndarray, subject_id: str, s
 
 def prepare_data() -> None:
     """
-    Process all BraTS subjects and prepare dataset for model training. 
+    Process all BraTS subjects and prepare dataset for model training.
     """
     all_slices = []
     
@@ -115,7 +115,7 @@ def prepare_data() -> None:
     splits = [(train, 'train'), (valid, 'valid'), (test, 'test')]
     for split_data, split_name in splits:
         for img, mask, subject_id, idx in tqdm(split_data, desc=f'Saving \'{split_name}\' slices'):
-            save_slice(img, mask, subject_id, idx, split_name) 
+            save_slice(img, mask, subject_id, idx, split_name)
 
     print('*COMPLETE: images have been distributed across training, validation, and test sets')
 
