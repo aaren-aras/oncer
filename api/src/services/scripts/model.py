@@ -3,6 +3,7 @@ from typing import Generator
 
 import numpy as np
 import tensorflow as tf
+from tensorflow.keras import mixed_precision
 from tensorflow.keras import layers, Model
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.losses import CategoricalCrossentropy
@@ -10,24 +11,31 @@ from tensorflow.keras.utils import to_categorical
 import imgaug.augmenters as iaa 
 from imgaug.augmentables.segmaps import SegmentationMapsOnImage
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard
-from tensorflow.keras.mixed_precision import experimental as mixed_precision
-# import tensorflowjs as tfjs
 
-from data import IMG_DIR, MASK_DIR
+from .data import IMG_DIR, MASK_DIR
 from ..utils.config import (
     IMG_SIZE, MODALITIES, NUM_CLASSES, FILTERS, KERNEL_SIZE, SCALE_FACTOR, 
     DROPOUT_RATE, LEARNING_RATE, EPSILON, BATCH_SIZE, AUG_CONFIG, EPOCHS
 )
 
 # Use GPU for faster training (if available)
-physical_devices = tf.config.experimental.list_physical_devices('GPU')
-print('Available GPUs:', physical_devices)
+physical_devices = tf.config.list_physical_devices('GPU')
+print('*AVAILABLE GPUs:', physical_devices)
 if physical_devices: 
     tf.config.experimental.set_memory_growth(physical_devices[0], True) # allocate memory incrementally, instead of all at once
-    policy = mixed_precision.Policy('mixed_float16') # faster training, lower memory usage
-    mixed_precision.set_policy(policy) 
-    print('Mixed precision policy:', tf.keras.mixed_precision.experimental.global_policy())
+    
+    mixed_precision.set_global_policy('mixed_float16') # faster training, lower memory usage
+    print('*MIXED PRECISION POLICY:', mixed_precision.global_policy())
 
+    build_info = tf.sysconfig.get_build_info()
+    cuda_version = build_info.get('cuda_version', 'Unknown')
+    cudnn_version = build_info.get('cudnn_version', 'Unknown')
+
+    print(f'*CUDA TOOLKIT VERSION: {cuda_version}')
+    print(f'*cuDNN VERSION: {cudnn_version}')
+
+    if cuda_version == 'Unknown' or cudnn_version == 'Unknown':
+        print('*WARNING: CUDA or cuDNN version information unavailable. Verify your TensorFlow GPU setup...')
 
 def dice_coefficient(y_true: tf.Tensor, y_pred: tf.Tensor, smooth: float=EPSILON*100) -> tf.Tensor: 
     """
@@ -50,14 +58,16 @@ class DiceMetric(tf.keras.metrics.Metric):
     """
     def __init__(self, name='dice', **kwargs):
         super(DiceMetric, self).__init__(name=name, **kwargs)
-        self.dice = self.add_weight(name='dice', initializer='zeros') # cumulative Dice score
-        self.count = self.add_weight(name='count', initializer='zeros') # cumulative num batches
+        dtype = mixed_precision.global_policy().compute_dtype  # typically 'float16' here
+        self.dice = self.add_weight(name='dice', initializer='zeros', dtype=dtype) # cumulative Dice score
+        self.count = self.add_weight(name='count', initializer='zeros', dtype=dtype) # cumulative num batches
 
     def update_state(self, y_true: tf.Tensor, y_pred: tf.Tensor, sample_weight: tf.Tensor=None):
         """
         Update the state with current batch's Dice score.
         """
         dice = dice_coefficient(y_true, y_pred)
+        dice = tf.cast(dice, self.dice.dtype) # avoid float16/float32 mismatch err
         self.dice.assign_add(dice)
         self.count.assign_add(1.0)
 
@@ -105,13 +115,13 @@ def build_segmentation_model(input_shape: tuple[int, int, int]=(*IMG_SIZE, len(M
 
     # (1) Encoder: extract hierarchical features (low-level (edges, corners) -> high-level (tumour outlines, organ boundaries)) and downsample resolution by 1/2
     c1 = residual_block(layers.Conv2D(FILTERS[0], KERNEL_SIZE, padding='same')(inputs), FILTERS[0]) # preserve spatial res. with padding='same': (H, W) -> (H, W)
-    p1 = layers.MaxPooling(SCALE_FACTOR)(c1) # (H, W) -> (H/2, W/2)
+    p1 = layers.MaxPooling2D(SCALE_FACTOR)(c1) # (H, W) -> (H/2, W/2)
 
     c2 = residual_block(layers.Conv2D(FILTERS[1], KERNEL_SIZE, padding='same')(p1), FILTERS[1])
-    p2 = layers.MaxPooling(SCALE_FACTOR)(c2)
+    p2 = layers.MaxPooling2D(SCALE_FACTOR)(c2)
 
     c3 = residual_block(layers.Conv2D(FILTERS[2], KERNEL_SIZE, padding='same')(p2), FILTERS[2])
-    p3 = layers.MaxPooling(SCALE_FACTOR)(c3)
+    p3 = layers.MaxPooling2D(SCALE_FACTOR)(c3)
 
     # (2) Bottleneck: extract richest (high-level) features, then zero out some to reduce overfitting
     b = residual_block(layers.Conv2D(FILTERS[3], KERNEL_SIZE, padding='same')(p3), FILTERS[3])
@@ -220,8 +230,8 @@ def train_model() -> None:
     valid_gen = data_generator(IMG_VALID_DIR, MASK_VALID_DIR, augment=False)
 
     # Set num batches to process per epoch
-    train_steps = len(IMG_TRAIN_DIR.iterdir()) // BATCH_SIZE
-    valid_steps = len(IMG_VALID_DIR.iterdir()) // BATCH_SIZE
+    train_steps = len(list(IMG_TRAIN_DIR.iterdir())) // BATCH_SIZE # generators don't have lengths
+    valid_steps = len(list(IMG_VALID_DIR.iterdir())) // BATCH_SIZE
 
     callbacks = [
         EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True, verbose=1),
