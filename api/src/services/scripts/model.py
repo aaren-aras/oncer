@@ -24,8 +24,8 @@ print('*AVAILABLE GPUs:', physical_devices)
 if physical_devices: 
     tf.config.experimental.set_memory_growth(physical_devices[0], True) # allocate memory incrementally, instead of all at once
     
-    mixed_precision.set_global_policy('mixed_float16') # faster training, lower memory usage
-    print('*MIXED PRECISION POLICY:', mixed_precision.global_policy())
+    # mixed_precision.set_global_policy('mixed_float16') # faster training, lower memory usage
+    # print('*MIXED PRECISION POLICY:', mixed_precision.global_policy())
 
     build_info = tf.sysconfig.get_build_info()
     cuda_version = build_info.get('cuda_version', 'Unknown')
@@ -36,6 +36,7 @@ if physical_devices:
 
     if cuda_version == 'Unknown' or cudnn_version == 'Unknown':
         print('*WARNING: CUDA or cuDNN version information unavailable. Verify your TensorFlow GPU setup...')
+
 
 def dice_coefficient(y_true: tf.Tensor, y_pred: tf.Tensor, smooth: float=EPSILON*100) -> tf.Tensor: 
     """
@@ -58,16 +59,14 @@ class DiceMetric(tf.keras.metrics.Metric):
     """
     def __init__(self, name='dice', **kwargs):
         super(DiceMetric, self).__init__(name=name, **kwargs)
-        dtype = mixed_precision.global_policy().compute_dtype  # typically 'float16' here
-        self.dice = self.add_weight(name='dice', initializer='zeros', dtype=dtype) # cumulative Dice score
-        self.count = self.add_weight(name='count', initializer='zeros', dtype=dtype) # cumulative num batches
+        self.dice = self.add_weight(name='dice', initializer='zeros') # cumulative Dice score
+        self.count = self.add_weight(name='count', initializer='zeros') # cumulative num batches
 
     def update_state(self, y_true: tf.Tensor, y_pred: tf.Tensor, sample_weight: tf.Tensor=None):
         """
         Update the state with current batch's Dice score.
         """
         dice = dice_coefficient(y_true, y_pred)
-        dice = tf.cast(dice, self.dice.dtype) # avoid float16/float32 mismatch err
         self.dice.assign_add(dice)
         self.count.assign_add(1.0)
 
@@ -196,15 +195,19 @@ def data_generator(
                 if augment:
                     uint8_img = (img * 255).astype(np.uint8) # float32 [0, 1] -> uint8 [0, 255] (for imgaug)
                     
-                    # Convert mask to segmentation map to synchronize augmentation with corresponding img
+                    # Convert mask to segmentation map to match augmentation with corresponding img
                     segmap = SegmentationMapsOnImage(mask, shape=img.shape[:2]) # (H, W, 4) img -> (H, W) img ~ (H, W) mask
 
                     # Apply augmentation pipeline to both image and mask
                     aug_img, aug_segmap = seq(image=uint8_img, segmentation_maps=segmap)
                     img = aug_img.astype(np.float32) / 255.0 # uint8 [0, 255] -> float32 [0,1] (convert back for model)
+                    mask_to_encode = aug_segmap.get_arr() # SegmentationMapsOnImage obj -> arr
+                    # mask_to_encode = np.clip(mask_to_encode, 0, num_classes=-1)
+                else:
+                    mask_to_encode = mask
                 
                 # One-hot encode mask (H, W) -> (H, W, NUM_CLASSES = 4) 
-                onehot_mask = to_categorical(aug_segmap.get_arr(), num_classes) # int labels (0, 1, 2, 3) -> vectors ([0, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], ...)
+                onehot_mask = to_categorical(mask_to_encode, num_classes) # int labels (0, 1, 2, 3) -> vectors ([0, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], ...)
 
                 batch_imgs.append(img)
                 batch_masks.append(onehot_mask)
