@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "type": "module",
-  "description": "Uses a ML algorithm to detect tumours in uploaded medical images",
+  "description": "Performs brain tumour segmentation on structural MRI scans using a 2D U-Net",
   "scripts": {
     "start": "concurrently \"npm run start:app\" \"npm run start:api\"",
     "start:app": "cd app && vite",
@@ -19,9 +19,12 @@
   "keywords": [
     "vue",
     "express",
+    "tensorflow",
     "tumor-detection",
     "ml",
-    "medical-images"
+    "medical-images",
+    "brain",
+    "glioma"
   ],
   "author": "Aaren Arasaratnam",
   "license": "ISC",
@@ -32,11 +35,13 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "multer": "^1.4.5-lts.1",
+    "npyjs": "^0.7.0",
     "pinia": "^2.3.1",
     "vue": "^3.5.4",
     "vue-router": "^4.3.3"
   },
   "devDependencies": {
+    "@eslint/js": "^9.33.0",
     "@playwright/test": "^1.44.1",
     "@rushstack/eslint-patch": "^1.8.0",
     "@tsconfig/node20": "^20.1.4",
@@ -50,14 +55,17 @@
     "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "^0.5.1",
     "concurrently": "^8.2.2",
-    "eslint": "^8.57.0",
+    "eslint": "^8.57.1",
     "eslint-plugin-playwright": "^1.6.2",
-    "eslint-plugin-vue": "^9.23.0",
+    "eslint-plugin-vue": "^9.33.0",
+    "globals": "^16.3.0",
+    "jiti": "^2.5.1",
     "jsdom": "^24.1.0",
     "nodemon": "^3.1.4",
     "sass-embedded": "^1.83.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4",
+    "typescript-eslint": "^8.39.1",
     "vite": "^5.3.1",
     "vitest": "^1.6.0",
     "vue-tsc": "^2.0.21"
