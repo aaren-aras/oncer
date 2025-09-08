@@ -13,7 +13,7 @@
     </div>
 
     <button @click="toggleTheme" class="theme-toggle">
-      Toggle to {{ theme === 'dark' ? 'Light' : 'Dark' }} Mode
+      {{ theme === 'dark' ? 'Light Mode ☀️' : 'Dark Mode 🌙' }}
     </button>
   </header>
 
