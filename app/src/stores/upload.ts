@@ -23,8 +23,8 @@ export const useUploadStore = defineStore('upload', () => {
   // const uploads = ref<{ image: string, filename: string, prediction: string }[]>([]);
   const uploads = ref<UploadResult[]>([]);
 
-  const addUpload = (image: string, filename: string, prediction: string) => { 
-    uploads.value.unshift({ image, filename, prediction }); // add to start of array instead of end (push)
+  const addUpload = (image: string, filename: string, prediction: string, overlay: string) => { 
+    uploads.value.unshift({ image, filename, prediction, overlay }); // add to start of array instead of end (push)
     localStorage.setItem('uploads', JSON.stringify(uploads.value)); // persist across reloads
   }
 
