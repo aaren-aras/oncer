@@ -4,6 +4,7 @@ from typing import Generator
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras import mixed_precision
+from tensorflow.python.platform import build_info as tf_build_info
 from tensorflow.keras import layers, Model
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.losses import CategoricalCrossentropy
@@ -30,9 +31,11 @@ if physical_devices:
     build_info = tf.sysconfig.get_build_info()
     cuda_version = build_info.get('cuda_version', 'Unknown')
     cudnn_version = build_info.get('cudnn_version', 'Unknown')
+    cuda_compute_capabilities = tf_build_info.build_info.get('cuda_compute_capabilities')
 
     print(f'*CUDA TOOLKIT VERSION: {cuda_version}')
     print(f'*cuDNN VERSION: {cudnn_version}')
+    print(f'*TF CUDA COMPUTE CAPABILITIES:, {cuda_compute_capabilities}')
 
     if cuda_version == 'Unknown' or cudnn_version == 'Unknown':
         print('*WARNING: CUDA or cuDNN version information unavailable. Verify your TensorFlow GPU setup...')
