@@ -5,9 +5,10 @@ node_modules/
 
 # BACKEND
 api/data/
-api/src/services/models/
 api/uploads/
-api/src/utils/__pycache__/
+api/src/services/models/
+api/src/services/__pycache__/
+api/src/services/scripts/__pycache__/
 
 # FRONTEND
 ## Logs
