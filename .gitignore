@@ -4,9 +4,8 @@ node_modules/
 .env
 
 # BACKEND
-api/.venv/
 api/data/
-api/models/
+api/services/models/
 api/uploads/
 api/src/utils/__pycache__/
 
