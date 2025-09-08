@@ -1,8 +1,14 @@
-virtualenv  # use Python 3.8.10
-numpy==1.22.0
-tensorflow==2.2.0
-tensorflowjs==3.1.0
-protobuf==3.20.3
-matplotlib==3.3.4 
-scikit-learn==0.23.2  
-nibabel==3.2.2
+tensorflow==2.17.0         # match NGC container
+keras>=3.0.0               # TF 2.17 uses Keras 3.x
+numpy>=1.26.4              # compatible with TF 2.17 + Python 3.12
+protobuf>=4.25.3           # TF 2.17 works with newer protobuf
+matplotlib>=3.9.2          # latest stable, compatible with numpy
+scikit-learn>=1.5.2        # recent stable
+imgaug==0.4.0              # stable
+tqdm>=4.66.4               # recent stable
+
+nibabel>=5.2.0             # works with Python 3.12
+pillow>=10.3.0             # works with matplotlib
+
+fastapi>=0.110.0           # recent stable
+uvicorn>=0.29.0            # compatible with FastAPI
