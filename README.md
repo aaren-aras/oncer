@@ -37,7 +37,9 @@ These steps ensure that the `preprocessing.py` and `model.py` scripts in `api/se
 git clone https://github.com/aaren-aras/oncer.git && cd oncer
 ```
 
-To avoid compatibility issues with the latest NVIDIA GPUs (and the ensuing CUDA/cuDNN mismatch headaches), I decided to use NVIDIA's <u>N</u>VIDIA <u>G</u>PU <u>C</u>LOUD (NGC) [TensorFlow containers](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/tensorflow) for **GPU-accelerated** CNN training on Windows. These containers come pre-packaged with versions of TensorFlow, CUDA, and cuDNN that are (almost) **guaranteed** to work together.
+### Option A: Docker / NGC (recommended)
+
+To avoid compatibility issues with the latest NVIDIA GPUs (and the ensuing CUDA/cuDNN mismatch headaches), I decided to use NVIDIA's <u>N</u>VIDIA <u>G</u>PU <u>C</u>loud (NGC) [TensorFlow containers](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/tensorflow) for **GPU-accelerated** CNN training on Windows. These containers come pre-packaged with versions of TensorFlow, CUDA, and cuDNN that are (almost) **guaranteed** to work together, alongside other stuff for optimizing GPU performance.
 
 Replace `/path/to/Oncer` with your project path:
 
@@ -72,12 +74,18 @@ nvcc --version
 nvidia-smi
 ```
 
-Alternatively, if you don't want to use Docker, you *can* choose to set the project up locally (Python/Node), but you'll need to **manually** install compatible CUDA + cuDNN versions (refer to this [table](https://www.tensorflow.org/install/source#gpu) for tested build configurations). 
- - TensorFlow GPU support outside containers is only guaranteed up to TF **2.10 (CUDA 11.2, cuDNN 8.1)**
+### Option B: Local (optional)
+
+Alternatively, if you don't want to use Docker/NGC, you *could* **manually** set up Python, TensorFlow, [CUDA](https://developer.nvidia.com/cuda-toolkit-archive), and [cuDNN](https://developer.nvidia.com/rdp/cudnn-archive) on your host system. Of course, this means YOU are responsible for making sure  ALL versions play nicely together—a task I *personally* wouldn't wish on my worst enemy. But hey, the choice is yours! 
+
+Refer to this [table](https://www.tensorflow.org/install/source#gpu) for tested build configurations.
+
+#### Sidenotes
+ - TensorFlow GPU support outside containers is only guaranteed up to **2.10 (CUDA 11.2, cuDNN 8.1)** for Windows
  - If you have a newer GPU (e.g., RTX 40/50 series), containers are STRONGLY recommended
 
 ```bash
-# ALTERNATIVELY: install Python deps within virtual env (Windows example)
+# Install Python deps within virtual env (Windows example)
 cd api 
 py -3.10 -m venv .venv
 source .venv/Scripts/activate # Git Bash
@@ -107,6 +115,9 @@ npm run preview
  - Windows requires WSL2 for Docker GPU acceleration
 
 ## Retrospective
- - Consider rewriting entire backend in Python 
- - Docker NGC containers MASSIVELY simplify GPU + CUDA setup for modern NVIDIA GPUs requiring CUDA 12+ (no version mismatch, no DLL errors, no local TF rebuilds, ...)
+ - Consider writing the entire backend in Python for all future DL projects
+ - Docker NGC containers MASSIVELY simplify GPU + CUDA setup for modern NVIDIA GPUs requiring CUDA 12+ (no version mismatch and local rebuild trial-and-error, no Bazel errors, no DLL errors, ...)
    - Don't waste time with local installs and juggling Python versions, CUDA toolkits, and cuDNN DLLs on Windows when there're cleaner solutions available
+   - You don't have to use *older* versions of software to achieve compatibility
+   - Some TF builds lack precompiled CUDA kernels for newer GPUs with higher compute capabilities, forcing them to JIT-compile PTX at runtime, which can drastically slow startup; these containers avoid the issue by including prebuilt, GPU-optimized binaries
+ - Look into multi-GPU setups (distributed training?): https://developer.nvidia.com/nccl
