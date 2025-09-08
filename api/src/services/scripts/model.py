@@ -13,7 +13,7 @@ from imgaug.augmentables.segmaps import SegmentationMapsOnImage
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard
 
 from .data import IMG_DIR, MASK_DIR
-from ..utils.config import (
+from ..config import (
     IMG_SIZE, MODALITIES, NUM_CLASSES, FILTERS, KERNEL_SIZE, SCALE_FACTOR, 
     DROPOUT_RATE, LEARNING_RATE, EPSILON, BATCH_SIZE, AUG_CONFIG, EPOCHS
 )

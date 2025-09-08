@@ -6,7 +6,7 @@ import numpy as np
 import nibabel as nib
 from sklearn.model_selection import train_test_split
 
-from ..utils.config import MODALITIES, EPSILON, LABEL_MAP
+from ..config import MODALITIES, EPSILON, LABEL_MAP
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 BRATS_DIR = (SCRIPT_DIR / '../../../data/BraTS2021_Training_Data').resolve() # update if needed
@@ -102,7 +102,7 @@ def prepare_data() -> None:
     """
     all_slices = []
     
-    subjects = sorted([p for p in BRATS_DIR.iterdir()])
+    subjects = sorted([p for p in BRATS_DIR.iterdir() if p.is_dir()])
     for subject_path in tqdm(subjects, desc='Processing BraTS2021 subjects'):
         slices = process_subject(subject_path)
         all_slices.extend(slices)

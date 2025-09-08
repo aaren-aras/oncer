@@ -5,7 +5,7 @@ from fastapi import UploadFile
 import numpy as np
 from PIL import Image, ImageOps
 
-from ..utils.config import IMG_SIZE, EXTENSIONS
+from ..config import IMG_SIZE, EXTENSIONS
 
 
 def enhance_contrast(pii_img: Image.Image) -> Image.Image:
