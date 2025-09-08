@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split
 
 from ..config import MODALITIES, EPSILON, LABEL_MAP
 
-SCRIPT_DIR = Path(__file__).resolve().parent
+SCRIPT_DIR = Path(__file__).resolve().parent # oncer/api/services/scripts
 BRATS_DIR = (SCRIPT_DIR / '../../../data/BraTS2021_Training_Data').resolve() # update if needed
 OUTPUT_DIR = (SCRIPT_DIR / '../../../data/BraTS2021_Processed_Data').resolve()
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
