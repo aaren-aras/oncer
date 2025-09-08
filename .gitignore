@@ -5,7 +5,7 @@ node_modules/
 
 # BACKEND
 api/data/
-api/services/models/
+api/src/services/models/
 api/uploads/
 api/src/utils/__pycache__/
 
