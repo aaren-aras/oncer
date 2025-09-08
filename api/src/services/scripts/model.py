@@ -220,7 +220,8 @@ def train_model() -> None:
     Train a 2D U-Net segmentation model on BraTS data and save it for later inference.
     """
     model = build_segmentation_model()
-    Path('../models').mkdir(exist_ok=True)
+    MODELS_DIR = Path(__file__).resolve().parent / 'models' # oncer/api/src/services/models
+    MODELS_DIR.mkdir(exist_ok=True)
 
     # Define subsubdirectories from 'data.py'
     IMG_TRAIN_DIR = IMG_DIR / 'train'
@@ -238,7 +239,7 @@ def train_model() -> None:
 
     callbacks = [
         EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True, verbose=1),
-        ModelCheckpoint('../models/oncer_model_checkpoint.keras', monitor='val_loss', save_best_only=True, verbose=1),
+        ModelCheckpoint(Path(MODELS_DIR / 'oncer_model_checkpoint.keras'), monitor='val_loss', save_best_only=True, verbose=1),
         TensorBoard(log_dir='logs')
     ]
 
@@ -253,8 +254,7 @@ def train_model() -> None:
         verbose=1
     )
 
-    model.save('../models/oncer_model.keras')
-    # tfjs.converters.save_keras_model(model, '../models')
+    model.save(Path(MODELS_DIR / 'oncer_model.keras'))
     print(f"*COMPLETE: model has been trained and saved to 'models' folder")
 
 
