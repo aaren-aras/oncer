@@ -37,17 +37,19 @@ These steps ensure that the `preprocessing.py` and `model.py` scripts in `api/se
 git clone https://github.com/aaren-aras/oncer.git && cd oncer
 ```
 
-To avoid compatibility issues with the latest NVIDIA GPUs (and the ensuing CUDA/cuDNN mismatch headaches), I decided to use NVIDIA's <u>N</u>VIDIA <u>G</u>PU <u>C</u>LOUD (NGC) TensorFlow containers, which come pre-packaged with the correct versions of TensorFlow, CUDA, and cuDNN.
+To avoid compatibility issues with the latest NVIDIA GPUs (and the ensuing CUDA/cuDNN mismatch headaches), I decided to use NVIDIA's <u>N</u>VIDIA <u>G</u>PU <u>C</u>LOUD (NGC) [TensorFlow containers](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/tensorflow) for **GPU-accelerated** CNN training on Windows. These containers come pre-packaged with versions of TensorFlow, CUDA, and cuDNN that are (almost) **guaranteed** to work together.
+
+Replace `/path/to/Oncer` with your project path:
 
 ```bash
 # Pull the latest container image
 docker pull nvcr.io/nvidia/tensorflow:25.02-tf2-py3 
 
-# Run the container interactively with GPU access and shared memory for OpenCV
+# Run the container interactively (terminal-like) with GPU access and shared memory (for OpenCV)
 docker run --gpus all -it --rm \ 
-    --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 \ 
-    -v /path/to/Oncer:/workspace/Oncer \ 
-    nvcr.io/nvidia/tensorflow:25.02-tf2-py3
+  --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 \  # avoid OOM errs and stack overflow crashes 
+  -v /path/to/Oncer:/workspace/Oncer \   
+  nvcr.io/nvidia/tensorflow:25.02-tf2-py3 
 ```
 
 Inside the container:
