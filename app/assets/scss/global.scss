@@ -72,3 +72,26 @@ body::before {
     padding: 0 2rem;
   }
 }
+
+::-webkit-scrollbar {
+  height: 3px;              /* height of horizontal scrollbar ← You're missing this */
+  // width: 50px;               /* width of vertical scrollbar */
+  // border: 0.5px groove palette.$accent-3;
+  border: 0.5px groove var(--color-border-hover);
+}
+
+::-webkit-scrollbar-thumb:horizontal{
+  background: var(--primary);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0;
+  @include config.transition-ease;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
