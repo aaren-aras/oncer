@@ -9,6 +9,7 @@ api/uploads/
 api/src/services/models/
 api/src/services/__pycache__/
 api/src/services/scripts/__pycache__/
+api/src/services/utils/previews/
 
 # FRONTEND
 ## Logs
