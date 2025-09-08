@@ -4,8 +4,12 @@
   </section>
   <section v-else id="upload-view">
     <div class="selected-view">
-      <img v-if="selectedImage" :src="selectedImage.image" />
-      <p>{{ selectedImage?.prediction }}</p>
+      <div class="img-wrapper" ref="imageWrapper">
+        <img :src="selectedImage.image" ref="baseImage" @load="drawOverlay" />
+        <canvas class="overlay-canvas" ref="overlayCanvas"></canvas>
+      </div>
+      <!-- <img v-if="selectedImage" :src="selectedImage.image" /> -->
+      <p>{{ selectedImage?.prediction }}</p> 
     </div>
 
     <!-- <div v-if="isStoreEmpty" class="">
@@ -15,7 +19,7 @@
     <div class="thumbnail-row">
       <div
         v-for="upload in otherImages"
-        :key="upload.image"
+        :key="upload.filename"
         class="thumbnail"
         @click="selectImage(upload)"
       >
@@ -30,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, computed, watch } from 'vue';
+  import { ref, computed, watch, onMounted, nextTick } from 'vue';
   import { useUploadStore } from '@/stores/upload';
   import type { UploadResult } from '@/types';
   
@@ -52,6 +56,44 @@
   const selectImage = (upload: UploadResult) => {
     selectedImage.value = upload;
   }
+
+  const baseImage = ref<HTMLImageElement | null>(null);
+  const overlayCanvas = ref<HTMLImageElement | null>(null);
+
+  const drawOverlay = async() => {
+    await nextTick();
+    if (!selectedImage.value?.overlay || !overlayCanvas.value || !baseImage.value) return;
+
+      const img = baseImage.value;
+      const canvas = overlayCanvas.value;
+
+      // Match canvas size to image size for perfect overlay
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      // Clear previous overlay
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Create image object for overlay
+      const overlayImg = new Image();
+      overlayImg.src = selectedImage.value.overlay;
+
+      overlayImg.onload = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.globalAlpha = 0.5; // semi-transparent overlay
+        ctx.drawImage(overlayImg, 0, 0, canvas.width, canvas.height);
+        ctx.globalAlpha = 1.0;
+      };
+  }
+
+  onMounted(() => {
+    if (baseImage.value) {
+      baseImage.value.addEventListener('load', drawOverlay);
+    }
+  });
 
   // const uploads = storeToRefs(store).uploads;
   // import UploadButton from '@/components/UploadButton.vue';  
@@ -87,13 +129,38 @@
       gap: 1em;
       // border: 1px solid red;
 
-      img {
-        // width: 50rem;
-        // border: 1px solid var(--color-border);
-        border: 2px ridge $accent-3;
-        border-radius: 5px;
-        // color: palette.$accent-3;
+      .img-wrapper {
+        position: relative;
+        display: inline-block;
+        max-width: 50em;
 
+        img {
+          // width: 100%;
+          //   height: auto;
+          //   display: block;
+
+          display: block;
+          // width: 50rem;
+          // border: 1px solid var(--color-border);
+          border: 2px ridge $accent-3;
+          border-radius: 5px;
+          // color: palette.$accent-3;
+        }
+
+        .overlay-canvas {
+          // width: 100%;
+          //   height: auto;
+          //   display: block;
+
+
+          border-radius: 5px;
+          position: absolute;
+          top: 0;
+          left: 0;
+          z-index: 100;
+          pointer-events: none; /* so mouse clicks pass through */
+          user-select: none;
+        }
       }
 
       p {
@@ -105,10 +172,12 @@
     .thumbnail-row {
       display: flex;
       justify-content: flex-start;
-      overflow-x: auto;
       gap: 1rem;
+      width: 30rem;
       padding: 10px;
       border-top: 1px solid var(--color-border);
+      overflow-x: auto;
+
 
       .thumbnail {
         flex: 0 0 auto;
