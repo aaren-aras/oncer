@@ -25,7 +25,7 @@ docker run --rm --gpus all nvidia/cuda:12.2.0-base-ubuntu22.04 nvidia-smi
 ```
 
 ### 3. Project Data (not included in this repo)
- - Download the brain MRI scans for training the CNN from Kaggle, [here](https://www.kaggle.com/datasets/praneet0327/brain-tumor-dataset/data)
+ - Download the brain MRI scans for training the CNN from Kaggle, [here](https://www.kaggle.com/datasets/dschettler8845/brats-2021-task1/data)
  - Inside the `api` folder, create a new folder called `data`
  - Place the downloaded `BraTS2021_Training_Data` folder inside it, such that the final path is: `api/data/BraTS2021_Training_Data`
 
