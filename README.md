@@ -29,7 +29,7 @@ docker run --rm --gpus all nvidia/cuda:12.2.0-base-ubuntu22.04 nvidia-smi
  - Inside the `api` folder, create a new folder called `data`
  - Place the downloaded `BraTS2021_Training_Data` folder inside it, such that the final path is: `api/data/BraTS2021_Training_Data`
 
-These steps ensure that the `preprocessing.py` and `model.py` scripts in `api/services/scripts` can automatically locate the dataset without additional configuration.
+These steps ensure that the `preprocessing.py` and `model.py` scripts in `api/services/scripts` can auto-locate the dataset without additional configuration.
 
 ## Setup
 ```bash
@@ -38,35 +38,36 @@ git clone https://github.com/aaren-aras/oncer.git && cd oncer
 ```
 
 ### Option A: Docker / NGC (recommended)
-
 To avoid compatibility issues with the latest NVIDIA GPUs (and the ensuing CUDA/cuDNN mismatch headaches), I decided to use NVIDIA's <u>N</u>VIDIA <u>G</u>PU <u>C</u>loud (NGC) [TensorFlow containers](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/tensorflow) for **GPU-accelerated** CNN training on Windows. These containers come pre-packaged with versions of TensorFlow, CUDA, and cuDNN that are (almost) **guaranteed** to work together, alongside other stuff for optimizing GPU performance.
 
-Replace `/path/to/Oncer` with your project path:
+After launching [Docker Desktop](https://www.docker.com/products/docker-desktop/) and replacing `/C:/path/to/oncer` (Windows example):
 
 ```bash
 # Pull the latest container image
 docker pull nvcr.io/nvidia/tensorflow:25.02-tf2-py3 
 
-# Run the container interactively (terminal-like) with GPU access and shared memory (for OpenCV)
-docker run --gpus all -it --rm \ 
-  --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 \  # avoid OOM errs and stack overflow crashes 
-  -v /path/to/Oncer:/workspace/Oncer \   
-  nvcr.io/nvidia/tensorflow:25.02-tf2-py3 
+# Run the container interactively (terminal-like) with GPU access and shared memory (prevent imgaug crashes)
+docker run --gpus all -it --rm \
+  -p 5000:5000 \
+  --ipc=host \
+  --ulimit memlock=-1 \
+  --ulimit stack=67108864 \
+  -v /C:/path/to/oncer:/workspace/Oncer \
+  nvcr.io/nvidia/tensorflow:25.02-tf2-py3
+
+# Verify project files are mounted ('Oncer' is listed)
+ls /workspace
 ```
 
 Inside the container:
 
 ```bash
-# Install any missing system libraries for OpenCV
+# Install any missing system libraries for imgaug/OpenCV
 apt update && apt install -y libgl1 libglib2.0-0
 
 # Install Python dependencies
 cd /workspace/Oncer/api
 pip install -r requirements.txt
-
-# Prepare BraTS 2021 data and generate model files
-python -m src.services.scripts.data
-python -m src.services.scripts.model
 
 # Verify GPU is working
 python -c "import tensorflow as tf; print('Available GPUs:', tf.config.list_physical_devices('GPU'))"
@@ -74,9 +75,10 @@ nvcc --version
 nvidia-smi
 ```
 
-### Option B: Local (optional)
+You can close the shell with `exit`. 
 
-Alternatively, if you don't want to use Docker/NGC, you *could* **manually** set up Python, TensorFlow, [CUDA](https://developer.nvidia.com/cuda-toolkit-archive), and [cuDNN](https://developer.nvidia.com/rdp/cudnn-archive) on your host system. Of course, this means YOU are responsible for making sure  ALL versions play nicely together—a task I *personally* wouldn't wish on my worst enemy. But hey, the choice is yours! 
+### Option B: Local 
+Alternatively, if you don't want to use Docker/NGC, you *could* set up Python, TensorFlow, [CUDA](https://developer.nvidia.com/cuda-toolkit-archive), and [cuDNN](https://developer.nvidia.com/rdp/cudnn-archive) **manually** from your end. Of course, this means YOU are responsible for making sure ALL versions play nicely together: a task I *personally* wouldn't wish on my worst enemy. But hey, the choice is yours! 
 
 Refer to this [table](https://www.tensorflow.org/install/source#gpu) for tested build configurations.
 
@@ -90,22 +92,30 @@ cd api
 py -3.10 -m venv .venv
 source .venv/Scripts/activate # Git Bash
 pip install -r requirements.txt
+```
 
+### Running Locally
+Inside the NGC container (or virtual environment):
+
+```bash
 # Prepare BraTS 2021 data and generate model files
 python -m src.services.scripts.data
 python -m src.services.scripts.model
+
+# Launch backend
+uvicorn src.services.main:app --reload --reload-dir /workspace/Oncer/api/src --host 0.0.0.0 --port 5000
 ```
 
-Once the model's been trained, launch the web app locally with Node.js:
+In another terminal:
 
 ```bash
-# Install Node.js deps
-cd oncer && npm install
+# Install Node.js deps (from root)
+cd .. && npm install
 
-# Start dev server
+# Launch dev instance (frontend)
 npm run start
 
-# Build and preview prod
+# Build and preview prod instance
 npm run build
 npm run preview
 ```
@@ -115,7 +125,9 @@ npm run preview
  - Windows requires WSL2 for Docker GPU acceleration
 
 ## Retrospective
- - Consider writing the entire backend in Python for all future DL projects
+ - Please stop falling for **scope creep**
+ - KNOW your **tools**, and when/how/why to use them given the scope
+   - Consider writing the entire backend in Python for all future DL projects
  - Docker NGC containers MASSIVELY simplify GPU + CUDA setup for modern NVIDIA GPUs requiring CUDA 12+ (no version mismatch and local rebuild trial-and-error, no Bazel errors, no DLL errors, ...)
    - Don't waste time with local installs and juggling Python versions, CUDA toolkits, and cuDNN DLLs on Windows when there're cleaner solutions available
    - You don't have to use *older* versions of software to achieve compatibility
