@@ -1,53 +1,48 @@
 import io
-import asyncio
 
-from fastapi import UploadFile
+from fastapi import UploadFile, File, HTTPException
+import tensorflow as tf
 import numpy as np
-from PIL import Image, ImageOps
+from PIL import Image
 
-from ..config import IMG_SIZE, EXTENSIONS
-
-
-def enhance_contrast(pii_img: Image.Image) -> Image.Image:
-   '''Improve tumour visibility in low-contrast MRI uploads'''
-   return ImageOps.autocontrast(pii_img)
+from ..config import IMG_SIZE, MODALITIES
 
 
-async def read_image(file: UploadFile) -> np.ndarray:
-    '''single file -> numpy array'''
-    contents = await file.read()
-    img = Image.open(io.BytesIO(contents)).convert('L') # greyscale-ify (if not already)
-    img = ImageOps.autocontrast(img) # improve tumour visibility in low-contrast MRI uploads
-    img = img.resize(*IMG_SIZE)
-    return np.array(img, dtype=np.float32) / 255.0 # normalize
+def load_and_normalize(upload_file: UploadFile) -> np.ndarray:
+    """
+    Read uploads and normalize pixel intensities. 
+    """
+    try: 
+        contents = upload_file.file.read()
+        img = Image.open(io.BytesIO(contents)).convert('L') # bytes -> in-memory file-like obj -> greyscale-ify (if not already)
+        img = img.resize(*IMG_SIZE)
+
+        min_val = np.min(img)
+        max_val = np.max(img)
+
+        if max_val > min_val: # has contrast
+            img = (img - min_val) / (max_val - min_val) # scale to [0, 1]
+        else: # has no contrast
+            img = np.zeros_like(img) # handle corrupted/missing values   
+        return np.array(img, dtype=np.float32)
+    except Exception:
+        raise HTTPException(status_code=400, detail=f'Invalid image file: {upload_file.filename}')
 
 
-# async def load_and_resize(file: UploadFile) -> np.ndarray:
-#   '''Takes a single image upload and '''
-#   contents = await file.read()
-#   img = Image.open(io.BytesIO(contents)).convert('L') # greyscale-ify
-#   img = img.resize((240, 240))
-#   return np.array(img, dtype=np.float32) / 255.0 # normalize
+async def preprocess_uploads(
+    t1: UploadFile = File(...),
+    t1ce: UploadFile = File(...),
+    t2: UploadFile = File(...),
+    flair: UploadFile = File(...),
+) -> tf.Tensor:   
+    """ 
+    Load, normalize, and stack MRI modalities into a model-ready tensor.  
+    """
+    t1_img = load_and_normalize(t1)
+    t1ce_img = load_and_normalize(t1ce)
+    t2_img = load_and_normalize(t2)
+    flair_img = load_and_normalize(flair)
 
-
-# async def preprocess_modalities(t1, t1ce, t2, flair) -> np.ndarray:
-#   imgs = await asyncio.gather(
-#     load_and_resize(t1),
-#     load_and_resize(t1ce),
-#     load_and_resize(t2),
-#     load_and_resize(flair)
-#   )
-
-#   stacked = np.stack(imgs, axis=-1) # shape: (240, 240, 4)
-#   return np.expand_dims(stacked, axis=0) # shape: (1, 240, 240, 4)
-
-async def extract_modalities_from_zip(file: UploadFile) -> 
-
-async def preprocess_upload(file: UploadFile) -> np.ndarray:
-    # imgs = await extract_modalities_from_zip(file) if file.filename.endswith('.zip') else await read_image(file)
-
-    try:
-        
-
-
-    return
+    stacked = np.stack([locals()[m + '_img'] for m in MODALITIES], axis=-1) # shape (H, W) x 4 -> (H, W, 4) (append new dim at the end)
+    input_tensor = np.expand_dims(stacked, axis=0) # shape (H, W, 4) -> (1, H, W, 4)
+    return tf.convert_to_tensor(input_tensor, dtype=tf.float32)
