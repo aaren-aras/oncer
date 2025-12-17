@@ -12,3 +12,4 @@ pillow>=10.3.0             # works with matplotlib
 
 fastapi>=0.110.0           # recent stable
 uvicorn>=0.29.0            # compatible with FastAPI
+python-multipart>=0.0.6    # recent stable
