@@ -4,7 +4,7 @@ import base64
 import numpy as np
 from PIL import Image
 
-from ..config import BASE_COLOR, ALPHA_NCR, ALPHA_ED, ALPHA_ET, LABEL_MAP
+from src.services.config import BASE_COLOR, ALPHA_NCR, ALPHA_ED, ALPHA_ET, LABEL_MAP
 
 def create_overlay(mask: np.ndarray) -> str:
     """
@@ -31,7 +31,9 @@ def create_overlay(mask: np.ndarray) -> str:
     img = Image.fromarray(overlay, mode='RGBA') # np arr -> PIL Image obj
     buffer = io.BytesIO()
     img.save(buffer, format='PNG') # PIL image obj -> in-memory file-like obj as PNG (supports transparency)
-    return base64.b64encode(buffer.getvalue()).decode('utf-8') # PNG -> bytes -> base64 str  
+    # return base64.b64encode(buffer.getvalue()).decode('utf-8') # PNG -> bytes -> base64 str  
+    return f"data:image/png;base64,{base64.b64encode(buffer.getvalue()).decode('utf-8')}"
+
 
 
 def compute_segmentation_stats(mask: np.ndarray) -> dict[str, object]:
