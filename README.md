@@ -1,5 +1,5 @@
 # Oncer
-Hey! This web app lets you perform **brain tumour segmentation** on **structural MRI scans** with a 2D ResU-Net <u>c</u>onvolutional <u>n</u>eural <u>n</u>etwork (CNN). The model is trained on the [BraTS 2021 glioma dataset](https://www.cancerimagingarchive.net/analysis-result/rsna-asnr-miccai-brats-2021/) across *4* MRI modalities: `T1`, `T1CE`, `T2`, and `FLAIR`.
+Hey! This web app lets you perform **2D brain tumour segmentation** on **structural MRI scans** with a ResU-Net <u>c</u>onvolutional <u>n</u>eural <u>n</u>etwork (CNN). The model is trained on a dataset from the [2021 RSNA-ASNR-MICCAI BraTS Challenge](https://www.cancerimagingarchive.net/analysis-result/rsna-asnr-miccai-brats-2021/) across *4* MRI modalities: `T1`, `T1CE`, `T2`, and `FLAIR`.
 
 [insert host link here]
 
@@ -26,7 +26,7 @@ docker run --rm --gpus all nvidia/cuda:12.2.0-base-ubuntu22.04 nvidia-smi
 
 ### 3. Project Data (not included in this repo)
  - Download the brain MRI scans from Kaggle, [here](https://www.kaggle.com/datasets/dschettler8845/brats-2021-task1/data)
- - Inside the `api` folder, create a new folder and name it `data`
+ - Inside the `api` directory, create a new folder and name it `data`
  - Place the downloaded `BraTS2021_Training_Data` folder inside `data` (`api/data/BraTS2021_Training_Data`)
 
 These steps ensure that the `preprocessing.py` and `model.py` scripts in `api/services/scripts` can find the dataset without additional configuration.
@@ -37,48 +37,35 @@ These steps ensure that the `preprocessing.py` and `model.py` scripts in `api/se
 git clone https://github.com/aaren-aras/oncer.git && cd oncer
 ```
 
+From the project **root**, create a `.env` file and set a port number for the backend (e.g., `5000`):
+
+```
+API_PORT=5000
+```
+
+Then, run the following:
+
+```bash
+chmod +x api/entrypoint.sh
+```
+
 ### Option A: Docker / NGC (recommended)
 To avoid compatibility issues with the latest NVIDIA GPUs (and the ensuing CUDA/cuDNN mismatch headaches), I decided to use NVIDIA's <u>N</u>VIDIA <u>G</u>PU <u>C</u>loud (NGC) [TensorFlow containers](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/tensorflow) for **GPU-accelerated** CNN training on Windows. These containers come pre-packaged with versions of TensorFlow, CUDA, and cuDNN that are (almost) **guaranteed** to work together, alongside other stuff for optimizing GPU performance.
 
-After launching [Docker Desktop](https://www.docker.com/products/docker-desktop/) and replacing `/C:/path/to/oncer` (Windows example):
+After launching **Docker Desktop**:
 
 ```bash
-# Pull the latest container image
-docker pull nvcr.io/nvidia/tensorflow:25.02-tf2-py3 
+# Build backend image
+cd api && docker build -t oncer-api .
 
-# Run the container interactively (terminal-like) with GPU access and shared memory (prevent imgaug crashes)
-docker run --gpus all -it --rm \
-  -p 5000:5000 \
-  --ipc=host \
-  --ulimit memlock=-1 \
-  --ulimit stack=67108864 \
-  -v /C:/path/to/oncer:/workspace/Oncer \
-  nvcr.io/nvidia/tensorflow:25.02-tf2-py3
-
-# Verify project files are mounted ('Oncer' is listed)
-ls /workspace
+# Run backend locally (available @ https://localhost:${API_PORT})
+cd api && docker compose up --build
 ```
 
-Inside the container:
-
-```bash
-# Install any missing system libraries for imgaug/OpenCV
-apt update && apt install -y libgl1 libglib2.0-0
-
-# Install Python dependencies
-cd /workspace/Oncer/api
-pip install -r requirements.txt
-
-# Verify GPU is working
-python -c "import tensorflow as tf; print('Available GPUs:', tf.config.list_physical_devices('GPU'))"
-nvcc --version  
-nvidia-smi
-```
-
-You can close the shell with `exit`. 
+You can close the container with `docker compose down`. 
 
 ### Option B: Local 
-Alternatively, if you don't want to use Docker/NGC, you *could* set up Python, TensorFlow, [CUDA](https://developer.nvidia.com/cuda-toolkit-archive), and [cuDNN](https://developer.nvidia.com/rdp/cudnn-archive) **manually** from your end. Of course, this means YOU are responsible for making sure ALL versions play nicely together: a task I *personally* wouldn't wish on my worst enemy. But hey, the choice is yours! 
+Alternatively, if you don't want to use Docker/NGC, you *could* set up Python, TensorFlow, [CUDA](https://developer.nvidia.com/cuda-toolkit-archive), and [cuDNN](https://developer.nvidia.com/rdp/cudnn-archive) **manually** from your end. Of course, this means YOU are responsible for making sure ALL versions play nicely together: a fate I *personally* wouldn't wish on my worst enemy. But hey, the choice is yours! 
 
 Refer to this [table](https://www.tensorflow.org/install/source#gpu) for tested build configurations.
 
@@ -87,30 +74,23 @@ Refer to this [table](https://www.tensorflow.org/install/source#gpu) for tested 
  - If you have a newer GPU (e.g., RTX 40/50 series), containers are STRONGLY recommended
 
 ```bash
+cd api
+
 # Install Python deps within virtual env (Windows example)
-cd api 
 py -3.10 -m venv .venv
 source .venv/Scripts/activate # Git Bash
 pip install -r requirements.txt
+
+# Run backend
+./entrypoint.sh
 ```
 
 ### Running Locally
-Inside the NGC container (or virtual environment):
-
-```bash
-# Prepare BraTS 2021 data and generate model files
-python -m src.services.scripts.data
-python -m src.services.scripts.model
-
-# Launch backend
-uvicorn src.services.main:app --reload --reload-dir /workspace/Oncer/api/src --host 0.0.0.0 --port 5000
-```
-
 In another terminal:
 
 ```bash
-# Install Node.js deps (from root)
-cd .. && npm install
+# Install Node.js deps 
+cd ../app && npm install
 
 # Launch dev instance (frontend)
 npm run start
