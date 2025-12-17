@@ -1,0 +1,28 @@
+services:
+  api:
+    image: oncer-api
+    env_file:
+      - .env
+    ports:
+      - "${API_PORT}:5000"
+    volumes:
+      - ./api:/workspace/Oncer/api
+    
+    ipc: host
+    
+    # Prevent imgaug crashes
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      stack:
+        soft: 67108864 # increase stack size to 64 MB (67108864 bytes)
+        hard: 67108864
+    
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            count: all
+            capabilities: [gpu]
