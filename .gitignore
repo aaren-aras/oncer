@@ -4,6 +4,7 @@ node_modules/
 .env
 
 # BACKEND
+api/.venv/
 api/data/
 api/uploads/
 api/src/services/models/
