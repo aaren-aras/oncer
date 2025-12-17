@@ -1,11 +1,12 @@
 import io
+import traceback
 
 from fastapi import UploadFile, File, HTTPException
 import tensorflow as tf
 import numpy as np
 from PIL import Image
 
-from ..config import IMG_SIZE, MODALITIES
+from src.services.config import IMG_SIZE, MODALITIES
 
 
 def load_and_normalize(upload_file: UploadFile) -> np.ndarray:
@@ -14,8 +15,9 @@ def load_and_normalize(upload_file: UploadFile) -> np.ndarray:
     """
     try: 
         contents = upload_file.file.read()
+        upload_file.file.seek(0) # reset pointer (back to beginning of file)
         img = Image.open(io.BytesIO(contents)).convert('L') # bytes -> in-memory file-like obj -> greyscale-ify (if not already)
-        img = img.resize(*IMG_SIZE)
+        img = img.resize(IMG_SIZE)
 
         min_val = np.min(img)
         max_val = np.max(img)
@@ -26,6 +28,9 @@ def load_and_normalize(upload_file: UploadFile) -> np.ndarray:
             img = np.zeros_like(img) # handle corrupted/missing values   
         return np.array(img, dtype=np.float32)
     except Exception:
+        traceback.print_exc()
+        raise 
+    
         raise HTTPException(status_code=400, detail=f'Invalid image file: {upload_file.filename}')
 
 
