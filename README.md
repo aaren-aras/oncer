@@ -1,12 +1,12 @@
 # Oncer
-Hey! This web app lets you upload brain MRI scans and analyze them with a ResU-Net <u>c</u>onvolutional <u>n</u>eural <u>n</u>etwork (CNN). Specifically, the model performs **tumour segmentation** and subtype classification, trained on the BraTS 2021 glioma dataset across four MRI modalities: T1, T1CE, T2, and FLAIR.
+Hey! This web app lets you perform **brain tumour segmentation** on **structural MRI scans** with a 2D ResU-Net <u>c</u>onvolutional <u>n</u>eural <u>n</u>etwork (CNN). The model is trained on the [BraTS 2021 glioma dataset](https://www.cancerimagingarchive.net/analysis-result/rsna-asnr-miccai-brats-2021/) across *4* MRI modalities: `T1`, `T1CE`, `T2`, and `FLAIR`.
 
 [insert host link here]
 
 [insert video demo here]
 
 ## Prerequisites
-You'll need *three* main pieces in place before running this project locally:
+You'll need *3* main pieces in place before running this project locally:
 
 ### 1. OS & Environemnt
  - On Windows, install [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install) (Ubuntu **22.04** recommended)
@@ -16,7 +16,7 @@ You'll need *three* main pieces in place before running this project locally:
 ### 2. Docker with NVIDIA GPU Support
  - Install [Docker Desktop](https://www.docker.com/products/docker-desktop/)
  - Install the latest [NVIDIA drivers](https://www.nvidia.com/en-us/drivers/) for your GPU
- - Install the **[NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)** so Docker can use your GPU
+ - Install the **[NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)** so that Docker can use your GPU
 
 Verify setup:
 
@@ -25,11 +25,11 @@ docker run --rm --gpus all nvidia/cuda:12.2.0-base-ubuntu22.04 nvidia-smi
 ```
 
 ### 3. Project Data (not included in this repo)
- - Download the brain MRI scans for training the CNN from Kaggle, [here](https://www.kaggle.com/datasets/dschettler8845/brats-2021-task1/data)
- - Inside the `api` folder, create a new folder called `data`
- - Place the downloaded `BraTS2021_Training_Data` folder inside it, such that the final path is: `api/data/BraTS2021_Training_Data`
+ - Download the brain MRI scans from Kaggle, [here](https://www.kaggle.com/datasets/dschettler8845/brats-2021-task1/data)
+ - Inside the `api` folder, create a new folder and name it `data`
+ - Place the downloaded `BraTS2021_Training_Data` folder inside `data` (`api/data/BraTS2021_Training_Data`)
 
-These steps ensure that the `preprocessing.py` and `model.py` scripts in `api/services/scripts` can auto-locate the dataset without additional configuration.
+These steps ensure that the `preprocessing.py` and `model.py` scripts in `api/services/scripts` can find the dataset without additional configuration.
 
 ## Setup
 ```bash
