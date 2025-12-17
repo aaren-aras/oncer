@@ -3,11 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "type": "module",
-  "description": "Performs brain tumour segmentation on structural MRI scans using a 2D U-Net",
+  "description": "Performs brain tumour segmentation on structural MRI scans using a 2D ResU-Net",
   "scripts": {
-    "start": "concurrently \"npm run start:app\" \"npm run start:api\"",
-    "start:app": "cd app && vite",
-    "start:api": "cd api && nodemon src/app.ts",
+    "start": "vite",
     "build": "npm run type-check && npm run build-only",
     "preview": "vite preview",
     "test:unit": "vitest",
