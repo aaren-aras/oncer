@@ -2,8 +2,8 @@
 data/
 uploads/
 
-src/models/
-!src/models/oncer_model.keras
+models/
+!models/oncer_model.keras
 
 src/__pycache__/
 src/scripts/__pycache__/

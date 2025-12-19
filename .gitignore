@@ -7,7 +7,7 @@ node_modules/
 api/.venv/
 api/data/
 api/uploads/
-api/src/models/
+api/models/
 api/src/__pycache__/
 api/src/scripts/__pycache__/
 api/src/utils/previews/
