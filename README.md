@@ -29,7 +29,7 @@ docker run --rm --gpus all nvidia/cuda:12.2.0-base-ubuntu22.04 nvidia-smi
  - Inside the `api` directory, create a new folder and name it `data`
  - Place the downloaded `BraTS2021_Training_Data` folder inside `data` (`api/data/BraTS2021_Training_Data`)
 
-These steps ensure that the `preprocessing.py` and `model.py` scripts in `api/services/scripts` can find the dataset without additional configuration.
+These steps ensure that the `preprocessing.py` and `model.py` scripts in `api/src/scripts` can find the dataset without additional configuration.
 
 ## Setup
 ```bash

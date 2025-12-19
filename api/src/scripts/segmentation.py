@@ -4,7 +4,7 @@ import base64
 import numpy as np
 from PIL import Image
 
-from src.services.config import BASE_COLOR, ALPHA_NCR, ALPHA_ED, ALPHA_ET, LABEL_MAP
+from src.config import BASE_COLOR, ALPHA_NCR, ALPHA_ED, ALPHA_ET, LABEL_MAP
 
 
 def create_overlay(mask: np.ndarray) -> str:

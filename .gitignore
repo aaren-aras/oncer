@@ -7,10 +7,10 @@ node_modules/
 api/.venv/
 api/data/
 api/uploads/
-api/src/services/models/
-api/src/services/__pycache__/
-api/src/services/scripts/__pycache__/
-api/src/services/utils/previews/
+api/src/models/
+api/src/__pycache__/
+api/src/scripts/__pycache__/
+api/src/utils/previews/
 
 # FRONTEND
 ## Logs

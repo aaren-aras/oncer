@@ -2,9 +2,9 @@
 data/
 uploads/
 
-src/services/models/
-!src/services/models/oncer_model.keras
+src/models/
+!src/models/oncer_model.keras
 
-src/services/__pycache__/
-src/services/scripts/__pycache__/
-src/services/utils/previews/
+src/__pycache__/
+src/scripts/__pycache__/
+src/utils/previews/

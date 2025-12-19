@@ -16,6 +16,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Run backend once container's built
-# CMD ["uvicorn", "src.services.main:app", "--host", "0.0.0.0", "--port", "5000", "--reload"]
-
 ENTRYPOINT ["./entrypoint.sh"]

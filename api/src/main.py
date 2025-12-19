@@ -11,7 +11,7 @@ import numpy as np
 from .scripts.preprocessing import preprocess_uploads
 from .scripts.segmentation import create_overlay, compute_segmentation_stats
 
-MODEL_PATH = Path(__file__).resolve().parent / 'models/oncer_model.keras' # oncer/api/src/services/models
+MODEL_PATH = Path(__file__).resolve().parent / 'models/oncer_model.keras' # oncer/api/src/models
 model: tf.keras.Model | None = None
 
 

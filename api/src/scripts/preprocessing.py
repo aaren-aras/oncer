@@ -6,7 +6,7 @@ import tensorflow as tf
 import numpy as np
 from PIL import Image
 
-from src.services.config import IMG_SIZE, MODALITIES
+from src.config import IMG_SIZE, MODALITIES
 
 
 def load_and_normalize(upload_file: UploadFile) -> np.ndarray:
