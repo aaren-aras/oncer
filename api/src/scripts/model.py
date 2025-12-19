@@ -243,7 +243,7 @@ def train_model() -> None:
     callbacks = [
         EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True, verbose=1),
         ModelCheckpoint(Path(MODELS_DIR / 'oncer_model_checkpoint.keras'), monitor='val_loss', save_best_only=True, verbose=1),
-        TensorBoard(log_dir='logs')
+        TensorBoard(log_dir=Path(MODELS_DIR / 'logs'))
     ]
 
     # Train model on BraTS dataset ((1) Forward Pass -> (2) Loss Calculation -> (3) Backward Pass/Backpropogation -> (4) Weight Update)
