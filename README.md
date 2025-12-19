@@ -101,7 +101,7 @@ npm run preview
 ```
 
 ## Issues
- - TF GPU compatibility is fragile outside Docker
+ - TF GPU compatibility is fragile outside Docker NGC containers
  - Windows requires WSL2 for Docker GPU acceleration
 
 ## Retrospective
