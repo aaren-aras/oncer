@@ -58,7 +58,7 @@ def process_subject(subject_path: Path) -> list[tuple[np.ndarray, np.ndarray, st
     for i in range(stacked.shape[2]): # per axial slice (z-resolution)
         img_slice = stacked[:, :, i, :] # shape (H, W, 4)
         mask_slice = mask[:, :, i] # shape (H, W)
-        slices.append((img_slice, mask_slice, subject_id, i))
+        slices.append(img_slice, mask_slice, subject_id, i)
 
     return slices
 
