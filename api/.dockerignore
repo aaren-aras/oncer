@@ -1,8 +1,9 @@
 .venv
-data/
 uploads/
+data/ 
 
-models/
+# Keep parent dir
+models/*
 !models/oncer_model.keras
 
 src/__pycache__/

@@ -65,7 +65,7 @@ cd api && docker compose up --build
 You can close the container with `docker compose down`. 
 
 ### Option B: Local 
-Alternatively, if you don't want to use Docker/NGC, you *could* set up Python, TensorFlow, [CUDA](https://developer.nvidia.com/cuda-toolkit-archive), and [cuDNN](https://developer.nvidia.com/rdp/cudnn-archive) **manually** from your end. Of course, this means YOU are responsible for making sure ALL versions play nicely together: a fate I *personally* wouldn't wish on my worst enemy. But hey, the choice is yours! 
+Alternatively, if you don't want to use Docker/NGC, you could set up Python, TensorFlow, [CUDA](https://developer.nvidia.com/cuda-toolkit-archive), and [cuDNN](https://developer.nvidia.com/rdp/cudnn-archive) manually from your end. This means YOU are responsible for making sure ALL software versions play nicely together, a fate I personally wouldn't wish on my worst enemy (but hey, the choice is yours). 
 
 Refer to this [table](https://www.tensorflow.org/install/source#gpu) for tested build configurations.
 

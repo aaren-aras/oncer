@@ -2,6 +2,9 @@
 data.py
  - Define small constant ε to avoid division-by-0 cases
 """
+MIN_TUMOR_FRACTION = 0.001 # keep slice if >=0.1% px are tumour
+BKGD_KEEP_RATE = 0.05 # keep bkgd slices 5% of the time
+RNG_SEED = 2026
 LABEL_MAP = { 0: 'background', 1: 'NCR', 2: 'ED', 3: 'ET' } # 4 -> 3
 MODALITIES = ('t1', 't1ce', 't2', 'flair')
 EPSILON = 1e-8

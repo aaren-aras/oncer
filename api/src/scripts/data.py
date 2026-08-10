@@ -6,11 +6,12 @@ import numpy as np
 import nibabel as nib
 from sklearn.model_selection import train_test_split
 
-from ..config import MODALITIES, EPSILON, LABEL_MAP
+from ..config import MIN_TUMOR_FRACTION, BKGD_KEEP_RATE, \
+RNG_SEED, MODALITIES, EPSILON, LABEL_MAP
 
 SCRIPT_DIR = Path(__file__).resolve().parent # oncer/api/src/scripts
-BRATS_DIR = (SCRIPT_DIR / '../../../data/BraTS2021_Training_Data').resolve() # update if needed
-OUTPUT_DIR = (SCRIPT_DIR / '../../../data/BraTS2021_Processed_Data').resolve()
+BRATS_DIR = (SCRIPT_DIR / '../../data/BraTS2021_Training_Data').resolve() # update if needed
+OUTPUT_DIR = (SCRIPT_DIR / '../../data/BraTS2021_Processed_Data').resolve()
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # Define dataset subdirectories    
@@ -18,7 +19,7 @@ IMG_DIR = OUTPUT_DIR / 'images'
 MASK_DIR = OUTPUT_DIR / 'masks'
 METADATA_DIR = OUTPUT_DIR / 'metadata'
 
-# Create above subdirectories and 'train', 'valid', and 'test' subsubdirectories
+# Create above subdirectories and subsubdirectories
 for split in ['train', 'valid', 'test']:
     (IMG_DIR / split).mkdir(parents=True, exist_ok=True)
     (MASK_DIR / split).mkdir(parents=True, exist_ok=True)
@@ -27,7 +28,8 @@ for split in ['train', 'valid', 'test']:
 
 def normalize_modality(img: np.ndarray) -> np.ndarray:
     """
-    Normalize MRI image slice to 8-bit greyscale to standardize pixel intensities and highlight structure over brightness.
+    Normalize MRI image slice to 8-bit greyscale to standardize 
+    pixel intensities and highlight structure over brightness.
     """
     img = np.nan_to_num(img) # handle any corrupted/missing values
     img = np.clip(img, 0, np.percentile(img, 99)) # cut off extremes (99th %tile)
@@ -35,7 +37,7 @@ def normalize_modality(img: np.ndarray) -> np.ndarray:
     return (img * 255).astype(np.uint8) # scale to [0, 255] (2e8)
 
 
-def process_subject(subject_path: Path) -> list[tuple[np.ndarray, np.ndarray, str, int]]:
+def process_subject(subject_path: Path, rng: np.random.Generator) -> list[tuple[np.ndarray, np.ndarray, str, int]]:
     """
     Given a BraTS subject (BraTS_2021_0xxxx):
     - Stack all 4 MRI modalities (T1, T1CE, T2, FLAIR) into a 4-channel 3D image volume,
@@ -58,14 +60,22 @@ def process_subject(subject_path: Path) -> list[tuple[np.ndarray, np.ndarray, st
     for i in range(stacked.shape[2]): # per axial slice (z-resolution)
         img_slice = stacked[:, :, i, :] # shape (H, W, 4)
         mask_slice = mask[:, :, i] # shape (H, W)
-        slices.append(img_slice, mask_slice, subject_id, i)
+
+        # Drop near-empty slices
+        tumor_fraction = np.count_nonzero(mask_slice) / mask_slice.size
+        if tumor_fraction < MIN_TUMOR_FRACTION:
+            if rng.random() > BKGD_KEEP_RATE:
+                continue 
+
+        slices.append((img_slice, mask_slice, subject_id, i))
 
     return slices
 
 
 def save_slice(img_stack: np.ndarray, mask_slice: np.ndarray, subject_id: str, slice_idx: int, split: str) -> None:
     """
-    Save MRI image slice, corresponding segmentation mask, and per-slice metadata to their respective subsubdirectories.
+    Save MRI image slice, corresponding segmentation mask, and 
+    per-slice metadata to their respective subsubdirectories.
     """
     img_path = IMG_DIR / split / f'{subject_id}_slice{slice_idx:03d}.npy' # e.g., 5 -> 005
     mask_path = MASK_DIR / split / f'{subject_id}_slice{slice_idx:03d}_mask.npy'
@@ -98,26 +108,45 @@ def save_slice(img_stack: np.ndarray, mask_slice: np.ndarray, subject_id: str, s
 
 def prepare_data() -> None:
     """
-    Process all BraTS subjects and prepare dataset for model training.
+    Process BraTS subjects and prepare dataset for model training.
     """
+    rng = np.random.default_rng(RNG_SEED)
+
     all_slices = []
     
     subjects = sorted([p for p in BRATS_DIR.iterdir() if p.is_dir()])
-    for subject_path in tqdm(subjects, desc='Processing BraTS2021 subjects'):
-        slices = process_subject(subject_path)
-        all_slices.extend(slices)
-    print(f'Total 2D Slices: {len(all_slices)}')
+
+    if not subjects:
+        raise FileNotFoundError(f'No subject directories found in {BRATS_DIR}')
+
+    # for subject_path in tqdm(subjects, desc='Processing BraTS2021 subjects'):
+    #     slices = process_subject(subject_path)
+    #     all_slices.extend(slices)
+    # print(f'Total 2D Slices: {len(all_slices)}')
     
     # Split MRI image slices into training, validation, and test sets (70-15-15)
-    train, temp = train_test_split(all_slices, test_size=0.3, random_state=2025) # 70% train, 30% temp
-    valid, test = train_test_split(temp, test_size=0.5, random_state=2025) # of 30% temp: 50% valid, 50% test
+    train, temp = train_test_split(subjects, test_size=0.3, random_state=RNG_SEED) # 70% train, 30% temp
+    valid, test = train_test_split(temp, test_size=0.5, random_state=RNG_SEED) # of 30% temp: 50% valid, 50% test
 
     splits = [(train, 'train'), (valid, 'valid'), (test, 'test')]
-    for split_data, split_name in splits:
-        for img, mask, subject_id, idx in tqdm(split_data, desc=f'Saving \'{split_name}\' slices'):
-            save_slice(img, mask, subject_id, idx, split_name)
+    # for split_data, split_name in splits:
+    #     for img, mask, subject_id, idx in tqdm(split_data, desc=f"Saving '{split_name}' slices"):
+    #         save_slice(img, mask, subject_id, idx, split_name)
 
-    print('*COMPLETE: images have been distributed across training, validation, and test sets')
+    total_slices = 0
+    for split_subjects, split_name in splits:
+        split_slice_count = 0
+        for subject_path in tqdm(split_subjects, desc=f"Processing '{split_name}' subjects"):
+            slices = process_subject(subject_path, rng)
+            for img, mask, subject_id, idx in slices:
+                save_slice(img, mask, subject_id, idx, split_name)
+            split_slice_count += len(slices)
+        print(f'{split_name}: {len(split_subjects)} subjects -> {split_slice_count} slices')
+        total_slices += split_slice_count
+
+    print(f'*COMPLETE: {total_slices} total slices distributed across training, validation, and test sets')
+
+    # print('*COMPLETE: images have been distributed across training, validation, and test sets')
 
 
 if __name__ == '__main__':

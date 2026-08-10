@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 set -e # exit if anything fails
-
-MODEL_PATH=${MODEL_PATH:-/workspace/Oncer/api/models/oncer_model.keras}
-
 echo "Checking for model at: $MODEL_PATH"
 
 if [ ! -f "$MODEL_PATH" ]; then

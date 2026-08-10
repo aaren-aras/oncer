@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
@@ -8,10 +9,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, UploadFile, File, HTTPException
 import numpy as np
 
+from .scripts.model import DiceMetric, dice_loss 
 from .scripts.preprocessing import preprocess_uploads
 from .scripts.segmentation import create_overlay, compute_segmentation_stats
 
-MODEL_PATH = Path(__file__).resolve().parent / 'models/oncer_model.keras' # oncer/api/models
+
+# MODEL_PATH = Path(__file__).resolve().parent.parent / 'models' / 'oncer_model.keras' 
+MODEL_PATH = Path(os.environ.get(
+    'MODEL_PATH',
+    str(Path(__file__).resolve().parent.parent / 'models' / 'oncer_model.keras')
+))
 model: tf.keras.Model | None = None
 
 
@@ -23,7 +30,14 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     global model
     try:    
        print('Loading model...')
-       model = tf.keras.models.load_model(MODEL_PATH, compile=False) 
+       model = tf.keras.models.load_model(
+            MODEL_PATH, 
+            custom_objects={
+                'DiceMetric': DiceMetric,
+                'dice_loss': dice_loss
+            }, 
+            compile=False
+        ) 
        print('Model loaded successfully!')
        yield
     finally:

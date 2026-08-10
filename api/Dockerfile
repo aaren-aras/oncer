@@ -15,5 +15,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy backend code
 COPY . .
 
+# Works for both LF and CRLF line endings
+RUN sed -i 's/\r$//' entrypoint.sh && chmod +x entrypoint.sh
+
 # Run backend once container's built
 ENTRYPOINT ["./entrypoint.sh"]
