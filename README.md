@@ -113,3 +113,4 @@ npm run preview
    - You don't have to use *older* versions of software to achieve compatibility
    - Some TF builds lack precompiled CUDA kernels for newer GPUs with higher compute capabilities, forcing them to JIT-compile PTX at runtime, which can drastically slow startup; these containers avoid the issue by including prebuilt, GPU-optimized binaries
  - Look into multi-GPU setups (distributed training?): https://developer.nvidia.com/nccl
+ - Implement model in PyTorch with [ONNX](https://github.com/onnx/onnx)
