@@ -1,10 +1,10 @@
 
 <template>
   <header>
-    <img alt="Oncer logo" class="logo" src="../assets/logo.svg" width="150" height="150" />
+    <img alt="Oncer logo" class="logo" src="../assets/logo-new.svg" width="150" height="150" />
 
     <div class="wrapper">
-      <WelcomeText title="Oncer" />
+      <WelcomeText title="ONCER ‎ 𖡎" />
       <nav>
         <RouterLink to="/">Welcome</RouterLink>
         <UploadButton />
@@ -16,6 +16,17 @@
       {{ theme === 'dark' ? 'Light Mode ☀️' : 'Dark Mode 🌙' }}
     </button>
   </header>
+  <footer>
+    <p>
+      &copy; {{ new Date().getFullYear() }} Aaren Arasaratnam. Developed under the
+      <a href="https://github.com/YOUR_USERNAME/oncer/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>.
+    </p>
+    <p class="data-attribution">
+      Trained on the
+        <a href="https://www.synapse.org/#!Synapse:syn25829067" target="_blank" rel="noopener">RSNA-ASNR-MICCAI BraTS 2021</a>
+      dataset. Not for clinical or commercial use.
+    </p>
+  </footer>
 
   <main>
     <RouterView />
@@ -25,7 +36,7 @@
 <script setup lang="ts">
   import { RouterLink, RouterView } from 'vue-router'
   import { useTheme } from '@/composables/useTheme'
-  import WelcomeText from './components/WelcomeText.vue'
+  import WelcomeText from './components/LeftPanel.vue'
   import UploadButton from './components/UploadButton.vue'
 
   const { theme, toggleTheme } = useTheme()
@@ -108,6 +119,19 @@ nav a {
 
 nav a:first-of-type {
   border: 0;
+}
+
+footer {
+  // background-color: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  cursor: pointer;
+  // @include transition-ease;
 }
 
 @media (min-width: 1024px) {
