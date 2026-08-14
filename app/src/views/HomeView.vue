@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import WelcomeBlurb from '../components/WelcomeBlurb.vue'
+  import WelcomeBlurb from '../components/InfoPanel.vue'
 </script>
 
 <template>
