@@ -1,6 +1,9 @@
 from pathlib import Path
 from typing import Generator
 
+import os
+os.environ['TF_USE_LEGACY_KERAS'] = '0' # use modern Keras 3, not Keras 2 (tf-keras)
+
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras import mixed_precision
@@ -45,6 +48,8 @@ def dice_coefficient(y_true: tf.Tensor, y_pred: tf.Tensor, smooth: float=EPSILON
     """
     Compute the Dice coefficient between two tensors (ground truth and prediction masks), ranging from 0 (no overlap) to 1 (perfect match).
     """
+    y_true = tf.cast(y_true, tf.float32)
+    y_pred = tf.cast(y_pred, tf.float32)
     y_true_f = tf.reshape(y_true, [-1]) # (H, W, 4) -> 1D, i.e., (240, 240, 4) = 240 x 240 x 4 = [2300400] elements
     y_pred_f = tf.reshape(y_pred, [-1])
     intersection = tf.reduce_sum(y_true_f * y_pred_f) # sum of element-wise product (common 1s between masks)
@@ -210,7 +215,8 @@ def data_generator(
                     mask_to_encode = mask
                 
                 # One-hot encode mask (H, W) -> (H, W, NUM_CLASSES = 4) 
-                onehot_mask = to_categorical(mask_to_encode, num_classes) # int labels (0, 1, 2, 3) -> vectors ([0, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], ...)
+                # onehot_mask = to_categorical(mask_to_encode, num_classes) # int labels (0, 1, 2, 3) -> vectors ([0, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], ...)
+                onehot_mask = to_categorical(mask_to_encode, num_classes).astype(np.float32)
 
                 batch_imgs.append(img)
                 batch_masks.append(onehot_mask)
@@ -223,7 +229,7 @@ def train_model() -> None:
     Train a 2D U-Net segmentation model on BraTS data and save it for later inference.
     """
     model = build_segmentation_model()
-    MODELS_DIR = Path(__file__).resolve().parent.parent / 'models' # oncer/api/models
+    MODELS_DIR = Path(__file__).resolve().parent.parent.parent / 'models' # oncer/api/models
     MODELS_DIR.mkdir(exist_ok=True)
 
     # Define subsubdirectories from 'data.py'
@@ -240,10 +246,16 @@ def train_model() -> None:
     train_steps = len(list(IMG_TRAIN_DIR.iterdir())) // BATCH_SIZE # generators don't have lengths
     valid_steps = len(list(IMG_VALID_DIR.iterdir())) // BATCH_SIZE
 
+    # callbacks = [
+    #     EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True, verbose=1),
+    #     ModelCheckpoint(Path(MODELS_DIR / 'oncer_model_checkpoint.keras'), monitor='val_loss', save_best_only=True, verbose=1),
+    #     TensorBoard(log_dir=Path(MODELS_DIR / 'logs'))
+    # ]
+
     callbacks = [
         EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True, verbose=1),
-        ModelCheckpoint(Path(MODELS_DIR / 'oncer_model_checkpoint.keras'), monitor='val_loss', save_best_only=True, verbose=1),
-        TensorBoard(log_dir=Path(MODELS_DIR / 'logs'))
+        ModelCheckpoint(str(MODELS_DIR / 'oncer_model_checkpoint.keras'), monitor='val_loss', save_best_only=True, verbose=1),
+        TensorBoard(log_dir=str(MODELS_DIR / 'logs'))
     ]
 
     # Train model on BraTS dataset ((1) Forward Pass -> (2) Loss Calculation -> (3) Backward Pass/Backpropogation -> (4) Weight Update)
@@ -257,7 +269,8 @@ def train_model() -> None:
         verbose=1
     )
 
-    model.save(Path(MODELS_DIR / 'oncer_model.keras'))
+    # model.save(Path(MODELS_DIR / 'oncer_model.keras'))
+    model.save(str(MODELS_DIR / 'oncer_model.keras'))
     print(f"*COMPLETE: model has been trained and saved to 'models' folder")
 
 
