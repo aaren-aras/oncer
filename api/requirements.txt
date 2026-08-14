@@ -1,15 +1,25 @@
-tensorflow==2.17.0         # match NGC container
-keras>=3.0.0               # TF 2.17 uses Keras 3.x
-numpy>=1.26.4              # compatible with TF 2.17 + Python 3.12
-protobuf>=4.25.3           # TF 2.17 works with newer protobuf
-matplotlib>=3.9.2          # latest stable, compatible with numpy
-scikit-learn>=1.5.2        # recent stable
-imgaug==0.4.0              # stable
-tqdm>=4.66.4               # recent stable
+# Version pins are anchored to TensorFlow 2.17.0 to match the NVIDIA NGC
+# container (nvcr.io/nvidia/tensorflow:25.02-tf2-py3) used for training/
+# deployment, so local dev and Docker stay on compatible TF/Keras/NumPy
+# versions and avoid model-loading mismatches (e.g. Keras 2 vs Keras 3
+# serialization). Requires Python 3.11 or 3.12 locally — TF 2.17 has no
+# published wheels for 3.13+. imgaug is pinned exactly (0.4.0) since it's
+# unmaintained and prone to breaking on newer numpy/scipy releases.
 
-nibabel>=5.2.0             # works with Python 3.12
-pillow>=10.3.0             # works with matplotlib
+python-dotenv>=1.0.0
+tensorflow>=2.17.0, <2.19 # match NGC container
+keras>=3.0.0 # TF 2.17 uses Keras 3.x
+tf-keras>=2.17.0
+numpy>=1.26.4, <2.0 # compatible with TF 2.17 + Python 3.12
+protobuf>=4.25.3 # TF 2.17 works with newer protobuf
+matplotlib>=3.9.2 
+scikit-learn>=1.5.2 
+imgaug==0.4.0 
+tqdm>=4.66.4 
 
-fastapi>=0.110.0           # recent stable
-uvicorn>=0.29.0            # compatible with FastAPI
-python-multipart>=0.0.6    # recent stable
+nibabel>=5.2.0 # works with Python 3.12
+pillow>=10.3.0 # works with matplotlib
+
+fastapi>=0.110.0 
+uvicorn>=0.29.0 # compatible with FastAPI
+python-multipart>=0.0.6 
