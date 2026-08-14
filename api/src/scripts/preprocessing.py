@@ -48,6 +48,15 @@ async def preprocess_uploads(
     t2_img = load_and_normalize(t2)
     flair_img = load_and_normalize(flair)
 
-    stacked = np.stack([locals()[m + '_img'] for m in MODALITIES], axis=-1) # shape (H, W) x 4 -> (H, W, 4) (append new dim at the end)
+
+    modality_imgs = {
+        't1': t1_img,
+        't1ce': t1ce_img,
+        't2': t2_img,
+        'flair': flair_img,
+    }
+    stacked = np.stack([modality_imgs[m] for m in MODALITIES], axis=-1)
+
+    # stacked = np.stack([locals()[m + '_img'] for m in MODALITIES], axis=-1) # shape (H, W) x 4 -> (H, W, 4) (append new dim at the end)
     input_tensor = np.expand_dims(stacked, axis=0) # shape (H, W, 4) -> (1, H, W, 4)
     return tf.convert_to_tensor(input_tensor, dtype=tf.float32)

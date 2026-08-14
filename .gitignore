@@ -5,6 +5,7 @@ node_modules/
 
 # BACKEND
 api/.venv/
+api/.venv-inference/
 api/data/
 api/uploads/
 # api/models/
