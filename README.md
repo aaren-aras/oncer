@@ -1,10 +1,6 @@
 ![README Banner](readme-banner.png)
 
-Hey! This web app lets you perform **2D brain tumour segmentation** on **structural MRI scans** with a ResU-Net <u>c</u>onvolutional <u>n</u>eural <u>n</u>etwork (CNN). The model is trained on a dataset from the [2021 RSNA-ASNR-MICCAI BraTS Challenge](https://www.cancerimagingarchive.net/analysis-result/rsna-asnr-miccai-brats-2021/) across *4* MRI modalities: `T1`, `T1CE`, `T2`, and `FLAIR`.
-
-[insert host link here]
-
-[insert video demo here]
+This is a web app for performing **brain tumour segmentation** on **structural MRI scans** with a ResU-Net <u>c</u>onvolutional <u>n</u>eural <u>n</u>etwork (CNN). The model is trained on a dataset from the [2021 RSNA-ASNR-MICCAI BraTS Challenge](https://www.cancerimagingarchive.net/analysis-result/rsna-asnr-miccai-brats-2021/) across *4* MRI modalities: `T1`, `T1CE`, `T2`, and `FLAIR`.
 
 ## Prerequisites
 You'll need *3* main pieces in place before running this project locally:
