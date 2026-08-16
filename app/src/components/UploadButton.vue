@@ -216,7 +216,7 @@ const convertToBase64 = (file: File): Promise<string> => {
         }
 
         &.has-file {
-          background-color: #16a34a; // green to show it's filled
+          background-color: #91daab; // green to show it's filled
         }
       }
 
