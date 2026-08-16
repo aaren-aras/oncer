@@ -100,6 +100,12 @@ npm run build
 npm run preview
 ```
 
+An `API_PORT` must be set in a root `.env` file for `entrypoint.sh` to run the backend. E.g.,
+
+```bash
+API_PORT=5000
+```
+
 ## Issues
  - TF GPU compatibility is fragile outside Docker NGC containers
  - Windows requires WSL2 for Docker GPU acceleration
