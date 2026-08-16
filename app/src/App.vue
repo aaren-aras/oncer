@@ -1,14 +1,16 @@
 
 <template>
   <header>
-    <img alt="Oncer logo" class="logo" src="../assets/logo-new.svg" width="150" height="150" />
+    <img alt="ONCER Logo" class="logo" src="../assets/logo-new.svg" />
 
     <div class="wrapper">
-      <WelcomeText title="ONCER ‎ 𖡎" />
+      <LeftPanel title="ONCER&nbsp; 𖡎" />
       <nav>
-        <RouterLink to="/">Welcome</RouterLink>
         <UploadButton />
-        <!-- <RouterLink to="/upload">Upload Scan</RouterLink> -->
+        <div class="router-links">
+          <RouterLink to="/">Welcome</RouterLink>
+          <RouterLink to="/upload">Uploads</RouterLink>
+        </div>
       </nav>
     </div>
 
@@ -18,14 +20,16 @@
   </header>
   <footer>
     <p>
-      &copy; {{ new Date().getFullYear() }} Aaren Arasaratnam. Developed under the
-      <a href="https://github.com/YOUR_USERNAME/oncer/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>.
+      &copy; {{ new Date().getFullYear() }} Aaren Arasaratnam
+      &nbsp;&bull;&nbsp; v0.1.0
+      &nbsp;&bull;&nbsp; Released under the
+      <a href="https://github.com/aaren-aras/oncer/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>
     </p>
-    <p class="data-attribution">
+    <!-- <p class="data-attribution">
       Trained on the
         <a href="https://www.synapse.org/#!Synapse:syn25829067" target="_blank" rel="noopener">RSNA-ASNR-MICCAI BraTS 2021</a>
       dataset. Not for clinical or commercial use.
-    </p>
+    </p> -->
   </footer>
 
   <main>
@@ -36,7 +40,7 @@
 <script setup lang="ts">
   import { RouterLink, RouterView } from 'vue-router'
   import { useTheme } from '@/composables/useTheme'
-  import WelcomeText from './components/LeftPanel.vue'
+  import LeftPanel from './components/LeftPanel.vue'
   import UploadButton from './components/UploadButton.vue'
 
   const { theme, toggleTheme } = useTheme()
@@ -84,20 +88,33 @@
   }
 
 header {
+  display: flex;
+  // gap: 0.5rem;
   line-height: 1.5;
-  max-height: 100vh;
+  // max-height: 100vh;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+img {
+  display: inline-block;
+  width: 10rem;
+  height: 10rem;
+  // margin-right: 1rem;
 }
 
 nav {
+  display: flex;
+  flex-direction: column;
   // width: 100%;
-  font-size: 12px;
+  // font-size: 12px;
   text-align: center;
-  margin-top: 2rem;
+  // margin-top: 2rem;
+
+  .router-links {
+    font-size: 1.1rem;
+    margin-top: 1.5rem;
+  }
+
+
 }
 
 nav a.router-link-exact-active {
@@ -124,14 +141,18 @@ nav a:first-of-type {
 footer {
   // background-color: transparent;
   color: var(--color-text);
-  border: 1px solid var(--color-border);
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
+  // border: 1px solid var(--color-border);
+  // padding: 0.5rem 1rem;
+  // border-radius: 8px;
+  display: flex;
   position: absolute;
   bottom: 30px;
   right: 30px;
-  cursor: pointer;
-  // @include transition-ease;
+
+  footer a {
+    cursor: pointer;
+    @include transition-ease;
+  }
 }
 
 @media (min-width: 1024px) {

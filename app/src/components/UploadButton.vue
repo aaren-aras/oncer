@@ -6,24 +6,25 @@
 </template> -->
 <template>
   <form id="upload-form" @submit.prevent="handleSubmit">
-    <div>
-      <label for="t1">T1:</label>
-      <input type="file" id="t1" @change="(e) => handleFileChange('t1')(e)" accept=".png, .jpg, .jpeg" required />
+    <div class="modality-uploads">
+      <div>
+        <input type="file" id="t1" @change="(e) => handleFileChange('t1')(e)" accept=".png, .jpg, .jpeg" required hidden />
+        <label for="t1" class="custom-file-label" :class="{'has-file': t1File}">T1</label>
+      </div>
+      <div>
+        <input type="file" id="t2" @change="(e) => handleFileChange('t2')(e)" accept=".png, .jpg, .jpeg" required hidden />
+        <label for="t2" class="custom-file-label" :class="{'has-file': t2File}">T2</label>
+      </div>
+      <div>
+        <input type="file" id="t1ce" @change="(e) => handleFileChange('t1ce')(e)" accept=".png, .jpg, .jpeg" required hidden />
+        <label for="t1ce" class="custom-file-label" :class="{'has-file': t1ceFile}">T1CE</label>
+      </div>
+      <div>
+        <input type="file" id="flair" @change="(e) => handleFileChange('flair')(e)" accept=".png, .jpg, .jpeg" required hidden />
+        <label for="flair" class="custom-file-label" :class="{'has-file': flairFile}">FLAIR</label>
+      </div>
     </div>
-    <div>
-      <label for="t1ce">T1CE:</label>
-      <input type="file" id="t1ce" @change="(e) => handleFileChange('t1ce')(e)" accept=".png, .jpg, .jpeg" required />
-    </div>
-    <div>
-      <label for="t2">T2:</label>
-<input type="file" id="t2" @change="(e) => handleFileChange('t2')(e)" accept=".png, .jpg, .jpeg" required />
-    </div>
-    <div>
-      <label for="flair">FLAIR:</label>
-<input type="file" id="flair" @change="(e) => handleFileChange('flair')(e)" accept=".png, .jpg, .jpeg" required />
-    </div>
-
-    <button type="submit">Upload</button>
+    <button type="submit">UPLOAD</button>
   </form>
 </template>
 
@@ -44,7 +45,7 @@ const handleFileChange = (modality: string) => (e: Event) => {
   const input = e.target as HTMLInputElement;
   const file = input.files?.[0] ?? null;
 
-  console.log(`Selected file for ${modality}:`, file); // ✅
+  console.log(`Selected file for ${modality}:`, file); 
 
 
   if (!file) return;
@@ -92,6 +93,7 @@ const handleSubmit = async () => {
 };
 
 const convertToBase64 = (file: File): Promise<string> => {
+  /* Converts uploads to Base64 to persist in localStorage (unlike blob URLs) */
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(reader.result as string);
@@ -162,43 +164,81 @@ const convertToBase64 = (file: File): Promise<string> => {
 </script>
 
 <style scoped lang="scss">
-    @use '../../assets/scss/global.scss' as *;
+  @use '../../assets/scss/global.scss' as *;
 
-    form {
-      display: inline-block;
-    }
+  form {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: -0.75rem;
+    margin-left: 1rem;
     
-    input {
-    // display: block;
-    // margin: 0 auto;
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: 1px solid var(--color-border);
-    background-color: var(--color-background);
-    color: var(--color-text);
-    cursor: pointer;
-    &:focus {
-      outline: none;
-      border-color: var(--color-heading);
-      box-shadow: 0 0 0 2px rgba(100, 150, 255, 0.4);
+    .modality-uploads {
+      // display: grid;
+      // grid-template-columns: repeat(2, 1fr);
+      // grid-template-columns: max-content 1fr;
+
+      display: flex;
+      gap: 10px;
+
+      input {
+      // display: block;
+      margin: 0;
+      // padding: 10px;
+      font-size: 16px;
+      // border-radius: 5px;
+      // border: 1px solid var(--color-border);
+  
+      cursor: pointer;
+
+      &:focus {
+        outline: none;
+        border-color: var(--color-heading);
+        box-shadow: 0 0 0 2px rgba(100, 150, 255, 0.4);
+      }
+
+      &::placeholder {
+        color: rgba(var(--color-text), 0.5); // If var doesn't work here, use a fallback color
+      }
     }
 
-    &::placeholder {
-      color: rgba(var(--color-text), 0.5); // If var doesn't work here, use a fallback color
-    }
-  }
-    .custom-file-label {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    background-color: var(--color-text);
-    color: #fff;
-    border-radius: 8px;
-    cursor: pointer;
-    @include transition-ease;
-  }
+      .custom-file-label {
+        display: inline-block;
+        padding: 0.5rem 0.5rem;
+        background-color: var(--accent-2);
+        color: var(--secondary);
+        border-radius: 4px;
+        cursor: pointer;
+        @include transition-ease;
 
-  .custom-file-label:hover {
-    background-color: #374151;
-  }
+        &:hover {
+          background-color: #374151;
+        }
+
+        &.has-file {
+          background-color: #16a34a; // green to show it's filled
+        }
+      }
+
+    }
+
+    
+    button {
+      height: fit-content;
+      font-size: 1.1rem;
+      font-weight: 500;
+      background-color: $accent-3;
+      color: var(--primary);
+      border: 0;
+      border-radius: 4px;
+      padding: 16px;
+   
+      cursor: pointer;
+      @include transition-ease;
+
+      &:hover {
+        background-color: var(--accent-2);
+      }
+    }
+  } 
 </style>
