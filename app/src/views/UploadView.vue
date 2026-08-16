@@ -9,7 +9,24 @@
         <canvas class="overlay-canvas" ref="overlayCanvas"></canvas>
       </div>
       <!-- <img v-if="selectedImage" :src="selectedImage.image" /> -->
-      <p>{{ selectedImage?.prediction }}</p> 
+      <div class="prediction-row">
+        <p>{{ selectedImage?.prediction }}</p>
+
+        <div class="legend">
+          <div class="legend-item">
+            <span class="legend-swatch" style="--legend-alpha: 0.50"></span>
+            <span class="legend-label">NCR</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-swatch" style="--legend-alpha: 0.71"></span>
+            <span class="legend-label">ED</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-swatch" style="--legend-alpha: 1"></span>
+            <span class="legend-label">ET</span>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- <div v-if="isStoreEmpty" class="">
@@ -34,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, computed, watch, onMounted, nextTick } from 'vue';
+  import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue';
   import { useUploadStore } from '@/stores/upload';
   import type { UploadResult } from '@/types';
   
@@ -67,9 +84,12 @@
       const img = baseImage.value;
       const canvas = overlayCanvas.value;
 
-      // Match canvas size to image size for perfect overlay
-      canvas.width = img.naturalWidth;
-      canvas.height = img.naturalHeight;
+      // Match canvas size to image's rendered size (NOT natural pixel size)
+      // Overlay dims stay consistent across diff source resolutions
+      const { width, height } = img.getBoundingClientRect();
+
+      canvas.width = width;
+      canvas.height = height;
 
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
@@ -89,10 +109,18 @@
       };
   }
 
+  // Re-draw if the window/container resizes, so the canvas stays matched to the image
+  const handleResize = () => drawOverlay();
+
   onMounted(() => {
     if (baseImage.value) {
       baseImage.value.addEventListener('load', drawOverlay);
     }
+    window.addEventListener('resize', handleResize);
+  });
+
+  onUnmounted(() => {
+    window.removeEventListener('resize', handleResize);
   });
 
   // const uploads = storeToRefs(store).uploads;
@@ -135,30 +163,22 @@
         max-width: 50em;
 
         img {
-          // width: 100%;
-          //   height: auto;
-          //   display: block;
-
           display: block;
-          // width: 50rem;
-          // border: 1px solid var(--color-border);
+          max-width: 100%;
+          height: auto;
           border: 2px ridge $accent-3;
           border-radius: 5px;
-          // color: palette.$accent-3;
         }
 
         .overlay-canvas {
-          // width: 100%;
-          //   height: auto;
-          //   display: block;
-
-
+          width: 100%;
+          height: 100%;
           border-radius: 5px;
           position: absolute;
           top: 0;
           left: 0;
           z-index: 100;
-          pointer-events: none; /* so mouse clicks pass through */
+          pointer-events: none; // mouse clicks pass through
           user-select: none;
         }
       }
@@ -169,6 +189,48 @@
       }
     }
 
+    .prediction-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+
+      p {
+        font-size: 1.25rem;
+        color: var(--color-heading);
+        font-weight: 500;
+        margin: 0;
+      }
+
+      .legend {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        align-items: center;
+
+        .legend-item {
+          display: flex;
+          align-items: center;
+          gap: 0.4rem;
+          font-size: 0.9rem;
+        }
+
+        .legend-swatch {
+          display: inline-block;
+          width: 1rem;
+          height: 1rem;
+          border-radius: 4px;
+          border: 1px solid var(--color-border);
+          background-color: rgba(209, 82, 255, var(--legend-alpha));
+        }
+
+        .legend-label {
+          color: var(--color-text);
+        }
+      }
+    }
+  
     .thumbnail-row {
       display: flex;
       justify-content: flex-start;
