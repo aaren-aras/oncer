@@ -76,7 +76,7 @@ async def predictTumors(
         seg_logits = model.predict(input_tensor)
         seg_mask = np.argmax(seg_logits[0], axis=-1) # shape (1, H, W, 4) -> (H, W, 4) -> (H, W), most likely class per pixel
         # tumor_present = bool(np.any(seg_mask > 0))
-        prediction = 'Tumour(s) detected.' if bool(np.any(seg_mask > 0)) else 'No tumour(s) detected.'
+        prediction = 'Tumour detected' if bool(np.any(seg_mask > 0)) else 'No tumours detected'
 
         overlay = create_overlay(seg_mask)
         stats = compute_segmentation_stats(seg_mask)
