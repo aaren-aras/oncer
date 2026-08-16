@@ -40,7 +40,9 @@
         class="thumbnail"
         @click="selectImage(upload)"
       >
-        <img :src="upload.image" alt=""/>
+        <!-- <img :src="upload.image" alt=""/> -->
+        <img class="thumb-base" :src="upload.image" alt="" />
+        <img v-if="upload.overlay" class="thumb-overlay" :src="upload.overlay" alt="" />
       </div>
     </div>
 
@@ -236,26 +238,37 @@
       justify-content: flex-start;
       gap: 1rem;
       width: 30rem;
-      padding: 10px;
+      padding: 10px 10px 20px 10px;  
       border-top: 1px solid var(--color-border);
       overflow-x: auto;
 
-
       .thumbnail {
+        position: relative;
         flex: 0 0 auto;
         width: 10rem;
         height: 10rem;
+        border-radius: 20px;
         margin-top: 1rem;
         cursor: pointer;
+        overflow: hidden;
+        @include transition-ease;
+
+        &:hover {
+          transform: scale(1.05);
+        }
 
         img {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
           object-fit: cover;
-          border-radius: 20px;
-          @include transition-ease;
+        }
 
-          &:hover {
-            transform: scale(1.05);
-          }
+        .thumb-overlay {
+          opacity: 0.5;
+          pointer-events: none;
         }
       }
     }
