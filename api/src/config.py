@@ -49,7 +49,7 @@ segmentation.py
  - Match RGB with $accent-3 from 'app/assets/scss/_palette.scss'
  - Define opacities (A) based on clinical importance (ET > ED > NCR)
 """
-BASE_COLOR = (82, 113, 255)
+BASE_COLOR = (209, 82, 255)
 ALPHA_NCR = 128 # Necrotic tumour core (NCR) 
 ALPHA_ED = 180 # Peritumoural edematous/invaded tissue (ED)
 ALPHA_ET = 255 # Gadolinium-enhancing tumour (ET)
