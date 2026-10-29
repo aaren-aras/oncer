@@ -1,6 +1,12 @@
 ![README Banner](readme-banner.png)
 
-This is a web app for performing **brain tumour segmentation** on **structural MRI scans** with a ResU-Net <u>c</u>onvolutional <u>n</u>eural <u>n</u>etwork (CNN). The model is trained on a dataset from the [2021 RSNA-ASNR-MICCAI BraTS Challenge](https://www.cancerimagingarchive.net/analysis-result/rsna-asnr-miccai-brats-2021/) across *4* MRI modalities: `T1`, `T1CE`, `T2`, and `FLAIR`.
+ONCER is a web-based deep learning pipeline for automated multi-parametric **brain tumour segmentation**, trained on the [2021 RSNA-ASNR-MICCAI BraTS Challenge](https://www.cancerimagingarchive.net/analysis-result/rsna-asnr-miccai-brats-2021/) dataset. The model 
+(`api/models/oncer_model.keras`) is a ResU-Net: a convolutional neural network architecture comprising a encoder-decoder structure with skip connections. It processes co-registered,
+skull-stripped, 4-channel structural MRI scans (`T1`, `T1CE`, `T2`, `FLAIR`) to delineate sub-tumoural structures like **Gadolinium-enhancing tumour (ET)**, **peritumoural edematous/invaded tissue (ED)**, and **necrotic tumor core (NCR)**. Dataset images were annotated manually
+by neuro-radiologists, and resampled to isotropic 1 mm<sup>3</sup> resolution.
+
+I was inspired to start this project in September 2024 after gaining some familiartiy with 
+*Keras/TensorFlow* and getting obsessed with brain MR imaging from a recent engineering co-op.  
 
 ## Prerequisites
 You'll need *3* main pieces in place before running this project locally:
