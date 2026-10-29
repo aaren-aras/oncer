@@ -1,7 +1,7 @@
 
 <template>
   <header>
-    <img alt="ONCER Logo" class="logo" src="../assets/logo-new.svg" />
+    <img alt="ONCER Logo" class="logo" src="../assets/logo.svg" />
 
     <div class="wrapper">
       <LeftPanel title="ONCER&nbsp; 𖡎" />
