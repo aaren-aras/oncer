@@ -11,22 +11,9 @@
     "type-check": "vue-tsc",
     "lint": "eslint . --fix"
   },
-  "keywords": [
-    "vue",
-    "fastapi",
-    "tensorflow",
-    "tumor-detection",
-    "deep-learning",
-    "medical-images",
-    "mri",
-    "brain",
-    "glioma"
-  ],
   "author": "Aaren Arasaratnam",
   "license": "MIT",
   "dependencies": {
-    "@tsconfig/node20": "^20.1.9",
-    "dotenv": "^16.4.5",
     "pinia": "^2.3.1",
     "vue": "^3.5.4",
     "vue-router": "^4.3.3"
