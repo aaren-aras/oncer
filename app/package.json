@@ -3,16 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Performs brain tumour segmentation on structural MRI scans using a 2D ResU-Net",
+  "description": "A web app for segmenting brain tumours on structural MRI scans",
   "scripts": {
     "start": "vite",
-    "build": "npm run type-check && npm run build-only",
+    "build": "npm run type-check && vite build",
     "preview": "vite preview",
-    "test:unit": "vitest",
-    "test:e2e": "playwright test",
-    "build-only": "vite build",
-    "type-check": "vue-tsc --build --force",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
+    "type-check": "vue-tsc",
+    "lint": "eslint . --fix"
   },
   "keywords": [
     "vue",
@@ -36,21 +33,17 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
-    "@playwright/test": "^1.44.1",
     "@rushstack/eslint-patch": "^1.8.0",
     "@vitejs/plugin-vue": "^5.0.5",
     "@vue/eslint-config-typescript": "^13.0.0",
-    "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "^0.5.1",
     "eslint": "^8.57.1",
-    "eslint-plugin-playwright": "^1.6.2",
     "eslint-plugin-vue": "^9.33.0",
     "globals": "^16.3.0",
     "sass-embedded": "^1.83.0",
     "typescript": "^5.5.4",
     "typescript-eslint": "^8.39.1",
     "vite": "^5.3.1",
-    "vitest": "^1.6.0",
     "vue-tsc": "^2.0.21"
   }
 }
