@@ -1,9 +1,9 @@
 {
   "name": "oncer",
-  "version": "0.1.0",
+  "description": "A web app for segmenting brain tumours on structural MRI scans",
   "private": true,
   "type": "module",
-  "description": "A web app for segmenting brain tumours on structural MRI scans",
+  "version": "0.1.0",
   "scripts": {
     "start": "vite",
     "build": "npm run type-check && vite build",
