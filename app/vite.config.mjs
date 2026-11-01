@@ -1,31 +1,37 @@
+import { defineConfig, loadEnv } from 'vite' // autocompletion and type checking for this file
 import { fileURLToPath, URL } from 'node:url'
-
-import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-export default defineConfig({
-  css: {
-    preprocessorOptions: {
-      scss: {
-        api: 'modern-compiler' // use dart-sass
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, fileURLToPath(new URL('..', import.meta.url)), ''); // point to root dir
+  const appPort = env.APP_PORT || '5173';
+  const apiPort = env.API_PORT || 5000;
+
+  return {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: 'modern-compiler' // use dart-sass
+        }
       }
-    }
-  },
-  plugins: [
-    vue(),
-  ],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
-    }
-  },
-  server: {
-    // port: 3000, // give backend port
-    proxy: {
-      '/api': {
-        target: 'http://localhost:5000',
-        changeOrigin: true,
-        // rewrite: path => path.replace(/^\/api/, '') // remove '/api' prefix from requests
+    },
+    plugins: [
+      vue(),
+    ],
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url))
+      }
+    },
+    server: {
+      port: Number(appPort), // frontend dev server port
+      proxy: {
+        '/api': {
+          // Route frontend requests to FastAPI backend address 
+          target: `http://localhost:${apiPort}`,
+          changeOrigin: true, // tell backend requests are coming from 5000 
+          // rewrite: path => path.replace(/^\/api/, '') // remove '/api' prefix from requests
+        }
       }
     }
   }
