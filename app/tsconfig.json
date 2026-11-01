@@ -4,7 +4,7 @@
   "exclude": ["node_modules"],
   "compilerOptions": {
     "paths": {
-      "@/*": ["./src/*"] // alias
+      "@/*": ["./src/*"] // alias (line 18, vite.config.mjs)
     }
   }
 }
