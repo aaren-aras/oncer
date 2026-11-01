@@ -1,47 +1,42 @@
 ![README Banner](ui-preview.png)
 
-ONCER is a web-based deep learning tool for automated multi-parametric **brain tumour segmentation**, trained on the [2021 RSNA-ASNR-MICCAI BraTS Challenge](https://www.cancerimagingarchive.net/analysis-result/rsna-asnr-miccai-brats-2021/) Task 1 dataset. 
-The model (`api/models/oncer_model.keras`) is a ResU-Net, i.e., a convolutional neural 
-network architecture comprising a encoder-decoder structure with skip connections. 
+ONCER is a web-based deep learning tool for automated multi-parametric **brain tumour segmentation**, trained on the [2021 RSNA-ASNR-MICCAI BraTS Challenge](https://www.cancerimagingarchive.net/analysis-result/rsna-asnr-miccai-brats-2021/) Task 1 dataset. The model (`api/models/oncer_model.keras`) is a ResU-Net, i.e., a convolutional neural network architecture built around an encoder-decoder structure with skip connections. 
 
 It processes co-registered, skull-stripped, 4-channel structural MRI scans (`T1`, `T1CE`, `T2`, `FLAIR`) to delineate sub-tumoural structures like **Gadolinium-enhancing tumour (ET)**, **peritumoural edematous/invaded tissue (ED)**, and **necrotic tumor core (NCR)**. Dataset 
 images were annotated manually by neuro-radiologists, and resampled to isotropic 1 mm<sup>3</sup> resolution, as documented in [this paper](https://ieeexplore.ieee.org/document/6975210).
 
-I started this in September 2024 after gaining some familiartiy with *Keras/TensorFlow* and getting reeeeally into brain MR imaging after a recent engineering co-op.  
+I started this in September 2024 after messing around with Keras/TensorFlow and getting reeeeally into brain MR imaging after wrapping up a co-op placement.
 
 ## Prerequisites
-You'll need *3* main pieces in place before running this project locally:
+This section covers what's needed for **GPU-accelerated model training**, but because the model file is already provided, feel free to jump ahead to [Running Locally](#running-locally). 
 
-### 1. OS & Environemnt
- - On Windows, install [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install) (Ubuntu **22.04** recommended)
- - On Linux, you can run Docker natively
- - On macOS, GPU acceleration isn’t supported (unless you’re using CPU-only builds)
+To avoid compatibility issues with the latest NVIDIA GPUs *(and the ensuing CUDA/cuDNN mismatch headaches)*, I used [NVIDIA NGC containers](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/tensorflow)
+(`nvcr.io/nvidia/tensorflow:25.02-tf2-py3`): Docker containers that come pre-packaged with versions of TensorFlow, CUDA, and cuDNN that're guaranteed to work together out of the box. Because these containers are Linux-based, you'll need [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install) installed for Windows (Ubuntu **22.04** recommended). 
 
-### 2. Docker with NVIDIA GPU Support
- - Install [Docker Desktop](https://www.docker.com/products/docker-desktop/)
- - Install the latest [NVIDIA drivers](https://www.nvidia.com/en-us/drivers/) for your GPU
- - Install the **[NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)** so that Docker can use your GPU
+You'll naturally want to have [Docker Desktop](https://www.docker.com/products/docker-desktop/),
+the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) (lets Docker use your GPU), and latest [NVIDIA drivers](https://www.nvidia.com/en-us/drivers/) installed as well!
 
-Verify setup:
+The training data can be downloaded from Kaggle, [here](https://www.kaggle.com/datasets/dschettler8845/brats-2021-task1/data). Keep in mind these disk requirements: the raw dataset uses **12.4** GB, the processed data takes **22.6** GB, and the compiled `oncer-api` Docker image needs **31.1** GB, for a combined ~**66** GB of disk space needed in total for training.
+
+## Setup
+Start by verifying your Docker setup:
 
 ```bash
 docker run --rm --gpus all nvidia/cuda:12.2.0-base-ubuntu22.04 nvidia-smi
 ```
 
-### 3. Project Data (not included in this repo)
- - Download the brain MRI scans from Kaggle, [here](https://www.kaggle.com/datasets/dschettler8845/brats-2021-task1/data)
- - Inside the `api` directory, create a new folder and name it `data`
- - Place the downloaded `BraTS2021_Training_Data` folder inside `data` (`api/data/BraTS2021_Training_Data`)
-
-These steps ensure that the `preprocessing.py` and `model.py` scripts in `api/src/scripts` can find the dataset without additional configuration.
-
-## Setup
 ```bash
 # Clone repo and navigate to project dir
 git clone https://github.com/aaren-aras/oncer.git && cd oncer
 ```
 
+### Setting up folder structure 
+Inside the `api` directory, create a new folder, name it `data`, and place the unzipped `BraTS2021_Training_Data` folder inside `data` (like so: `api/data/BraTS2021_Training_Data`).
+This ensures the `preprocessing.py` and `model.py` scripts in `api/src/scripts` can find the dataset without any additional configuration. These steps ensure that the `preprocessing.py` and `model.py` scripts in `api/src/scripts` can find the dataset without additional configuration.
+
+
 From the project **root**, create a `.env` file and set a port number for the backend (e.g., `5000`):
+
 
 ```
 API_PORT=5000
@@ -53,16 +48,11 @@ Then, run the following:
 chmod +x api/entrypoint.sh
 ```
 
-### Option A: Docker / NGC (recommended)
-To avoid compatibility issues with the latest NVIDIA GPUs (and the ensuing CUDA/cuDNN mismatch headaches), I decided to use NVIDIA's <u>N</u>VIDIA <u>G</u>PU <u>C</u>loud (NGC) [TensorFlow containers](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/tensorflow) for **GPU-accelerated** CNN training on Windows. These containers come pre-packaged with versions of TensorFlow, CUDA, and cuDNN that are (almost) **guaranteed** to work together, alongside other stuff for optimizing GPU performance.
 
 After launching **Docker Desktop**:
 
 ```bash
-# Build backend image
-cd api && docker build -t oncer-api .
-
-# Run backend locally (available @ https://localhost:${API_PORT})
+# Build backend image and run locally (available @ https://localhost:${API_PORT})
 cd api && docker compose up --build
 ```
 
@@ -110,7 +100,7 @@ An `API_PORT` must be set in a root `.env` file for `entrypoint.sh` to run the b
 API_PORT=5000
 ```
 
-## Issues
+### Issues
  - TF GPU compatibility is fragile outside Docker NGC containers
  - Windows requires WSL2 for Docker GPU acceleration
 
