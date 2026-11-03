@@ -8,15 +8,15 @@ RUN apt update && apt install -y \
     libglib2.0-0 \
  && rm -rf /var/lib/apt/lists/*
 
-# Install Python deps
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Install ALL Python dependencies listed in pyproject.toml
+COPY pyproject.toml .
+RUN pip install --no-cache-dir -r ".[training]"
 
 # Copy backend code
 COPY . .
 
-# Works for both LF and CRLF line endings
-RUN sed -i 's/\r$//' entrypoint.sh && chmod +x entrypoint.sh
+# Make entrypoint.sh executable and handle both line endings (LF, CRLF)
+RUN chmod +x entrypoint.sh && sed -i 's/\r$//' entrypoint.sh  
 
 # Run backend once container's built
 ENTRYPOINT ["./entrypoint.sh"]
