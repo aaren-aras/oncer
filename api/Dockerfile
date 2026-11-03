@@ -8,9 +8,10 @@ RUN apt update && apt install -y \
     libglib2.0-0 \
  && rm -rf /var/lib/apt/lists/*
 
-# Install ALL Python dependencies listed in pyproject.toml
+# Copy packaging files and install ALL Python dependencies 
 COPY pyproject.toml .
-RUN pip install --no-cache-dir -r ".[training]"
+COPY src/ ./src/
+RUN pip install --no-cache-dir ".[training]"
 
 # Copy backend code
 COPY . .
