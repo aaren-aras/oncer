@@ -5,7 +5,7 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, fileURLToPath(new URL('..', import.meta.url)), ''); // point to root dir
   const appPort = env.APP_PORT || '5173';
-  const apiPort = env.API_PORT || 5000;
+  const apiPort = env.API_PORT || '5000';
 
   return {
     css: {
@@ -27,10 +27,8 @@ export default defineConfig(({ mode }) => {
       port: Number(appPort), // frontend dev server port
       proxy: {
         '/api': {
-          // Route frontend requests to FastAPI backend address 
-          target: `http://localhost:${apiPort}`,
-          changeOrigin: true, // tell backend requests are coming from 5000 
-          // rewrite: path => path.replace(/^\/api/, '') // remove '/api' prefix from requests
+          target: `http://localhost:${apiPort}`, // route frontend requests to FastAPI backend address 
+          changeOrigin: true, // tell backend that requests are coming from apiPort, not appPort 
         }
       }
     }
