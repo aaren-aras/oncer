@@ -9,10 +9,12 @@ I started this in September 2024 after messing around with Keras/TensorFlow and 
 
 ## Prerequisites
 This section covers what's needed for **GPU-accelerated model training** with **NVIDIA GPUs**, but because 
-the model file is already provided in this repository, feel free to skip [Model Training](#model-training). 
+the model file is already provided in this repository, feel free to jump ahead to [Running Locally](#running-locally).
 
 To avoid compatibility issues with the latest NVIDIA GPUs *(and the ensuing CUDA/cuDNN mismatch headaches)*, I used **[NVIDIA NGC containers](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/tensorflow)**
-(`nvcr.io/nvidia/tensorflow:25.02-tf2-py3`): Docker containers that come pre-packaged with versions of TensorFlow, CUDA, and cuDNN that're guaranteed to work together out of the box. Because these containers are Linux-based, you'll need [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install) installed for Windows (Ubuntu **22.04** recommended). 
+(`nvcr.io/nvidia/tensorflow:25.02-tf2-py3`). The one specified in `api/Dockerfile` comes pre-packaged with
+Python **3.12**, TensorFlow **2.17.0** (Keras **3**), CUDA **12.8.0** / cuDNN **9.7.1**, and Ubuntu 
+**24.04.1 LTS**, which're guaranteed to work together out of the box. Because these containers are Linux-based, you'll need [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install) installed for Windows (Ubuntu **22.04 LTS** recommended). 
 
 You'll naturally want to have [Docker Desktop](https://www.docker.com/products/docker-desktop/),
 the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) (lets Docker use your GPU), and latest [NVIDIA drivers](https://www.nvidia.com/en-us/drivers/) for your GPU installed as well!
@@ -27,6 +29,29 @@ git clone https://github.com/aaren-aras/oncer.git
 cd oncer
 ```
 
+### Model Training
+Verify your installations before proceeding:
+
+```bash
+docker run --rm --gpus all nvidia/cuda:12.2.0-base-ubuntu22.04 nvidia-smi
+```
+
+Extract the `BraTS2021_Training_Data` folder from `archive.zip > BraTS2021_Training_Data.tar`.
+
+Then, inside the `api` directory, create a new folder, name it `data`, and move the `BraTS2021_Training_Data` folder into `data` (i.e., `api/data/BraTS2021_Training_Data`).
+This ensures the `data.py` and `model.py` scripts in `api/src/scripts` can find the 
+dataset without extra setup. 
+
+Launch **Docker Desktop**, and while inside `api`, build the `oncer-api` image, and spin up a container:
+
+```bash
+cd api
+docker compose up --build
+```
+
+You can close the container with `docker compose down` after use. 
+
+### Running Locally
 From the project root, create a `.env` file and set port numbers and host bindings for the frontend 
 and backend dev servers *(this is optional as defaults are provided, **but still recommended**)*. 
 For example:
@@ -37,30 +62,8 @@ API_PORT=5000
 API_HOST=0.0.0.0
 ```
 
-### Model Training
-Verify your installations before proceeding:
-
-```bash
-docker run --rm --gpus all nvidia/cuda:12.2.0-base-ubuntu22.04 nvidia-smi
-```
-
-Inside the `api` directory, create a new folder, name it `data`, and move the extracted `BraTS2021_Training_Data` folder into `data` (i.e., `api/data/BraTS2021_Training_Data`).
-This ensures the `preprocessing.py` and `model.py` scripts in `api/src/scripts` can find the 
-dataset without extra setup. 
-
-Then, after launching **Docker Desktop**, while inside the `api` directory, build the `oncer-api` 
-Docker image and spin up a container:
-
-```bash
-cd api
-docker compose up --build
-```
-
-You can close the container with `docker compose down` after use. 
-
-### Running Locally
-Commands for interfacing with the frontend dev server (https://localhost::${APP_PORT}) are listed 
-in `app/package.json` under `scripts`. For installing all dependencies and running it from the `app` directory:
+Commands for interfacing with the **frontend** dev server (`https://localhost::${APP_PORT}`) are listed 
+in `app/package.json` under `scripts`. Install all dependencies and run it from the `app` directory:
 
 ```bash
 cd app 
@@ -68,49 +71,35 @@ npm install
 npm run start
 ```
 
-The backend dev server (https://localhost::${API_PORT}) uses **[uvicorn](https://uvicorn.dev/)**, 
-and can be ran from the `api` directory as follows, after installing core dependencies (see 
-`api/pyproject.toml`) in a virtual environment:
+The **backend** dev server (`https://localhost:${API_PORT}`) uses **[uvicorn](https://uvicorn.dev/)**, 
+and can be run from the `api` directory after installing core dependencies (see `api/pyproject.toml`) 
+in a virtual environment. Keep in mind that Python **3.11**/**3.12** is required:
 
 ```bash
 cd api
-py -3.10 -m venv .venv # Windows example
+py -3.12 -m venv .venv # Git Bash example 
 source .venv/Scripts/activate 
 pip install .
 uvicorn src.main:app --host "$API_HOST" --port "$API_PORT" --reload
 ```
 
-#### Sidenotes
- - TensorFlow GPU support outside containers is only guaranteed up to **2.10 (CUDA 11.2, cuDNN 8.1)** for Windows
- - If you have a newer GPU (e.g., RTX 40/50 series), containers are STRONGLY recommended
+### Using the App
+With the dev servers set up, you'll be able to test out the model. Segmentation accuracy depends
+heavily on matching the preprocessing pipeline in `api/scripts`. For the best results, upload all 
+four **co-registered**, **skull-stripped**, **axial** slices (`T1`, `T1CE`, `T2`, `FLAIR`) 
+simultaneously as **PNGs** *(to avoid compression artifacts on subregion boundaries)*, ideally 
+resampled to $1\text{ mm}^3$ isotropic voxel resolution to match the BraTS 2021 training distribution
+mentioned earlier. 
 
+This dataset also consists exclusively of **gliomas**, so any attempt to segment other brain 
+pathologies like meningiomas, pituitary adenomas, or stroke lesions will be met with varying, unpredictable, unreliable degrees of success.
 
-### Running Locally
-In another terminal:
-
-```bash
-# Install Node.js deps 
-cd ../app && npm install
-
-# Launch dev instance (frontend)
-npm run start
-
-# Build and preview prod instance
-npm run build
-npm run preview
-```
-
-### Issues
- - TF GPU compatibility is fragile outside Docker NGC containers
- - Windows requires WSL2 for Docker GPU acceleration
+Enjoy!
 
 ## Retrospective
- - Please stop falling for **scope creep**
- - KNOW your **tools**, and when/how/why to use them given the scope
-   - Consider writing the entire backend in Python for all future DL projects
- - Docker NGC containers MASSIVELY simplify GPU + CUDA setup for modern NVIDIA GPUs requiring CUDA 12+ (no version mismatch and local rebuild trial-and-error, no Bazel errors, no DLL errors, ...)
-   - Don't waste time with local installs and juggling Python versions, CUDA toolkits, and cuDNN DLLs on Windows when there're cleaner solutions available
-   - You don't have to use *older* versions of software to achieve compatibility
-   - Some TF builds lack precompiled CUDA kernels for newer GPUs with higher compute capabilities, forcing them to JIT-compile PTX at runtime, which can drastically slow startup; these containers avoid the issue by including prebuilt, GPU-optimized binaries
- - Look into multi-GPU setups (distributed training?): https://developer.nvidia.com/nccl
- - Implement model in PyTorch with [ONNX](https://github.com/onnx/onnx)
+ - TF GPU compatibility is fragile outside Docker NGC containers, only guaranteed up to
+  **2.10 (CUDA 11.2, cuDNN 8.1)** for Windows, and strongly recommended for newer GPUs 
+  (RTX 40/50 series) requiring CUDA **12+** 
+    - Some TF builds lack precompiled CUDA kernels for newer GPUs with higher compute capabilities, forcing them to JIT-compile PTX at runtime, which drastically slows startup
+    - NGC containers avoid the issue by including prebuilt, GPU-optimized binaries
+ - Scope creep is real  
