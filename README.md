@@ -19,7 +19,7 @@ Python **3.12**, TensorFlow **2.17.0** (Keras **3**), CUDA **12.8.0** / cuDNN **
 You'll naturally want to have [Docker Desktop](https://www.docker.com/products/docker-desktop/),
 the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) (lets Docker use your GPU), and latest [NVIDIA drivers](https://www.nvidia.com/en-us/drivers/) for your GPU installed as well!
 
-The training data can be downloaded from Kaggle, [here](https://www.kaggle.com/datasets/dschettler8845/brats-2021-task1/data). Note the following disk requirements: the raw dataset uses **12.4** GB, the processed data takes **22.6** GB, and the compiled `oncer-api` Docker image takes **31.1** GB, for a combined ~**66** GB of disk space needed to run the full training pipeline.
+The training data can be downloaded from Kaggle, [here](https://www.kaggle.com/datasets/dschettler8845/brats-2021-task1/data). Note the following disk requirements: the raw dataset uses **12.4** GB, the processed data takes **22.6** GB, and the compiled `oncer-api` Docker image takes **28-31** GB, for a combined **63-66** GB of disk space needed to run the full training pipeline.
 
 ## Setup
 Begin by cloning the repository and navigating to the project directory:
@@ -49,7 +49,7 @@ cd api
 docker compose up --build
 ```
 
-You can close the container with `docker compose down` after use. 
+Clean up build cache afterwards with `docker builder prune -a`, and close the container after use with `docker compose down`.
 
 ### Running Locally
 From the project root, create a `.env` file and set port numbers and host bindings for the frontend 
