@@ -3,12 +3,13 @@
 ONCER is a web-based deep learning tool for automated multi-parametric **brain tumour segmentation**, trained on the [2021 RSNA-ASNR-MICCAI BraTS Challenge](https://www.cancerimagingarchive.net/analysis-result/rsna-asnr-miccai-brats-2021/) Task 1 dataset. The model (`api/models/oncer_model.keras`) is a ResU-Net, i.e., a convolutional neural network architecture built around an encoder-decoder structure with skip connections. 
 
 It processes co-registered, skull-stripped, 4-channel structural MRI scans (`T1`, `T1CE`, `T2`, `FLAIR`) to delineate sub-tumoural structures like **Gadolinium-enhancing tumour (ET)**, **peritumoural edematous/invaded tissue (ED)**, and **necrotic tumor core (NCR)**. Dataset 
-images were annotated manually by neuro-radiologists and resampled to isotropic 1 mm<sup>3</sup> resolution, as documented in [this paper](https://ieeexplore.ieee.org/document/6975210).
+images were annotated manually by neuro-radiologists and resampled to isotropic 1 mm<sup>3</sup> resolution, as documented in [this paper](https://ieeexplore.ieee.org/document/6975210) (see `docs`).
 
 I started this in September 2024 after messing around with Keras/TensorFlow and getting reeeeally into brain MR imaging after wrapping up a co-op placement.
 
 ## Prerequisites
-This section covers what's needed for **GPU-accelerated model training**, but because the model file is already provided in this repository, feel free to jump ahead to [Running Locally](#running-locally). 
+This section covers what's needed for **GPU-accelerated model training** with **NVIDIA GPUs**, but because 
+the model file is already provided in this repository, feel free to skip [Model Training](#model-training). 
 
 To avoid compatibility issues with the latest NVIDIA GPUs *(and the ensuing CUDA/cuDNN mismatch headaches)*, I used **[NVIDIA NGC containers](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/tensorflow)**
 (`nvcr.io/nvidia/tensorflow:25.02-tf2-py3`): Docker containers that come pre-packaged with versions of TensorFlow, CUDA, and cuDNN that're guaranteed to work together out of the box. Because these containers are Linux-based, you'll need [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install) installed for Windows (Ubuntu **22.04** recommended). 
@@ -19,65 +20,70 @@ the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/c
 The training data can be downloaded from Kaggle, [here](https://www.kaggle.com/datasets/dschettler8845/brats-2021-task1/data). Note the following disk requirements: the raw dataset uses **12.4** GB, the processed data takes **22.6** GB, and the compiled `oncer-api` Docker image takes **31.1** GB, for a combined ~**66** GB of disk space needed to run the full training pipeline.
 
 ## Setup
-Start by verifying your Docker setup:
+Begin by cloning the repository and navigating to the project directory:
+
+```bash
+git clone https://github.com/aaren-aras/oncer.git 
+cd oncer
+```
+
+From the project root, create a `.env` file and set port numbers and host bindings for the frontend 
+and backend dev servers *(this is optional as defaults are provided, **but still recommended**)*. 
+For example:
+
+```bash
+APP_PORT=5173
+API_PORT=5000
+API_HOST=0.0.0.0
+```
+
+### Model Training
+Verify your installations before proceeding:
 
 ```bash
 docker run --rm --gpus all nvidia/cuda:12.2.0-base-ubuntu22.04 nvidia-smi
 ```
 
-```bash
-# Clone repo and navigate to project dir
-git clone https://github.com/aaren-aras/oncer.git && cd oncer
-```
+Inside the `api` directory, create a new folder, name it `data`, and move the extracted `BraTS2021_Training_Data` folder into `data` (i.e., `api/data/BraTS2021_Training_Data`).
+This ensures the `preprocessing.py` and `model.py` scripts in `api/src/scripts` can find the 
+dataset without extra setup. 
 
-### Setting up folder structure 
-Inside the `api` directory, create a new folder, name it `data`, and place the unzipped `BraTS2021_Training_Data` folder inside `data` (like so: `api/data/BraTS2021_Training_Data`).
-This ensures the `preprocessing.py` and `model.py` scripts in `api/src/scripts` can find the dataset without any additional configuration. These steps ensure that the `preprocessing.py` and `model.py` scripts in `api/src/scripts` can find the dataset without additional configuration.
-
-
-From the project **root**, create a `.env` file and set a port number for the backend (e.g., `5000`):
-
-
-```
-API_PORT=5000
-```
-
-Then, run the following:
+Then, after launching **Docker Desktop**, while inside the `api` directory, build the `oncer-api` 
+Docker image and spin up a container:
 
 ```bash
-chmod +x api/entrypoint.sh
+cd api
+docker compose up --build
 ```
 
+You can close the container with `docker compose down` after use. 
 
-After launching **Docker Desktop**:
+### Running Locally
+Commands for interfacing with the frontend dev server (https://localhost::${APP_PORT}) are listed 
+in `app/package.json` under `scripts`. For installing all dependencies and running it from the `app` directory:
 
 ```bash
-# Build backend image and run locally (available @ https://localhost:${API_PORT})
-cd api && docker compose up --build
+cd app 
+npm install
+npm run start
 ```
 
-You can close the container with `docker compose down`. 
+The backend dev server (https://localhost::${API_PORT}) uses **[uvicorn](https://uvicorn.dev/)**, 
+and can be ran from the `api` directory as follows, after installing core dependencies (see 
+`api/pyproject.toml`) in a virtual environment:
 
-### Option B: Local 
-Alternatively, if you don't want to use Docker/NGC, you could set up Python, TensorFlow, [CUDA](https://developer.nvidia.com/cuda-toolkit-archive), and [cuDNN](https://developer.nvidia.com/rdp/cudnn-archive) manually from your end. This means YOU are responsible for making sure ALL software versions play nicely together, a fate I personally wouldn't wish on my worst enemy (but hey, the choice is yours). 
-
-Refer to this [table](https://www.tensorflow.org/install/source#gpu) for tested build configurations.
+```bash
+cd api
+py -3.10 -m venv .venv # Windows example
+source .venv/Scripts/activate 
+pip install .
+uvicorn src.main:app --host "$API_HOST" --port "$API_PORT" --reload
+```
 
 #### Sidenotes
  - TensorFlow GPU support outside containers is only guaranteed up to **2.10 (CUDA 11.2, cuDNN 8.1)** for Windows
  - If you have a newer GPU (e.g., RTX 40/50 series), containers are STRONGLY recommended
 
-```bash
-cd api
-
-# Install Python deps within virtual env (Windows example)
-py -3.10 -m venv .venv
-source .venv/Scripts/activate # Git Bash
-pip install -r requirements.txt
-
-# Run backend
-./entrypoint.sh
-```
 
 ### Running Locally
 In another terminal:
@@ -92,12 +98,6 @@ npm run start
 # Build and preview prod instance
 npm run build
 npm run preview
-```
-
-An `API_PORT` must be set in a root `.env` file for `entrypoint.sh` to run the backend. E.g.,
-
-```bash
-API_PORT=5000
 ```
 
 ### Issues
