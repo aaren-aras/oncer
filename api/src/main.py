@@ -9,6 +9,8 @@ import traceback
 from dotenv import load_dotenv
 import tensorflow as tf
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import RedirectResponse
 from fastapi import FastAPI, UploadFile, File, HTTPException
 import numpy as np
 
@@ -58,6 +60,12 @@ app.add_middleware(
     allow_methods=['*'],
     allow_headers=['*'],
 )
+app.mount("/papers", StaticFiles(directory="docs"), name="papers")
+
+
+@app.get("/", include_in_schema=False)
+async def root():
+    return RedirectResponse(url="/docs")
 
 
 @app.post('/predict')
