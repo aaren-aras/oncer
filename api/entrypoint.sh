@@ -25,8 +25,4 @@ else
     echo 'Model already exists... Skipping.'
 fi
 
-echo "Starting backend... on port $API_PORT"
-exec uvicorn src.main:app \
-    --host 0.0.0.0 \
-    --port "$API_PORT" \
-    --reload
+echo "Startup complete! Run locally with `npm run start` and `uvicorn` (see README) 
