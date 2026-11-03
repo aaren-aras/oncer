@@ -1,8 +1,8 @@
+import os
+# Hardcoded to use modern Keras 3, not Keras 2 (tf-keras)
+os.environ['TF_USE_LEGACY_KERAS'] = '0' 
 from pathlib import Path
 from typing import Generator
-
-import os
-os.environ['TF_USE_LEGACY_KERAS'] = '0' # use modern Keras 3, not Keras 2 (tf-keras)
 
 import numpy as np
 import tensorflow as tf
