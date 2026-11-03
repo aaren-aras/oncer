@@ -1,8 +1,7 @@
-PROJECT_ROOT = Path(__file__).resolve().parent.parent  # Adjust parents as needed
-MODEL_PATH = PROJECT_ROOT / "api" / "models" / "oncer_model.keras"
-
-os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "2") # reduce TF spam during training
-APP_PORT = os.environ.get('APP_PORT', '5173') # grab from root .env
+# PROJECT_ROOT = Path(__file__).resolve().parent.parent  # Adjust parents as needed
+# MODEL_PATH = PROJECT_ROOT / "api" / "models" / "oncer_model.keras"
+# os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "2") # reduce TF spam during training
+# APP_PORT = os.environ.get('APP_PORT', '5173') # grab from root .env
 
 
 """
