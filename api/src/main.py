@@ -1,10 +1,12 @@
 import os
+# Hardcoded to use modern Keras 3, not Keras 2 (tf-keras)
 os.environ['TF_USE_LEGACY_KERAS'] = '0'
 from pathlib import Path
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 import traceback
 
+from dotenv import load_dotenv
 import tensorflow as tf
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, UploadFile, File, HTTPException
@@ -14,6 +16,8 @@ import numpy as np
 from .scripts.preprocessing import preprocess_uploads
 from .scripts.segmentation import create_overlay, compute_segmentation_stats
 
+load_dotenv()
+APP_PORT = os.environ.get('APP_PORT', '5173')
 
 MODEL_PATH = Path(__file__).resolve().parent.parent / 'models' / 'oncer_model.keras' 
 # MODEL_PATH = Path(os.environ.get(
@@ -46,9 +50,10 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
         
 
 app = FastAPI(lifespan=lifespan)
+app_port = os.environ.get('APP_PORT', '5173')
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['http://localhost:5173'], 
+    allow_origins=[f'http://localhost:{APP_PORT}'], 
     allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*'],
