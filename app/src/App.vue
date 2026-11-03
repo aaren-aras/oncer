@@ -1,7 +1,7 @@
 
 <template>
   <header>
-    <img alt="ONCER Logo" class="logo" src="../assets/logo.svg" />
+    <img alt="ONCER Logo" class="logo" src="./assets/logo.svg" />
 
     <div class="wrapper">
       <LeftPanel title="ONCER&nbsp; 𖡎" />
@@ -59,7 +59,7 @@
 
 
 <style scoped lang="scss">
-  @use '../assets/scss/global.scss' as *;
+  @use './assets/scss/global.scss' as *;
 
   main {
     // width: 100%;

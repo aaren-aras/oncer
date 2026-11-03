@@ -164,7 +164,7 @@ const convertToBase64 = (file: File): Promise<string> => {
 </script>
 
 <style scoped lang="scss">
-  @use '../../assets/scss/global.scss' as *;
+  @use '../assets/scss/global.scss' as *;
 
   form {
     display: flex;
