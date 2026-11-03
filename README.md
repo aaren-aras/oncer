@@ -73,7 +73,7 @@ npm run start
 
 The **backend** dev server (`https://localhost:${API_PORT}`) uses **[uvicorn](https://uvicorn.dev/)**, 
 and can be run from the `api` directory after installing core dependencies (see `api/pyproject.toml`) 
-in a virtual environment. Keep in mind that Python **3.11**/**3.12** is required:
+in a virtual environment. Note that Python **3.11**/**3.12** is required:
 
 ```bash
 cd api
