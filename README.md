@@ -92,9 +92,7 @@ resampled to $1\text{ mm}^3$ isotropic voxel resolution to match the BraTS 2021 
 mentioned earlier. 
 
 This dataset also consists exclusively of **gliomas**, so any attempt to segment other brain 
-pathologies like meningiomas, pituitary adenomas, or stroke lesions will be met with varying, unpredictable, unreliable degrees of success.
-
-Enjoy!
+pathologies like meningiomas, pituitary adenomas, or stroke lesions will be met with varying, unpredictable, unreliable degrees of success. Enjoy!
 
 ## Retrospective
  - TF GPU compatibility is fragile outside Docker NGC containers, only guaranteed up to
