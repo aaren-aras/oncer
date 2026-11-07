@@ -41,7 +41,7 @@ body::before {
   right: 0;
   bottom: 0;
   // Source: https://www.pexels.com/photo/medical-imaging-of-the-brain-5723875
-  background: url('./assets/bkgd.jpg') no-repeat center center/cover;
+  background: url('../background.jpg') no-repeat center center/cover;
   z-index: -1; /* Ensure it’s behind the content */
   opacity: 0.02;
   // filter: brightness(500%); 
