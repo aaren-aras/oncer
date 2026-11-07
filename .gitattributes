@@ -1,10 +1,11 @@
 # Convert line endings in code and config files to LF on checkout/commit
 * text=auto eol=lf
 
-# Don't touch line endings for model weights files and raw image data
+# Don't touch line endings for model weights files, raw image data, fonts, etc.
 *.keras binary
 *.nii binary
 *.nii.gz binary
 *.png binary
 *.jpg binary
 *.svg text eol=lf
+*.ttf binary
