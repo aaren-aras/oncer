@@ -7,6 +7,6 @@
 *.nii.gz binary
 *.png binary
 *.jpg binary
-*.svg text eol=lf
+*.svg binary
 *.pdf binary
 *.ttf binary
