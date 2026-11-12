@@ -17,8 +17,8 @@ def create_overlay(mask: np.ndarray) -> str:
     # Define overlay colours for BrATS tumour regions with varying opacities  
     color_map = {
         0: (0, 0, 0, 0), # Background
-        1: (*BASE_COLOR, ALPHA_NCR), # Necrotic tumour core (NCR) 
-        2: (*BASE_COLOR, ALPHA_ED), # Peritumoural edematous/invaded tissue (ED)
+        1: (147, 51, 234, ALPHA_NCR), # Necrotic tumour core (NCR) 
+        2: (189, 116, 255, ALPHA_ED), # Peritumoural edematous/invaded tissue (ED)
         3: (*BASE_COLOR, ALPHA_ET), # Gadolinium-enhancing tumour (ET)
     }
 
