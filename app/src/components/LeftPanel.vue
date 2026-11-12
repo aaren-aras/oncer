@@ -9,7 +9,7 @@ defineProps<{
     <h1 class="green">{{ title }}</h1>
     <h4>
       <u>O</u>ncer <u>N</u>eural <u>C</u>lassificaton / <u>E</u>valuation <u>R</u>eporter
-      (or... <u>ON</u>OLOGY + CAN<u>CER</u>)
+      (or... <u>ON</u>COLOGY + CAN<u>CER</u>)
     </h4>
     <h2>
       An all-at-<u>once</u> solution to all your multi-modal brain tumour detection/segmentation needs
