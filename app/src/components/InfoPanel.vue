@@ -26,7 +26,7 @@
     </template>
     <template #heading>How to Use</template>
       Upload 4 co-registered, skull-stripped <b>axial</b> MRI slices from the same scan 
-      (T1, T2, T1CE, FLAIR), then click <code><b>UPLOAD</b></code> to generate the segmented 
+      (T1, T1CE, T2, FLAIR), then click <code><b>UPLOAD</b></code> to generate the segmented 
       overlay.
   </WelcomeItem>
 

@@ -12,12 +12,12 @@
         <label for="t1" class="custom-file-label" :class="{'has-file': t1File}">T1</label>
       </div>
       <div>
-        <input type="file" id="t2" @change="(e) => handleFileChange('t2')(e)" accept=".png, .jpg, .jpeg" required hidden />
-        <label for="t2" class="custom-file-label" :class="{'has-file': t2File}">T2</label>
-      </div>
-      <div>
         <input type="file" id="t1ce" @change="(e) => handleFileChange('t1ce')(e)" accept=".png, .jpg, .jpeg" required hidden />
         <label for="t1ce" class="custom-file-label" :class="{'has-file': t1ceFile}">T1CE</label>
+      </div>
+      <div>
+        <input type="file" id="t2" @change="(e) => handleFileChange('t2')(e)" accept=".png, .jpg, .jpeg" required hidden />
+        <label for="t2" class="custom-file-label" :class="{'has-file': t2File}">T2</label>
       </div>
       <div>
         <input type="file" id="flair" @change="(e) => handleFileChange('flair')(e)" accept=".png, .jpg, .jpeg" required hidden />
@@ -71,7 +71,7 @@ const handleSubmit = async () => {
   formData.append('flair', flairFile.value);
 
   try {
-    const response = await fetch('http://localhost:5000/predict', {
+    const response = await fetch('http://localhost:5001/predict', {
       method: 'POST',
       body: formData,
     });
@@ -89,6 +89,7 @@ const handleSubmit = async () => {
     router.push('/upload');
   } catch (e) {
     console.error('Error uploading files:', e);
+    alert(`Upload failed: ${e.message || e}`);
   }
 };
 
