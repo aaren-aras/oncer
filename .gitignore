@@ -15,6 +15,7 @@ api/src/utils/previews/
 
 # Frontend
 node_modules/
+.vite/
 dist/
 *.log
 *.tsbuildinfo
