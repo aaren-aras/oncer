@@ -93,13 +93,13 @@ mentioned earlier.
 This dataset also consists exclusively of **gliomas**, so any attempt to segment other brain 
 pathologies like meningiomas, pituitary adenomas, or stroke lesions will be met with varying, unpredictable, unreliable degrees of success. Enjoy!
 
-### Data Acknowledgements
-Multi-modal slice sets used for the preview (`ui-preview.png`) were sourced from these papers:
+#### Data Acknowledgements
+Multi-modal slice sets used for the preview (`ui-preview.png`) were sourced from these papers (left to right):
 
-* [Nature Scientific Reports — Evaluation of synthetic tumor brain images](https://www.nature.com/articles/s41598-022-14983-4#Sec9)
-* [ResearchGate — Advancing Precision: A Comprehensive Review of MRI Segmentation Datasets from BraTS Challenges 2012–2025](https://www.researchgate.net/publication/389935832_Advancing_Precision_A_Comprehensive_Review_of_MRI_Segmentation_Datasets_from_BraTS_Challenges_2012-2025)
-* [ResearchGate — Brain Tumor Segmentation from MRI Images using Hybrid CNNs](https://www.researchgate.net/publication/340699988_Brain_Tumor_Segmentation_from_MRI_Images_using_Hybrid_Convolutional_Neural_Networks)
-* [PMC6579720 — Brain tumor segmentation evaluation framework](https://pmc.ncbi.nlm.nih.gov/articles/PMC6579720/#_ad93_)
+* L. Pei et al., “A General Skull Stripping of Multiparametric Brain MRIs Using 3D Convolutional Neural Network,” Scientific Reports, vol. 12, no. 1, June 2022, doi: 10.1038 s41598-022-14983-4.
+* Z. Tang, P.-T. Yap, and D. Shen, “A New Multi-Atlas Registration Framework for Multimodal Pathological Images Using Conventional Monomodal Normal Atlases,” IEEE Trans Image Process, p. 10.1109/TIP.2018.2884563, Dec. 2018, doi: 10.1109/TIP.2018.2884563.
+* Dinthisrang Daimary, Mayur Bhargab Bora, kh Amitab, and Debdatta Kandar, “Brain Tumor Segmentation From MRI Images Using Hybrid Convolutional Neural Networks,” ResearchGate, 2020. https://www.researchgate.net/publication/340699988_Brain_Tumor_Segmentation_from_MRI_Images_using_Hybrid_Convolutional_Neural_Networks.
+* B. Bonato, L. Nanni, and A. Bertoldo, “Advancing Precision: A Comprehensive Review of MRI Segmentation Datasets From BraTS Challenges (2012–2025),” Sensors, vol. 25, no. 6, p. 1838, Mar. 2025, doi: 10.3390/s25061838.
 
 ## Retrospective
  - TF GPU compatibility is fragile outside Docker NGC containers, only guaranteed up to
