@@ -25,4 +25,4 @@ else
     echo 'Model already exists... Skipping.'
 fi
 
-echo "Startup complete! Run locally with `npm run start` and `uvicorn` (see README) 
+echo "Startup complete! Run locally with `npm run start` and `uvicorn` (see README)" 
