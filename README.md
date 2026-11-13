@@ -85,13 +85,21 @@ uvicorn src.main:app --host "$API_HOST" --port "$API_PORT" --reload
 ### Using the App
 With the dev servers set up, you'll be able to test out the model. Segmentation accuracy depends
 heavily on matching the preprocessing pipeline in `api/scripts`. For the best results, upload all 
-four **co-registered**, **skull-stripped**, **axial** slices (`T1`, `T1CE`, `T2`, `FLAIR`) 
+four **co-registered**, *axial** slices (`T1`, `T1CE`, `T2`, `FLAIR`) 
 simultaneously as **PNGs** *(to avoid compression artifacts on subregion boundaries)*, ideally 
 resampled to $1\text{ mm}^3$ isotropic voxel resolution to match the BraTS 2021 training distribution
 mentioned earlier. 
 
 This dataset also consists exclusively of **gliomas**, so any attempt to segment other brain 
 pathologies like meningiomas, pituitary adenomas, or stroke lesions will be met with varying, unpredictable, unreliable degrees of success. Enjoy!
+
+### Data Acknowledgements
+Multi-modal slice sets used for the preview (`ui-preview.png`) were sourced from these papers:
+
+* [Nature Scientific Reports — Evaluation of synthetic tumor brain images](https://www.nature.com/articles/s41598-022-14983-4#Sec9)
+* [ResearchGate — Advancing Precision: A Comprehensive Review of MRI Segmentation Datasets from BraTS Challenges 2012–2025](https://www.researchgate.net/publication/389935832_Advancing_Precision_A_Comprehensive_Review_of_MRI_Segmentation_Datasets_from_BraTS_Challenges_2012-2025)
+* [ResearchGate — Brain Tumor Segmentation from MRI Images using Hybrid CNNs](https://www.researchgate.net/publication/340699988_Brain_Tumor_Segmentation_from_MRI_Images_using_Hybrid_Convolutional_Neural_Networks)
+* [PMC6579720 — Brain tumor segmentation evaluation framework](https://pmc.ncbi.nlm.nih.gov/articles/PMC6579720/#_ad93_)
 
 ## Retrospective
  - TF GPU compatibility is fragile outside Docker NGC containers, only guaranteed up to
