@@ -10,7 +10,6 @@ services:
     volumes:
       - ./api/data:/workspace/Oncer/api/data
       - ./api/models:/workspace/Oncer/api/models
-
     ipc: host
     
     # Prevent imgaug crashes
@@ -19,7 +18,8 @@ services:
         soft: -1
         hard: -1
       stack:
-        soft: 67108864 # increase stack size to 64 MB (67108864 bytes)
+        # Increase stack size to 64 MB
+        soft: 67108864 
         hard: 67108864
     
     deploy:
