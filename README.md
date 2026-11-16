@@ -98,7 +98,7 @@ Multi-modal slice sets used for the preview (`ui-preview.png`) were sourced from
 
 * L. Pei et al., “A General Skull Stripping of Multiparametric Brain MRIs Using 3D Convolutional Neural Network,” Scientific Reports, vol. 12, no. 1, June 2022, doi: 10.1038 s41598-022-14983-4.
 * Z. Tang, P.-T. Yap, and D. Shen, “A New Multi-Atlas Registration Framework for Multimodal Pathological Images Using Conventional Monomodal Normal Atlases,” IEEE Trans Image Process, p. 10.1109/TIP.2018.2884563, Dec. 2018, doi: 10.1109/TIP.2018.2884563.
-* Dinthisrang Daimary, Mayur Bhargab Bora, kh Amitab, and Debdatta Kandar, “Brain Tumor Segmentation From MRI Images Using Hybrid Convolutional Neural Networks,” ResearchGate, 2020. https://www.researchgate.net/publication/340699988_Brain_Tumor_Segmentation_from_MRI_Images_using_Hybrid_Convolutional_Neural_Networks.
+* D. Daimary, B. M. Bhargab, K. Amitab, and D. Kandar, “Brain Tumor Segmentation From MRI Images Using Hybrid Convolutional Neural Networks,” International Conference on Computational Intelligence and Data Science, vol. 167, pp. 2419–2428, Jan. 2020, doi: 10.1016/j.procs.2020.03.295.
 * B. Bonato, L. Nanni, and A. Bertoldo, “Advancing Precision: A Comprehensive Review of MRI Segmentation Datasets From BraTS Challenges (2012–2025),” Sensors, vol. 25, no. 6, p. 1838, Mar. 2025, doi: 10.3390/s25061838.
 
 ## Retrospective
