@@ -62,7 +62,7 @@ API_PORT=5000
 API_HOST=0.0.0.0
 ```
 
-Commands for interfacing with the **frontend** dev server (`http://localhost::${APP_PORT}`) are listed 
+Commands for interfacing with the **frontend** dev server (`http://localhost:${APP_PORT}`) are listed 
 in `app/package.json` under `scripts`. Install all dependencies and run it from the `app/` directory:
 
 ```bash
@@ -85,7 +85,7 @@ uvicorn src.main:app --host "$API_HOST" --port "$API_PORT" --reload
 ### Using the App
 With the dev servers set up, you'll be able to test out the model. Segmentation accuracy depends
 heavily on matching the preprocessing pipeline in `api/scripts`. For the best results, upload all 
-four **co-registered**, *axial** slices (`T1`, `T1CE`, `T2`, `FLAIR`) 
+four **co-registered**, **axial** slices (`T1`, `T1CE`, `T2`, `FLAIR`) 
 simultaneously as **PNGs** *(to avoid compression artifacts on subregion boundaries)*, ideally 
 resampled to $1\text{ mm}^3$ isotropic voxel resolution to match the BraTS 2021 training distribution
 mentioned earlier. 
@@ -96,7 +96,7 @@ pathologies like meningiomas, pituitary adenomas, or stroke lesions will be met 
 #### Data Acknowledgements
 Multi-modal slice sets used for `preview.png` are saved under `docs/samples` and sourced from these papers (left to right):
 
-* L. Pei et al., “A General Skull Stripping of Multiparametric Brain MRIs Using 3D Convolutional Neural Network,” Scientific Reports, vol. 12, no. 1, June 2022, doi: 10.1038 s41598-022-14983-4.
+* L. Pei et al., “A General Skull Stripping of Multiparametric Brain MRIs Using 3D Convolutional Neural Network,” Scientific Reports, vol. 12, no. 1, June 2022, doi: 10.1038/s41598-022-14983-4.
 * Z. Tang, P.-T. Yap, and D. Shen, “A New Multi-Atlas Registration Framework for Multimodal Pathological Images Using Conventional Monomodal Normal Atlases,” IEEE Trans Image Process, p. 10.1109/TIP.2018.2884563, Dec. 2018, doi: 10.1109/TIP.2018.2884563.
 * D. Daimary, B. M. Bhargab, K. Amitab, and D. Kandar, “Brain Tumor Segmentation From MRI Images Using Hybrid Convolutional Neural Networks,” International Conference on Computational Intelligence and Data Science, vol. 167, pp. 2419–2428, Jan. 2020, doi: 10.1016/j.procs.2020.03.295.
 * B. Bonato, L. Nanni, and A. Bertoldo, “Advancing Precision: A Comprehensive Review of MRI Segmentation Datasets From BraTS Challenges (2012–2025),” Sensors, vol. 25, no. 6, p. 1838, Mar. 2025, doi: 10.3390/s25061838.
