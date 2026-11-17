@@ -71,7 +71,7 @@ const handleSubmit = async () => {
   formData.append('flair', flairFile.value);
 
   try {
-    const response = await fetch('http://localhost:5001/predict', {
+    const response = await fetch('/api/predict', {
       method: 'POST',
       body: formData,
     });

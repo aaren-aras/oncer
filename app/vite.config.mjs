@@ -16,7 +16,7 @@ export default defineConfig(({ mode }) => {
       }
     },
     plugins: [
-      vue(),
+      vue()
     ],
     resolve: {
       alias: {
@@ -29,6 +29,7 @@ export default defineConfig(({ mode }) => {
         '/api': {
           target: `http://localhost:${apiPort}`, // route frontend requests to FastAPI backend address 
           changeOrigin: true, // tell backend that requests are coming from apiPort, not appPort 
+          rewrite: (path) => path.replace(/^\/api/, '') // '/api/predict' -> '/predict' 
         }
       }
     }
