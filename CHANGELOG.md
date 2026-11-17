@@ -39,7 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### Added
 
 - **ONCER** initial release.
-- ResU-Net CNN trained on BraTS 2021 Task 1 dataset.
+- ResU-Net CNN trained on [BraTS 2021 Task 1 dataset](https://www.kaggle.com/datasets/dschettler8845/brats-2021-task1/data).
 - FastAPI backend with `/predict` endpoint.
 - Vue 3 frontend with image uploader and segmentation viewer.
-- Docker containerization backed by NVIDIA NGC TensorFlow Container.
+- Docker containerization backed by [NVIDIA NGC TensorFlow Container](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/tensorflow).
