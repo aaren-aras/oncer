@@ -49,7 +49,7 @@ cd api
 docker compose up --build
 ```
 
-Clean up build cache afterwards with `docker builder prune -a`, and close the container after use with `docker compose down`.
+Clean up build cache afterwards with `docker builder prune -a`, and close the container when you're done with `docker compose down`.
 
 ### Running Locally
 From the project root, create a `.env` file and set port numbers and host bindings for the frontend 
@@ -91,19 +91,19 @@ mentioned earlier.
 This dataset also consists exclusively of **gliomas**, so any attempt to segment other brain 
 pathologies like meningiomas, pituitary adenomas, or stroke lesions will be met with varying, unpredictable, unreliable degrees of success. Enjoy!
 
-<details>
-<summary><strong>Data Acknowledgements</strong> (<code>preview.png</code> sample sources)</summary>
-
-Multi-modal slice sets used for `preview.png` are saved under `docs/samples` and sourced from these papers (left to right):
-
-1. L. Pei et al., “A General Skull Stripping of Multiparametric Brain MRIs Using 3D Convolutional Neural Network,” *Scientific Reports*, vol. 12, no. 1, June 2022, doi: `10.1038/s41598-022-14983-4`.
-2. Z. Tang, P.-T. Yap, and D. Shen, “A New Multi-Atlas Registration Framework for Multimodal Pathological Images Using Conventional Monomodal Normal Atlases,” *IEEE Trans. Image Process.*, Dec. 2018, doi: `10.1109/TIP.2018.2884563`.
-3. D. Daimary et al., “Brain Tumor Segmentation From MRI Images Using Hybrid Convolutional Neural Networks,” *Procedia Computer Science*, vol. 167, pp. 2419–2428, Jan. 2020, doi: `10.1016/j.procs.2020.03.295`.
-4. B. Bonato, L. Nanni, and A. Bertoldo, “Advancing Precision: A Comprehensive Review of MRI Segmentation Datasets From BraTS Challenges (2012–2025),” *Sensors*, vol. 25, no. 6, p. 1838, Mar. 2025, doi: `10.3390/s25061838`.
-
-</details>
-
 > **Disclaimer:** This project has not been clinically validated and must not be used for medical diagnosis, treatment decisions, or any clinical purpose. It is intended strictly for research and educational use.
+
+<details>
+<summary><strong style="display: inline-block; margin-bottom: 4px;">Data Acknowledgements</strong></summary>
+
+Multi-modal slice sets used for `preview.png` are saved under `docs/samples` and sourced from these papers:
+
+- L. Pei et al., “A General Skull Stripping of Multiparametric Brain MRIs Using 3D Convolutional Neural Network,” *Scientific Reports*, vol. 12, no. 1, June 2022, doi: `10.1038/s41598-022-14983-4`.
+- Z. Tang, P.-T. Yap, and D. Shen, “A New Multi-Atlas Registration Framework for Multimodal Pathological Images Using Conventional Monomodal Normal Atlases,” *IEEE Trans. Image Process.*, Dec. 2018, doi: `10.1109/TIP.2018.2884563`.
+- D. Daimary et al., “Brain Tumor Segmentation From MRI Images Using Hybrid Convolutional Neural Networks,” *Procedia Computer Science*, vol. 167, pp. 2419–2428, Jan. 2020, doi: `10.1016/j.procs.2020.03.295`.
+- B. Bonato, L. Nanni, and A. Bertoldo, “Advancing Precision: A Comprehensive Review of MRI Segmentation Datasets From BraTS Challenges (2012–2025),” *Sensors*, vol. 25, no. 6, p. 1838, Mar. 2025, doi: `10.3390/s25061838`.
+  
+</details>
 
 ## Retrospective
  - TF GPU compatibility is fragile outside Docker NGC containers, only guaranteed up to
@@ -112,3 +112,7 @@ Multi-modal slice sets used for `preview.png` are saved under `docs/samples` and
     - Some TF builds lack precompiled CUDA kernels for newer GPUs with higher compute capabilities, forcing them to JIT-compile PTX at runtime, which drastically slows startup
     - NGC containers avoid the issue by including prebuilt, GPU-optimized binaries
  - Scope creep is real  
+
+<div align="right">
+  <sub>© 2026 Aaren Arasaratnam • v0.1.1 • Released under the <a href="LICENSE">MIT License</a></sub>
+</div>
