@@ -62,7 +62,7 @@ API_PORT=5000
 API_HOST=0.0.0.0
 ```
 
-Commands for interfacing with the **frontend** dev server (`http://localhost::${APP_PORT}`) are listed 
+Commands for interfacing with the **frontend** dev server (`http://localhost:${APP_PORT}`) are listed 
 in `app/package.json` under `scripts`. Install all dependencies and run it from the `app/` directory:
 
 ```bash
@@ -85,7 +85,7 @@ uvicorn src.main:app --host "$API_HOST" --port "$API_PORT" --reload
 ### Using the App
 With the dev servers set up, you'll be able to test out the model. Segmentation accuracy depends
 heavily on matching the preprocessing pipeline in `api/scripts`. For the best results, upload all 
-four **co-registered**, *axial** slices (`T1`, `T1CE`, `T2`, `FLAIR`) 
+four **co-registered**, **axial** slices (`T1`, `T1CE`, `T2`, `FLAIR`) 
 simultaneously as **PNGs** *(to avoid compression artifacts on subregion boundaries)*, ideally 
 resampled to $1\text{ mm}^3$ isotropic voxel resolution to match the BraTS 2021 training distribution
 mentioned earlier. 
