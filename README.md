@@ -62,7 +62,7 @@ API_PORT=5000
 API_HOST=0.0.0.0
 ```
 
-Commands for interfacing with the **frontend** dev server (`https://localhost::${APP_PORT}`) are listed 
+Commands for interfacing with the **frontend** dev server (`http://localhost::${APP_PORT}`) are listed 
 in `app/package.json` under `scripts`. Install all dependencies and run it from the `app` directory:
 
 ```bash
@@ -71,7 +71,7 @@ npm install
 npm run start
 ```
 
-The **backend** dev server (`https://localhost:${API_PORT}`) uses **[uvicorn](https://uvicorn.dev/)**, 
+The **backend** dev server (`http://localhost:${API_PORT}`) uses **[uvicorn](https://uvicorn.dev/)**, 
 and can be run from the `api` directory after installing core dependencies (see `api/pyproject.toml`) in a virtual environment (Python **3.11**/**3.12** required):
 
 ```bash
@@ -94,7 +94,7 @@ This dataset also consists exclusively of **gliomas**, so any attempt to segment
 pathologies like meningiomas, pituitary adenomas, or stroke lesions will be met with varying, unpredictable, unreliable degrees of success. Enjoy!
 
 #### Data Acknowledgements
-Multi-modal slice sets used for the preview (`ui-preview.png`) were sourced from these papers (left to right):
+Multi-modal slice sets used for `preview.png` are saved under `docs/samples` and sourced from these papers (left to right):
 
 * L. Pei et al., “A General Skull Stripping of Multiparametric Brain MRIs Using 3D Convolutional Neural Network,” Scientific Reports, vol. 12, no. 1, June 2022, doi: 10.1038 s41598-022-14983-4.
 * Z. Tang, P.-T. Yap, and D. Shen, “A New Multi-Atlas Registration Framework for Multimodal Pathological Images Using Conventional Monomodal Normal Atlases,” IEEE Trans Image Process, p. 10.1109/TIP.2018.2884563, Dec. 2018, doi: 10.1109/TIP.2018.2884563.
