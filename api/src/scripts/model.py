@@ -271,7 +271,7 @@ def train_model() -> None:
 
     # model.save(Path(MODELS_DIR / 'oncer_model.keras'))
     model.save(str(MODELS_DIR / 'oncer_model.keras'))
-    print(f"*COMPLETE: model has been trained and saved to 'models' folder")
+    print(f"*COMPLETE: model has been trained and saved to 'models/' folder")
 
 
 if __name__ == '__main__':

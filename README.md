@@ -3,7 +3,7 @@
 ONCER is a web-based deep learning tool for automated multi-parametric **brain tumour segmentation**, trained on the [2021 RSNA-ASNR-MICCAI BraTS Challenge](https://www.cancerimagingarchive.net/analysis-result/rsna-asnr-miccai-brats-2021/) Task 1 dataset. The model (`api/models/oncer_model.keras`) is a ResU-Net, i.e., a convolutional neural network architecture built around an encoder-decoder structure with skip connections. 
 
 It processes co-registered, skull-stripped, 4-channel structural MRI scans (`T1`, `T1CE`, `T2`, `FLAIR`) to delineate sub-tumoural structures like **Gadolinium-enhancing tumour (ET)**, **peritumoural edematous/invaded tissue (ED)**, and **necrotic tumor core (NCR)**. Dataset 
-images were annotated manually by neuro-radiologists and resampled to isotropic 1 mm<sup>3</sup> resolution, as documented in [this paper](https://ieeexplore.ieee.org/document/6975210) (see `docs`).
+images were annotated manually by neuro-radiologists and resampled to isotropic 1 mm<sup>3</sup> resolution, as documented in [this paper](https://ieeexplore.ieee.org/document/6975210) (see `docs/`).
 
 I started this in September 2024 after messing around with Keras/TensorFlow and getting reeeeally into brain MR imaging after wrapping up a co-op placement.
 
@@ -36,13 +36,13 @@ Verify your installations before proceeding:
 docker run --rm --gpus all nvidia/cuda:12.2.0-base-ubuntu22.04 nvidia-smi
 ```
 
-Extract the `BraTS2021_Training_Data` folder from `archive.zip > BraTS2021_Training_Data.tar`.
+Extract the `BraTS2021_Training_Data/` folder from `archive.zip > BraTS2021_Training_Data.tar`.
 
-Then, inside the `api` directory, create a new folder, name it `data`, and move the `BraTS2021_Training_Data` folder into `data` (i.e., `api/data/BraTS2021_Training_Data`).
+Then, inside the `api/` directory, create a new folder, name it `data`, and move the `BraTS2021_Training_Data/` folder into `data` (i.e., `api/data/BraTS2021_Training_Data`).
 This ensures the `data.py` and `model.py` scripts in `api/src/scripts` can find the 
 dataset without extra setup. 
 
-Launch **Docker Desktop**, and while inside `api`, build the `oncer-api` image, and spin up a container:
+Launch **Docker Desktop**, and while inside `api/`, build the `oncer-api` image, and spin up a container:
 
 ```bash
 cd api
@@ -63,7 +63,7 @@ API_HOST=0.0.0.0
 ```
 
 Commands for interfacing with the **frontend** dev server (`http://localhost::${APP_PORT}`) are listed 
-in `app/package.json` under `scripts`. Install all dependencies and run it from the `app` directory:
+in `app/package.json` under `scripts`. Install all dependencies and run it from the `app/` directory:
 
 ```bash
 cd app 
@@ -72,7 +72,7 @@ npm run start
 ```
 
 The **backend** dev server (`http://localhost:${API_PORT}`) uses **[uvicorn](https://uvicorn.dev/)**, 
-and can be run from the `api` directory after installing core dependencies (see `api/pyproject.toml`) in a virtual environment (Python **3.11**/**3.12** required):
+and can be run from the `api/` directory after installing core dependencies (see `api/pyproject.toml`) in a virtual environment (Python **3.11**/**3.12** required):
 
 ```bash
 cd api
