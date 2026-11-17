@@ -84,10 +84,8 @@ uvicorn src.main:app --host "$API_HOST" --port "$API_PORT" --reload
 
 ### Using the App
 With the dev servers set up, you'll be able to test out the model. Segmentation accuracy depends
-heavily on matching the preprocessing pipeline in `api/scripts`. For the best results, upload all 
-four **co-registered**, **axial** slices (`T1`, `T1CE`, `T2`, `FLAIR`) 
-simultaneously as **PNGs** *(to avoid compression artifacts on subregion boundaries)*, ideally 
-resampled to $1\text{ mm}^3$ isotropic voxel resolution to match the BraTS 2021 training distribution
+heavily on matching the preprocessing pipeline in `api/src/scripts`. For the best results, upload all four **co-registered**, **axial** slices (`T1`, `T1CE`, `T2`, `FLAIR`) simultaneously as **PNGs** *(to avoid compression artifacts on subregion boundaries)*, ideally resampled to 
+$1\text{ mm}^3$ isotropic voxel resolution to match the BraTS 2021 training distribution
 mentioned earlier. 
 
 This dataset also consists exclusively of **gliomas**, so any attempt to segment other brain 
@@ -100,6 +98,8 @@ Multi-modal slice sets used for `preview.png` are saved under `docs/samples` and
 * Z. Tang, P.-T. Yap, and D. Shen, “A New Multi-Atlas Registration Framework for Multimodal Pathological Images Using Conventional Monomodal Normal Atlases,” IEEE Trans Image Process, p. 10.1109/TIP.2018.2884563, Dec. 2018, doi: 10.1109/TIP.2018.2884563.
 * D. Daimary, B. M. Bhargab, K. Amitab, and D. Kandar, “Brain Tumor Segmentation From MRI Images Using Hybrid Convolutional Neural Networks,” International Conference on Computational Intelligence and Data Science, vol. 167, pp. 2419–2428, Jan. 2020, doi: 10.1016/j.procs.2020.03.295.
 * B. Bonato, L. Nanni, and A. Bertoldo, “Advancing Precision: A Comprehensive Review of MRI Segmentation Datasets From BraTS Challenges (2012–2025),” Sensors, vol. 25, no. 6, p. 1838, Mar. 2025, doi: 10.3390/s25061838.
+
+> **Disclaimer:** This project has not been clinically validated and must not be used for medical diagnosis, treatment decisions, or any clinical purpose. It is intended strictly for research and educational use.
 
 ## Retrospective
  - TF GPU compatibility is fragile outside Docker NGC containers, only guaranteed up to
