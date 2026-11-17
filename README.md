@@ -91,13 +91,17 @@ mentioned earlier.
 This dataset also consists exclusively of **gliomas**, so any attempt to segment other brain 
 pathologies like meningiomas, pituitary adenomas, or stroke lesions will be met with varying, unpredictable, unreliable degrees of success. Enjoy!
 
-#### Data Acknowledgements
+<details>
+<summary><strong>Data Acknowledgements</strong> (<code>preview.png</code> sample sources)</summary>
+
 Multi-modal slice sets used for `preview.png` are saved under `docs/samples` and sourced from these papers (left to right):
 
-* L. Pei et al., “A General Skull Stripping of Multiparametric Brain MRIs Using 3D Convolutional Neural Network,” Scientific Reports, vol. 12, no. 1, June 2022, doi: 10.1038/s41598-022-14983-4.
-* Z. Tang, P.-T. Yap, and D. Shen, “A New Multi-Atlas Registration Framework for Multimodal Pathological Images Using Conventional Monomodal Normal Atlases,” IEEE Trans Image Process, p. 10.1109/TIP.2018.2884563, Dec. 2018, doi: 10.1109/TIP.2018.2884563.
-* D. Daimary, B. M. Bhargab, K. Amitab, and D. Kandar, “Brain Tumor Segmentation From MRI Images Using Hybrid Convolutional Neural Networks,” International Conference on Computational Intelligence and Data Science, vol. 167, pp. 2419–2428, Jan. 2020, doi: 10.1016/j.procs.2020.03.295.
-* B. Bonato, L. Nanni, and A. Bertoldo, “Advancing Precision: A Comprehensive Review of MRI Segmentation Datasets From BraTS Challenges (2012–2025),” Sensors, vol. 25, no. 6, p. 1838, Mar. 2025, doi: 10.3390/s25061838.
+1. L. Pei et al., “A General Skull Stripping of Multiparametric Brain MRIs Using 3D Convolutional Neural Network,” *Scientific Reports*, vol. 12, no. 1, June 2022, doi: `10.1038/s41598-022-14983-4`.
+2. Z. Tang, P.-T. Yap, and D. Shen, “A New Multi-Atlas Registration Framework for Multimodal Pathological Images Using Conventional Monomodal Normal Atlases,” *IEEE Trans. Image Process.*, Dec. 2018, doi: `10.1109/TIP.2018.2884563`.
+3. D. Daimary et al., “Brain Tumor Segmentation From MRI Images Using Hybrid Convolutional Neural Networks,” *Procedia Computer Science*, vol. 167, pp. 2419–2428, Jan. 2020, doi: `10.1016/j.procs.2020.03.295`.
+4. B. Bonato, L. Nanni, and A. Bertoldo, “Advancing Precision: A Comprehensive Review of MRI Segmentation Datasets From BraTS Challenges (2012–2025),” *Sensors*, vol. 25, no. 6, p. 1838, Mar. 2025, doi: `10.3390/s25061838`.
+
+</details>
 
 > **Disclaimer:** This project has not been clinically validated and must not be used for medical diagnosis, treatment decisions, or any clinical purpose. It is intended strictly for research and educational use.
 
