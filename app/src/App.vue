@@ -21,7 +21,7 @@
   <footer>
     <p>
       &copy; {{ new Date().getFullYear() }} Aaren Arasaratnam
-      &nbsp;&bull;&nbsp; v0.1.0
+      &nbsp;&bull;&nbsp; v0.1.1
       &nbsp;&bull;&nbsp; Released under the
       <a href="https://github.com/aaren-aras/oncer/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>
     </p>

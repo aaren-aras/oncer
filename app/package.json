@@ -3,7 +3,7 @@
   "description": "A web app for segmenting brain tumours on structural MRI scans",
   "private": true,
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "scripts": {
     "start": "vite",
     "build": "npm run type-check && vite build",
