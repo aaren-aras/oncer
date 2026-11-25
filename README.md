@@ -109,8 +109,9 @@ Multi-modal slice sets used for `preview.png` are saved under `docs/samples` and
  - TF GPU compatibility is fragile outside Docker NGC containers, only guaranteed up to
   **2.10 (CUDA 11.2, cuDNN 8.1)** for Windows, and strongly recommended for newer GPUs 
   (RTX 40/50 series) requiring CUDA **12+** 
-    - Some TF builds lack precompiled CUDA kernels for newer GPUs with higher compute capabilities, forcing them to JIT-compile PTX at runtime, which drastically slows startup
-    - NGC containers avoid the issue by including prebuilt, GPU-optimized binaries
+ - Some TF builds lack precompiled CUDA kernels for newer GPUs with higher compute capabilities, 
+forcing them to JIT-compile PTX at runtime and drastically slowing startup (NGC containers include 
+prebuilt, GPU-optimized binaries)
  - Scope creep is real  
 
 <div align="right">
