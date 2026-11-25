@@ -110,7 +110,7 @@ Multi-modal slice sets used for `preview.png` are saved under `docs/samples` and
   **2.10 (CUDA 11.2, cuDNN 8.1)** for Windows, and strongly recommended for newer GPUs 
   (RTX 40/50 series) requiring CUDA **12+** 
  - Some TF builds lack precompiled CUDA kernels for newer GPUs with higher compute capabilities, 
-forcing them to JIT-compile PTX at runtime and drastically slowing startup (NGC containers include 
+forcing them to JIT-compile PTX at runtime and drastically slowing startup (NGCs include 
 prebuilt, GPU-optimized binaries)
  - Scope creep is real  
 
