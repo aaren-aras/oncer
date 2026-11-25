@@ -14,7 +14,7 @@ the model file is already provided in this repository, feel free to jump ahead t
 To avoid compatibility issues with the latest NVIDIA GPUs *(and the ensuing CUDA/cuDNN mismatch headaches)*, I used **[NVIDIA NGC containers](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/tensorflow)**
 (`nvcr.io/nvidia/tensorflow:25.02-tf2-py3`). The one specified in `api/Dockerfile` comes pre-packaged with
 Python **3.12**, TensorFlow **2.17.0** (Keras **3**), CUDA **12.8.0** / cuDNN **9.7.1**, and Ubuntu 
-**24.04.1 LTS**, which're guaranteed to work together out of the box. Because these containers are Linux-based, you'll need [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install) installed for Windows (Ubuntu **22.04 LTS** recommended). 
+**24.04.1 LTS**, which're guaranteed to work together out of the box. Because these containers are Linux-based, you'll need [WSL 2](https://learn.microsoft.com/en-us/windows/wsl/install) installed for Windows (Ubuntu **22.04 LTS** recommended). 
 
 You'll naturally want to have [Docker Desktop](https://www.docker.com/products/docker-desktop/),
 the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) (lets Docker use your GPU), and latest [NVIDIA drivers](https://www.nvidia.com/en-us/drivers/) for your GPU installed as well!
